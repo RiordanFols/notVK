@@ -11,8 +11,9 @@ Vue.component('post-form', {
     },
     template:
         '<div class="post-form">' +
-            '<input type="text" placeholder="Введите текст" v-model="text"/>' +
-            '<input type="button" value="Готово" @click="save"/>' +
+            '<img class="post-form-img" alt=""/>' +
+            '<input class="post-form-text" type="text" placeholder="Что у вас нового?" v-model="text"/>' +
+            '<input class="post-form-btn" type="button" value="✔" @click="save"/>' +
         '</div>',
     methods: {
         save: function () {
@@ -85,7 +86,24 @@ Vue.component('user-info', {
     props: ['user'],
     template:
         '<div class="user-info">' +
-            '<p> {{ user.name }} {{ user.surname }}</p>' +
+            '<div class="user-info-left">' +
+                '<img class="user-photo" alt=""/>' +
+            '</div>' +
+            '<div class="user-info-right">' +
+                '<div class="user-info-right-header">{{ user.name }} {{ user.surname }}</div>' +
+                '<div class="user-info-right-main">' +
+            // день рождения, статус и т.д.
+                    '<div></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
+                '</div>' +
+                '<div class="user-info-right-footer">' +
+                '' +
+                // кол-во подписчиков и другие показатели
+                '</div>' +
+            '</div>' +
         '</div>',
 });
 

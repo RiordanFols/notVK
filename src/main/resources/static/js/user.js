@@ -37,7 +37,28 @@ Vue.component('user-info', {
     props: ['user'],
     template:
         '<div class="user-info">' +
-            '<p> {{ user.name }} {{ user.surname }}</p>' +
+            '<div class="user-info-left">' +
+                '<img class="user-photo" alt=""/>' +
+                '<a href="/messages" style="text-decoration: none">' +
+                    '<div class="user-message-btn">Написать сообщение</div>' +
+                '</a>' +
+                '<div class="user-subscribe-btn">Подписаться</div>' +
+            '</div>' +
+            '<div class="user-info-right">' +
+                '<div class="user-info-right-header">{{ user.name }} {{ user.surname }}</div>' +
+                '<div class="user-info-right-main">' +
+                    // день рождения, статус и т.д.
+                    '<div></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
+                '</div>' +
+                '<div class="user-info-right-footer">' +
+                    '' +
+                // кол-во подписчиков и другие показатели
+                '</div>' +
+            '</div>' +
         '</div>',
 });
 

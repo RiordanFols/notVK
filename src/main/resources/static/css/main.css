@@ -39,7 +39,7 @@
 
 .middle {
     float: left;
-    width: 600px;
+    width: 700px;
     min-height: 500px;
     padding: 5px;
 }
@@ -48,10 +48,3 @@
 
 }
 
-.user-info {
-
-}
-
-.post-list {
-
-}

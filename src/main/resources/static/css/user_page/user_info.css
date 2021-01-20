@@ -1,0 +1,66 @@
+.user-info {
+    min-height: 270px;
+    margin-bottom: 15px;
+    color: white;
+}
+
+.user-info-left {
+    padding: 15px;
+    min-height: 240px;
+    width: 160px;
+    float: left;
+    margin-right: 20px;
+    background-color: #3C3C44;
+}
+
+.user-photo {
+    width: 160px;
+    height: 160px;
+}
+
+.user-message-btn {
+    padding-top: 4px;
+    text-align: center;
+    border-radius: 4px;
+    margin-top: 10px;
+    background-color: #707078;
+    color: white;
+    height: 22px;
+}
+
+.user-subscribe-btn {
+    padding-top: 4px;
+    text-align: center;
+    border-radius: 4px;
+    margin-top: 10px;
+    background-color: #707078;
+    color: white;
+    height: 22px;
+}
+
+.user-subscribe-btn:hover {
+    cursor: pointer;
+}
+
+.user-info-right {
+    min-height: 240px;
+    padding: 15px;
+    width: 460px;
+    float: left;
+    background-color: #3C3C44;
+}
+
+.user-info-right-header {
+    height: 40px;
+    font-size: 22px;
+}
+
+.user-info-right-main {
+    height: 160px;
+    border-top: 1px solid #707078;
+    border-bottom: 1px solid #707078;
+}
+
+.user-info-right-footer {
+    height: 40px;
+}
