@@ -74,4 +74,24 @@ public class UserService implements UserDetailsService {
     public List<User> findAll() {
         return userRepository.findAll();
     }
+
+    public void subscribe(long userId, long targetId) {
+        User user = findById(userId);
+        User target = findById(targetId);
+
+        if (!user.getSubscriptions().contains(target)) {
+            user.getSubscriptions().add(target);
+            userRepository.save(user);
+        }
+    }
+
+    public void unsubscribe(long userId, long targetId) {
+        User user = findById(userId);
+        User target = findById(targetId);
+
+        if (user.getSubscriptions().contains(target)) {
+            user.getSubscriptions().remove(target);
+            userRepository.save(user);
+        }
+    }
 }

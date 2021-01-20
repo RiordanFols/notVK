@@ -25,8 +25,8 @@ public class PostLikeController {
     }
 
     @GetMapping("{id}")
-    public Map<String, Object> likeInfo(@AuthenticationPrincipal User user,
-                                        @PathVariable(name = "id") long postId) {
+    public Map<String, Object> likesInfo(@AuthenticationPrincipal User user,
+                                         @PathVariable(name = "id") long postId) {
 
         var data = new HashMap<String, Object>();
         Post post = postService.findById(postId);
@@ -37,15 +37,15 @@ public class PostLikeController {
     }
 
     @PostMapping("{id}")
-    public void create(@AuthenticationPrincipal User user,
-                       @PathVariable(name = "id") long postId) {
+    public void like(@AuthenticationPrincipal User user,
+                     @PathVariable(name = "id") long postId) {
 
         postService.likePost(postId, user.getId());
 
     }
 
     @DeleteMapping("{id}")
-    public void delete(@AuthenticationPrincipal User user,
+    public void unlike(@AuthenticationPrincipal User user,
                        @PathVariable(name = "id") long postId) {
 
         postService.unlikePost(postId, user.getId());

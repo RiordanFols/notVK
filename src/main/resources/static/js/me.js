@@ -71,8 +71,7 @@ Vue.component('post-el', {
         '</div>',
     methods: {
         del: function () {
-            let confirmation = confirm("Вы уверены, что хотите удалить пост?");
-            if (confirmation) {
+            if (confirm("Вы уверены, что хотите удалить пост?")) {
                 postApi.remove({id: this.post.id}).then(result => {
                     if (result.ok)
                         this.posts.splice(this.posts.indexOf(this.post), 1);
@@ -145,16 +144,10 @@ var app = new Vue({
         user: frontendData.user,
         posts: frontendData.userPosts,
     },
-    // methods: {
-    //
-    // },
     template:
         '<div class="content">' +
             '<user-info :user="user"/>' +
             '<post-form :posts="posts"/>' +
             '<post-list :posts="posts"/>' +
-        '</div>',
-    // created: function () {
-    //
-    // }
+        '</div>'
 });

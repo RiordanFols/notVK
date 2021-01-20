@@ -3,11 +3,15 @@ package ru.chernov.notvk.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.chernov.notvk.entity.Post;
+import ru.chernov.notvk.entity.User;
 import ru.chernov.notvk.repository.PostRepository;
 import ru.chernov.notvk.repository.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * @author Pavel Chernov
@@ -28,8 +32,13 @@ public class PostService {
         return postRepository.findAllByAuthorIdOrderByCreationDateTimeDesc(authorId);
     }
 
-    public List<Post> getFeed(long userId) {
-        return null;
+    public Set<Post> getFeed(long userId) {
+        User user = userRepository.getOne(userId);
+        Set<Post> feed = new TreeSet<>(Comparator.comparing(Post::getCreationDateTime).reversed());
+        for (var subscription : user.getSubscriptions()) {
+            feed.addAll(getUserPosts(subscription.getId()));
+        }
+        return feed;
     }
 
     public Post findById(long id) {
@@ -51,13 +60,21 @@ public class PostService {
 
     public void likePost(long postId, long userId) {
         Post post = findById(postId);
-        post.getLikes().add(userRepository.getOne(userId));
-        postRepository.save(post);
+        User user = userRepository.getOne(userId);
+
+        if (!post.getLikes().contains(user)) {
+            post.getLikes().add(user);
+            postRepository.save(post);
+        }
     }
 
     public void unlikePost(long postId, long userId) {
         Post post = findById(postId);
-        post.getLikes().remove(userRepository.getOne(userId));
-        postRepository.save(post);
+        User user = userRepository.getOne(userId);
+
+        if (post.getLikes().contains(user)) {
+            post.getLikes().remove(user);
+            postRepository.save(post);
+        }
     }
 }

@@ -47,9 +47,19 @@ public class User implements UserDetails {
     @Column(name = "role", nullable = false)
     private Set<Role> roles = new HashSet<>();
 
-//    private Set<User> subscriptions = new HashSet<>();
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_subscriptions",
+            joinColumns = @JoinColumn(name = "subscriber_id", updatable = false, nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "target_id", updatable = false, nullable = false))
+    @JsonIgnore
+    private Set<User> subscriptions = new HashSet<>();
 
-//    private Set<User> subscribers = new HashSet<>();
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_subscriptions",
+            joinColumns = @JoinColumn(name = "target_id", updatable = false, nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "subscriber_id", updatable = false, nullable = false))
+    @JsonIgnore
+    private Set<User> subscribers = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

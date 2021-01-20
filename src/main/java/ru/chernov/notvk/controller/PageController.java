@@ -7,12 +7,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import ru.chernov.notvk.entity.Post;
 import ru.chernov.notvk.entity.User;
 import ru.chernov.notvk.service.PostService;
 import ru.chernov.notvk.service.UserService;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Pavel Chernov
@@ -33,6 +36,11 @@ public class PageController {
     @GetMapping("/feed")
     public String feedPage(@AuthenticationPrincipal User user,
                            Model model) {
+        Set<Post> feed = postService.getFeed(user.getId());
+        Map<Object, Object> data = new HashMap<>();
+        data.put("feed", feed);
+
+        model.addAttribute("frontendData", data);
         return "main/feed";
     }
 

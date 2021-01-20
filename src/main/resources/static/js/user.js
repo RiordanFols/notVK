@@ -1,11 +1,12 @@
 var postLikeApi = Vue.resource('/post-like{/id}');
+var subscriptionsApi = Vue.resource('/subscriptions{/id}');
 
 Vue.component('post-el', {
     props: ['post'],
     data: function () {
         return {
             likeN: 0,
-            isLiked: false,
+            isLiked: false
         }
     },
     template:
@@ -13,7 +14,9 @@ Vue.component('post-el', {
             '<div class="post-header">' +
                 '<img class="post-author-img" alt=""/>' +
                 '<div class="post-info">' +
-                    '<div class="post-author">{{ post.author.name }} {{ post.author.surname }}</div>' +
+                    '<a v-bind:href="\'/user/\' + post.author.username" style="text-decoration: none">' +
+                        '<div class="post-author">{{ post.author.name }} {{ post.author.surname }}</div>' +
+                    '</a>' +
                     '<div class="post-datetime">{{ post.creationDateTime }}</div>' +
                 '</div>' +
             '</div>' +
@@ -69,6 +72,12 @@ Vue.component('post-list', {
 
 Vue.component('user-info', {
     props: ['user'],
+    data: function () {
+        return {
+            subscribersN: 0,
+            isSubscribed: false,
+        }
+    },
     template:
         '<div class="user-info">' +
             '<div class="user-info-left">' +
@@ -76,7 +85,8 @@ Vue.component('user-info', {
                 '<a href="/messages" style="text-decoration: none">' +
                     '<div class="user-message-btn">Написать сообщение</div>' +
                 '</a>' +
-                '<div class="user-subscribe-btn">Подписаться</div>' +
+                '<div class="user-subscribe-btn" v-if="!isSubscribed" @click="subscribe">Подписаться</div>' +
+                '<div class="user-subscribe-btn" v-else @click="unsubscribe">Отписаться</div>' +
             '</div>' +
             '<div class="user-info-right">' +
                 '<div class="user-info-right-header">{{ user.name }} {{ user.surname }}</div>' +
@@ -94,6 +104,34 @@ Vue.component('user-info', {
                 '</div>' +
             '</div>' +
         '</div>',
+    methods: {
+        subscribe: function () {
+            subscriptionsApi.save({id: this.user.id}, {}).then(result => {
+                if (result.ok) {
+                    this.isSubscribed = true;
+                    this.subscribersN++;
+                }
+            });
+        },
+        unsubscribe: function () {
+            if (confirm("Вы уверены, что хотите отписаться?")) {
+                subscriptionsApi.remove({id: this.user.id}).then(result => {
+                    if (result.ok) {
+                        this.isSubscribed = false;
+                        this.subscribersN--;
+                    }
+                });
+            }
+        },
+    },
+    created: function () {
+        subscriptionsApi.get({id: this.user.id}).then(result => {
+            result.json().then(data => {
+                this.isSubscribed = data.isSubscribed;
+                this.subscribersN = data.subscribersN;
+            });
+        });
+    }
 });
 
 var app = new Vue({
@@ -102,15 +140,9 @@ var app = new Vue({
         user: frontendData.user,
         posts: frontendData.userPosts,
     },
-    // methods: {
-    //
-    // },
     template:
         '<div class="content">' +
             '<user-info :user="user"/>' +
             '<post-list :posts="posts"/>' +
         '</div>',
-    // created: function () {
-    //
-    // }
 });
