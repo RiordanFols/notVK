@@ -48,4 +48,16 @@ public class PostService {
     public void delete(long id) {
         postRepository.deleteById(id);
     }
+
+    public void likePost(long postId, long userId) {
+        Post post = findById(postId);
+        post.getLikes().add(userRepository.getOne(userId));
+        postRepository.save(post);
+    }
+
+    public void unlikePost(long postId, long userId) {
+        Post post = findById(postId);
+        post.getLikes().remove(userRepository.getOne(userId));
+        postRepository.save(post);
+    }
 }

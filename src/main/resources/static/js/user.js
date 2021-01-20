@@ -1,6 +1,13 @@
+var postLikeApi = Vue.resource('/post-like{/id}');
 
 Vue.component('post-el', {
     props: ['post'],
+    data: function () {
+        return {
+            likeN: 0,
+            isLiked: false,
+        }
+    },
     template:
         '<div class="post-el">' +
             '<div class="post-header">' +
@@ -16,13 +23,40 @@ Vue.component('post-el', {
             '</div>' +
 
             '<div class="post-footer">' +
-                '<img class="footer-btn" src="/img/unliked.png" alt=""/>' +
-                '<div class="footer-number">5</div>' +
+                '<img class="footer-btn" v-if="isLiked" @click="unlike" src="/img/liked.png" alt=""/>' +
+                '<img class="footer-btn" v-else="isLiked" @click="like" src="/img/unliked.png" alt=""/>' +
+                '<div class="footer-number">{{ this.likeN }}</div>' +
 
                 '<img class="footer-btn" src="/img/comment_btn.png" alt="">' +
                 '<div class="footer-number">2</div>' +
             '</div>' +
-    '</div>',
+        '</div>',
+    methods: {
+        like: function () {
+            postLikeApi.save({id: this.post.id}, {}).then(result => {
+                if (result.ok) {
+                    this.isLiked = true;
+                    this.likeN++;
+                }
+            });
+        },
+        unlike: function () {
+            postLikeApi.remove({id: this.post.id}).then(result => {
+                if (result.ok) {
+                    this.isLiked = false;
+                    this.likeN--;
+                }
+            });
+        },
+    },
+    created: function () {
+        postLikeApi.get({id: this.post.id}).then(result => {
+            result.json().then(data => {
+                this.likeN = data.likeN;
+                this.isLiked = data.isLiked;
+            })
+        })
+    }
 });
 
 Vue.component('post-list', {
@@ -30,7 +64,7 @@ Vue.component('post-list', {
     template:
         '<div class="post-list">' +
             '<post-el v-for="post in posts" :key="post.id" :post="post"/>' +
-        '</div>>',
+        '</div>',
 });
 
 Vue.component('user-info', {
