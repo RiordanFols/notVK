@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Авторизация</title>
+</head>
+<body>
+
+<form method="post" th:action="@{/login}">
+    <h2>Пожалуйста, авторизируйтесь</h2>
+    <p>
+        <label for="username">Имя пользователя</label>
+        <input type="text" id="username" name="username" required autofocus>
+    </p>
+    <p>
+        <label for="password">Пароль</label>
+        <input type="password" id="password" name="password" required>
+    </p>
+    <button type="submit">Войти</button>
+</form>
+
+<p>Еще не зарегистрированы?</p>
+<a th:href="@{/registration}">Регистрация</a>
+
+</body>
+</html>

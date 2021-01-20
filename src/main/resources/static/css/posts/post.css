@@ -1,0 +1,103 @@
+.post-el {
+    padding: 10px 20px;
+    min-height: 80px;
+    background-color: #3C3C44;
+    margin-bottom: 15px;
+    border-radius: 4px;
+}
+
+.post-header {
+    height: 50px;
+}
+
+.post-author-img {
+    height: 50px;
+    width: 50px;
+    float: left;
+}
+
+.post-info {
+    width: 400px;
+    float: left;
+    margin-left: 10px;
+}
+
+.post-author {
+    height: 20px;
+    margin-top: 10px;
+    font-size: 17px;
+    color: white;
+}
+
+.post-datetime {
+    height: 20px;
+    font-size: 13px;
+    color: darkgray;
+}
+
+.post-action {
+    width: 90px;
+    height: inherit;
+    float: right;
+}
+
+.post-del-btn {
+    margin-top: 5px;
+    width: 25px;
+    height: 25px;
+    float: right;
+}
+
+.post-del-btn:hover {
+    cursor: pointer;
+}
+
+.post-edit-btn {
+    margin-right: 15px;
+    margin-top: 5px;
+    width: 25px;
+    height: 25px;
+    float: right;
+}
+
+.post-edit-btn:hover {
+    cursor: pointer;
+}
+
+.post-main {
+    min-height: 40px;
+}
+
+.post-text {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-size: 15px;
+    color: white;
+}
+
+.post-footer {
+    height: 25px;
+    border-top: 1px solid #707078;
+    padding-top: 12px;
+    padding-bottom: 5px;
+}
+
+.footer-btn {
+    float: left;
+    height: 25px;
+    width: 25px;
+}
+
+.footer-btn:hover {
+    cursor: pointer;
+}
+
+.footer-number {
+    height: 25px;
+    width: 25px;
+    float: left;
+    margin-left: 8px;
+    margin-top: 2px;
+    font-size: 18px;
+    color: darkgray;
+}

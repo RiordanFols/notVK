@@ -1,0 +1,57 @@
+
+.body {
+    background-color: #303038;
+}
+
+.main {
+    width: 1000px;
+    min-height: 800px;
+    margin: auto;
+}
+
+.left {
+    float: left;
+    width: 180px;
+}
+
+.left a {
+    text-decoration: none;
+}
+
+.left-btn {
+    padding: 5px;
+    height: 35px;
+    font-size: 20px;
+    color: white;
+}
+
+.left-btn:hover {
+    background-color: #707078;
+}
+
+.active-left-btn {
+    background-color: #505068;
+}
+
+.active-left-btn:hover {
+    background-color: #505068;
+}
+
+.middle {
+    float: left;
+    width: 600px;
+    min-height: 500px;
+    padding: 5px;
+}
+
+.content {
+
+}
+
+.user-info {
+
+}
+
+.post-list {
+
+}
