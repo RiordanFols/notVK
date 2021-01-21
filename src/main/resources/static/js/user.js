@@ -1,5 +1,5 @@
-var postLikeApi = Vue.resource('/post-like{/id}');
-var subscriptionsApi = Vue.resource('/subscriptions{/id}');
+let postLikeApi = Vue.resource('/post-like{/id}');
+let subscriptionsApi = Vue.resource('/subscriptions{/id}');
 
 Vue.component('post-el', {
     props: ['post'],
@@ -12,7 +12,9 @@ Vue.component('post-el', {
     template:
         '<div class="post-el">' +
             '<div class="post-header">' +
-                '<img class="post-author-img" alt=""/>' +
+                '<a v-bind:href="\'/user/\' + post.author.username">' +
+                    '<img class="post-author-img" src="/img/stock_avatar_m.png" alt=""/>' +
+                '</a>' +
                 '<div class="post-info">' +
                     '<a v-bind:href="\'/user/\' + post.author.username" style="text-decoration: none">' +
                         '<div class="post-author">{{ post.author.name }} {{ post.author.surname }}</div>' +
@@ -81,7 +83,7 @@ Vue.component('user-info', {
     template:
         '<div class="user-info">' +
             '<div class="user-info-left">' +
-                '<img class="user-photo" alt=""/>' +
+                '<img class="user-photo" src="/img/stock_avatar_m.png" alt=""/>' +
                 '<a href="/messages" style="text-decoration: none">' +
                     '<div class="user-message-btn">Написать сообщение</div>' +
                 '</a>' +

@@ -1,0 +1,40 @@
+.sub-list {
+
+}
+
+.sub-el {
+    padding: 10px 20px;
+    min-height: 50px;
+    background-color: #3C3C44;
+    margin-bottom: 15px;
+    border-radius: 4px;
+}
+
+.sub-el-img {
+    height: 50px;
+    width: 50px;
+    float: left;
+    border-radius: 25px;
+}
+
+.sub-info {
+    float: left;
+    margin-left: 15px;
+}
+
+.sub-user-name {
+    height: 20px;
+    margin-top: 10px;
+    font-size: 17px;
+    color: white;
+}
+
+.unsubscribe-btn {
+    height: 20px;
+    font-size: 13px;
+    color: darkgray;
+}
+
+.unsubscribe-btn:hover {
+    cursor: pointer;
+}

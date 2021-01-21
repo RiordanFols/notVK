@@ -1,5 +1,5 @@
-var postApi = Vue.resource('/post{/id}');
-var postLikeApi = Vue.resource('/post-like{/id}');
+let postApi = Vue.resource('/post{/id}');
+let postLikeApi = Vue.resource('/post-like{/id}');
 
 
 Vue.component('post-form', {
@@ -12,7 +12,7 @@ Vue.component('post-form', {
     },
     template:
         '<div class="post-form">' +
-            '<img class="post-form-img" alt=""/>' +
+            '<img class="post-form-img" src="/img/stock_avatar_m.png" alt=""/>' +
             '<input class="post-form-text" type="text" placeholder="Что у вас нового?" v-model="text"/>' +
             '<input class="post-form-btn" type="button" value="✔" @click="save"/>' +
         '</div>',
@@ -43,10 +43,14 @@ Vue.component('post-el', {
     template:
         '<div class="post-el">' +
             '<div class="post-header">' +
-                '<img class="post-author-img" alt=""/>' +
+                '<a v-bind:href="\'/user/\' + post.author.username">' +
+                    '<img class="post-author-img" src="/img/stock_avatar_m.png" alt=""/>' +
+                '</a>' +
 
                 '<div class="post-info">' +
-                    '<div class="post-author">{{ post.author.name }} {{ post.author.surname }}</div>' +
+                    '<a v-bind:href="\'/user/\' + post.author.username" style="text-decoration: none">' +
+                        '<div class="post-author">{{ post.author.name }} {{ post.author.surname }}</div>' +
+                    '</a>' +
                     '<div class="post-datetime">{{ post.creationDateTime }}</div>' +
                 '</div>' +
 
@@ -118,7 +122,7 @@ Vue.component('user-info', {
     template:
         '<div class="user-info">' +
             '<div class="user-info-left">' +
-                '<img class="user-photo" alt=""/>' +
+                '<img class="user-photo" src="/img/stock_avatar_m.png" alt=""/>' +
             '</div>' +
             '<div class="user-info-right">' +
                 '<div class="user-info-right-header">{{ user.name }} {{ user.surname }}</div>' +

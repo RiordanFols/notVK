@@ -1,4 +1,4 @@
-var postLikeApi = Vue.resource('/post-like{/id}');
+let postLikeApi = Vue.resource('/post-like{/id}');
 
 Vue.component('post-el', {
     props: ['post', 'posts'],
@@ -11,7 +11,10 @@ Vue.component('post-el', {
     template:
         '<div class="post-el">' +
             '<div class="post-header">' +
-                '<img class="post-author-img" alt=""/>' +
+                '<a v-bind:href="\'/user/\' + post.author.username">' +
+                    '<img class="post-author-img" src="/img/stock_avatar_m.png" alt=""/>' +
+                '</a>' +
+
                 '<div class="post-info">' +
                     '<a v-bind:href="\'/user/\' + post.author.username" style="text-decoration: none">' +
                         '<div class="post-author">{{ post.author.name }} {{ post.author.surname }}</div>' +

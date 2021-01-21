@@ -18,12 +18,13 @@
     height: 50px;
     width: 50px;
     float: left;
+    border-radius: 25px;
 }
 
 .post-info {
     width: 400px;
     float: left;
-    margin-left: 10px;
+    margin-left: 15px;
 }
 
 .post-author {

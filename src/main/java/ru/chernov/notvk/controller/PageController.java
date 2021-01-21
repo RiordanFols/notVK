@@ -88,6 +88,10 @@ public class PageController {
     @GetMapping("/subscriptions")
     public String subscriptionsPage(@AuthenticationPrincipal User user,
                                     Model model) {
+
+        Map<Object, Object> data = new HashMap<>();
+        data.put("subscriptions", userService.findById(user.getId()).getSubscriptions());
+        model.addAttribute("frontendData", data);
         return "main/subscriptions";
     }
 
