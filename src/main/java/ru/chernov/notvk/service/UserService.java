@@ -7,10 +7,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.chernov.notvk.entity.Role;
 import ru.chernov.notvk.entity.User;
+import ru.chernov.notvk.repository.MessageRepository;
 import ru.chernov.notvk.repository.UserRepository;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Pavel Chernov
@@ -22,10 +25,12 @@ public class UserService implements UserDetailsService {
     private static final String USERNAME_IS_TAKEN = "Пользователь с таким именем уже существует";
 
     private final UserRepository userRepository;
+    private final MessageRepository messageRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, MessageRepository messageRepository) {
         this.userRepository = userRepository;
+        this.messageRepository = messageRepository;
     }
 
     @Override
@@ -93,5 +98,17 @@ public class UserService implements UserDetailsService {
             user.getSubscriptions().remove(target);
             userRepository.save(user);
         }
+    }
+
+    public Set<User> getAllContacts(long userId) {
+        Set<Long> contactsIds = messageRepository.findContactsIds(userId);
+        contactsIds.remove(userId);
+
+        Set<User> contacts = new HashSet<>();
+        for (long contactId : contactsIds) {
+            contacts.add(findById(contactId));
+        }
+
+        return contacts;
     }
 }

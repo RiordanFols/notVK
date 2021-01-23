@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.chernov.notvk.entity.Post;
 import ru.chernov.notvk.entity.User;
+import ru.chernov.notvk.service.MessageService;
 import ru.chernov.notvk.service.PostService;
 import ru.chernov.notvk.service.UserService;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -26,11 +26,13 @@ public class PageController {
 
     private final UserService userService;
     private final PostService postService;
+    private final MessageService messageService;
 
     @Autowired
-    public PageController(UserService userService, PostService postService) {
+    public PageController(UserService userService, PostService postService, MessageService messageService) {
         this.userService = userService;
         this.postService = postService;
+        this.messageService = messageService;
     }
 
     @GetMapping("/feed")
@@ -75,14 +77,34 @@ public class PageController {
 
     @GetMapping("/profile")
     public String profilePage(@AuthenticationPrincipal User user,
-                          Model model) {
+                              Model model) {
         return "main/profile";
     }
 
-    @GetMapping("/messages")
-    public String messagesPage(@AuthenticationPrincipal User user,
-                           Model model) {
-        return "main/messages";
+    @GetMapping("/messenger")
+    public String messenger(@AuthenticationPrincipal User user,
+                               Model model) {
+
+        Map<Object, Object> data = new HashMap<>();
+        // get all users who user contacted with
+        data.put("userList", userService.getAllContacts(user.getId()));
+
+        model.addAttribute("frontendData", data);
+        return "main/messenger";
+    }
+
+    @GetMapping("/messenger/{username}")
+    public String chat(@PathVariable String username,
+                       @AuthenticationPrincipal User user,
+                       Model model) {
+        User target = userService.findByUsername(username);
+        Map<Object, Object> data = new HashMap<>();
+        data.put("userList", userService.getAllContacts(user.getId()));
+        data.put("messages", messageService.getCorrespondence(target.getId(), user.getId()));
+        data.put("target", target);
+
+        model.addAttribute("frontendData", data);
+        return "main/messenger";
     }
 
     @GetMapping("/subscriptions")

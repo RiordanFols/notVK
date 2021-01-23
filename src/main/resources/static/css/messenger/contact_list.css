@@ -1,0 +1,41 @@
+.contact-list {
+    width: 250px;
+    float: left;
+}
+
+.contact {
+    padding: 10px 5px;
+    height: 40px;
+    background-color: #3C3C44;
+    margin-bottom: 15px;
+    border-radius: 4px;
+}
+
+.contact:hover {
+    cursor: pointer;
+}
+
+.contact-img {
+    height: 40px;
+    width: 40px;
+    float: left;
+    border-radius: 20px;
+}
+
+.contact-info {
+    float: left;
+    margin-left: 10px;
+}
+
+.contact-name {
+    height: 20px;
+    margin-top: 5px;
+    font-size: 16px;
+    color: white;
+}
+
+.contact-last-message {
+    height: 20px;
+    font-size: 13px;
+    color: darkgray;
+}

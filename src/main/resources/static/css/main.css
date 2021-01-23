@@ -4,14 +4,14 @@
 }
 
 .main {
-    width: 1000px;
+    width: 1165px;
     min-height: 800px;
     margin: auto;
 }
 
 .left {
     float: left;
-    width: 180px;
+    width: 140px;
 }
 
 .left a {
@@ -20,8 +20,8 @@
 
 .left-btn {
     padding: 5px;
-    height: 35px;
-    font-size: 20px;
+    height: 30px;
+    font-size: 17px;
     color: white;
 }
 
@@ -38,8 +38,9 @@
 }
 
 .middle {
+    margin-left: 5px;
     float: left;
-    width: 700px;
+    width: 900px;
     min-height: 500px;
     padding: 5px;
 }

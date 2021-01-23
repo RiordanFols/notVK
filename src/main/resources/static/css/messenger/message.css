@@ -1,0 +1,41 @@
+.message {
+    min-height: 35px;
+    margin-bottom: 15px;
+}
+
+.message-author-img {
+    height: 35px;
+    width: 35px;
+    border-radius: 20px;
+    float: left;
+}
+
+.message-main {
+    width: 500px;
+    float: left;
+    margin-left: 10px;
+}
+
+.message-info {
+    height: 18px;
+}
+
+.message-author {
+    font-weight: bold;
+    color: darkgray;
+    font-size: 14px;
+    float: left;
+}
+
+.message-time {
+    font-size: 14px;
+    margin-left: 10px;
+    color: darkgray;
+    float: left;
+}
+
+.message-text {
+    height: 17px;
+    color: white;
+    font-size: 14px;
+}
