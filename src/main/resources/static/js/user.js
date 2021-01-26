@@ -84,7 +84,7 @@ Vue.component('user-info', {
         '<div class="user-info">' +
             '<div class="user-info-left">' +
                 '<img class="user-photo" src="/img/stock_avatar_m.png" alt=""/>' +
-                '<a href="/messages" style="text-decoration: none">' +
+                '<a v-bind:href="\'/messenger/\' + user.username" style="text-decoration: none">' +
                     '<div class="user-message-btn">Написать сообщение</div>' +
                 '</a>' +
                 '<div class="user-subscribe-btn" v-if="!isSubscribed" @click="subscribe">Подписаться</div>' +

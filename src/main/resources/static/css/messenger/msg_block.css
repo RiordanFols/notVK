@@ -2,7 +2,7 @@
     float: left;
     margin-left: 15px;
     width: 635px;
-    min-height: 300px;
+    height: 800px;
     background-color: #3C3C44;
 }
 
@@ -35,5 +35,18 @@
 }
 
 .chat {
+    display: flex;
+    flex-direction: column-reverse;
+    overflow: auto;
     margin: 10px 20px;
+    height: 690px;
+}
+
+.chat::-webkit-scrollbar {
+    display: none;
+}
+
+.chat {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }

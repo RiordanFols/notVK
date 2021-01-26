@@ -28,8 +28,7 @@ public class Message {
     @JoinColumn(name = "target_id", updatable = false, nullable = false)
     private User target;
 
-    // todo: nullable = false
-    @Column(nullable = true, updatable = false)
+    @Column(nullable = false, updatable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy HH:mm")
     private LocalDateTime creationDateTime;
 }

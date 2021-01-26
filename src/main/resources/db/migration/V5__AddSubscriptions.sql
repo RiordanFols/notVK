@@ -1,0 +1,15 @@
+INSERT INTO user_subscriptions(subscriber_id, target_id)
+VALUES (1, 2),
+       (1, 3),
+       (1, 4),
+       (1, 5),
+       (2, 1),
+       (2, 4),
+       (2, 5),
+       (3, 1),
+       (3, 4),
+       (3, 5),
+       (4, 1),
+       (4, 5),
+       (4, 2),
+       (5, 3);

@@ -1,6 +1,5 @@
 let messagesApi = Vue.resource('/messages{/id}');
 
-
 Vue.component('message', {
     props: ['message', 'user'],
     template:
@@ -42,12 +41,41 @@ Vue.component('chat-header', {
         '</div>'
 });
 
+Vue.component('message-form', {
+    props: ['target', 'messages'],
+    data: function () {
+        return {
+            text: ''
+        }
+    },
+    template:
+        '<div class="message-form">' +
+            '<input class="message-form-text" type="text" placeholder="Напишите сообщение" v-model="text"/>' +
+            '<input class="message-form-btn" type="button" value="✔" @click="save"/>' +
+        '</div>',
+    methods: {
+        save: function () {
+            if (this.text !== '') {
+                let body = {text: this.text};
+
+                messagesApi.save({id: this.target.id}, body).then(result => {
+                    result.json().then(data => {
+                        this.messages.splice(0, 0, data);
+                        this.text = '';
+                    });
+                });
+            }
+        }
+    }
+});
+
 Vue.component('msg-block', {
     props: ['messages', 'target'],
     template:
         '<div class="msg-block" >' +
             '<chat-header v-if="target != null" :target="target"/>' +
             '<chat v-if="target != null" :messages="messages"/>' +
+            '<message-form v-if="target != null" :target="target" :messages="messages"/>' +
         '</div>'
 });
 

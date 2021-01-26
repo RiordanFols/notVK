@@ -6,8 +6,7 @@ Vue.component('post-form', {
     props: ['posts'],
     data: function () {
         return {
-            text: '',
-            id: '',
+            text: ''
         }
     },
     template:
@@ -19,7 +18,7 @@ Vue.component('post-form', {
     methods: {
         save: function () {
             if (this.text !== '') {
-                let body = {text: this.text}
+                let body = {text: this.text};
 
                 postApi.save({}, body).then(result => {
                     result.json().then(data => {

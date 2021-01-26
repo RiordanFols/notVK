@@ -2,15 +2,12 @@ package ru.chernov.notvk.controller.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.chernov.notvk.entity.Message;
 import ru.chernov.notvk.entity.User;
 import ru.chernov.notvk.service.MessageService;
 
-import java.util.Set;
+import java.util.Map;
 
 /**
  * @author Pavel Chernov
@@ -26,9 +23,15 @@ public class MessageController {
         this.messageService = messageService;
     }
 
-    @GetMapping("{id}")
-    public Set<Message> getCorrespondence(@PathVariable(name = "id") long targetId,
-                                          @AuthenticationPrincipal User user) {
-        return messageService.getCorrespondence(user.getId(), targetId);
+    @PostMapping("{id}")
+    public Message create(@AuthenticationPrincipal User user,
+                          @PathVariable(name = "id") long targetId,
+                          @RequestBody Map<String, Object> body) {
+        return messageService.create(user.getId(), targetId, (String) body.get("text"));
+    }
+
+    @DeleteMapping("{id}")
+    public void delete(@PathVariable(name = "id") long messageId) {
+        messageService.delete(messageId);
     }
 }

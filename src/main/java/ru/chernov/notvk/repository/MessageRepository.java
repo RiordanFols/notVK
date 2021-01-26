@@ -10,7 +10,7 @@ import java.util.Set;
  * @author Pavel Chernov
  */
 public interface MessageRepository extends JpaRepository<Message, Long> {
-    Set<Message> findAllByAuthorIdAndTargetIdOrderByCreationDateTime(long authorId, long targetId);
+    Set<Message> findAllByAuthorIdAndTargetId(long authorId, long targetId);
 
     @Query(nativeQuery = true,
             value = "SELECT m.target_id, m.user_id FROM message m WHERE (m.target_id=?1 or m.user_id=?1);")
