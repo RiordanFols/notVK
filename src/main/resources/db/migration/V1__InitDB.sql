@@ -52,6 +52,23 @@ create table post_like
     primary key (post_id, user_id)
 );
 
+create table comment
+(
+    id                 int8          not null,
+    creation_date_time timestamp     not null,
+    text               varchar(5000) not null,
+    user_id            int8          not null,
+    post_id            int8          not null,
+    primary key (id)
+);
+
+create table comment_like
+(
+    comment_id int8 not null,
+    user_id    int8 not null,
+    primary key (comment_id, user_id)
+);
+
 create table user_role
 (
     user_id int8         not null,
@@ -100,3 +117,9 @@ alter table if exists user_subscriptions
 
 alter table if exists user_subscriptions
     add constraint FKm69uaasbua17sgdnhsq10yxd5 foreign key (subscriber_id) references usr;
+
+alter table if exists comment_like
+    add constraint FKeh0kvj98rlb19mbg8ooifb9be foreign key (user_id) references usr;
+
+alter table if exists comment_like
+    add constraint FKqlv8phl1ibeh0efv4dbn3720p foreign key (comment_id) references comment;

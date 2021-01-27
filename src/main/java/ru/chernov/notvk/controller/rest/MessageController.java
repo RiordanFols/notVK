@@ -13,7 +13,7 @@ import java.util.Map;
  * @author Pavel Chernov
  */
 @RestController
-@RequestMapping("/messages")
+@RequestMapping("/message")
 public class MessageController {
 
     private final MessageService messageService;

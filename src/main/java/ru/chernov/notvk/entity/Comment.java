@@ -1,12 +1,15 @@
 package ru.chernov.notvk.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Pavel Chernov
@@ -35,10 +38,10 @@ public class Comment {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy HH:mm")
     private LocalDateTime creationDateTime;
 
-//    @ManyToMany(fetch = FetchType.LAZY)
-//    @JoinTable(name = "comment_like",
-//            joinColumns = @JoinColumn(name = "comment_id", nullable = false, updatable = false),
-//            inverseJoinColumns = @JoinColumn(name = "user_id", nullable = false, updatable = false))
-//    @JsonIgnore
-//    private Set<User> likes = new HashSet<>();
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "comment_like",
+            joinColumns = @JoinColumn(name = "comment_id", nullable = false, updatable = false),
+            inverseJoinColumns = @JoinColumn(name = "user_id", nullable = false, updatable = false))
+    @JsonIgnore
+    private Set<User> likes = new HashSet<>();
 }

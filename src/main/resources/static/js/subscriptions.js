@@ -1,4 +1,4 @@
-let subscriptionsApi = Vue.resource('/subscriptions{/id}');
+let subscriptionsApi = Vue.resource('/subscription{/id}');
 
 Vue.component('sub-info', {
     props: ['sub', 'subs'],
@@ -40,7 +40,7 @@ var app = new Vue({
         subscriptions: frontendData.subscriptions,
     },
     template:
-        '<div class="content">' +
+        '<div class="middle">' +
             '<sub-list :subs="subscriptions"/>' +
         '</div>',
 });

@@ -31,6 +31,10 @@ public class CommentService {
         this.postRepository = postRepository;
     }
 
+    public Comment findById(long commentId) {
+        return commentRepository.findById(commentId).orElse(null);
+    }
+
     public Comment create(long userId, long postId, String text) {
         User author = userRepository.findById(userId).orElse(null);
         Post post = postRepository.findById(postId).orElse(null);
@@ -50,5 +54,25 @@ public class CommentService {
 
     public Set<Comment> getPostComments(long postId) {
         return commentRepository.findAllByPostIdOrderByCreationDateTime(postId);
+    }
+
+    public void likeComment(long commentId, long userId) {
+        User user = userRepository.getOne(userId);
+        Comment comment = findById(commentId);
+
+        if (!comment.getLikes().contains(user)) {
+            comment.getLikes().add(user);
+            commentRepository.save(comment);
+        }
+    }
+
+    public void unlikeComment(long commentId, long userId) {
+        User user = userRepository.getOne(userId);
+        Comment comment = findById(commentId);
+
+        if (comment.getLikes().contains(user)) {
+            comment.getLikes().remove(user);
+            commentRepository.save(comment);
+        }
     }
 }
