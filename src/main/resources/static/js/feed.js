@@ -2,6 +2,32 @@ let postLikeApi = Vue.resource('/post-like{/id}');
 let commentApi = Vue.resource('/comment{/id}');
 let commentLikeApi = Vue.resource('/comment-like{/id}');
 
+Vue.component('comment-form', {
+    props: ['comments', 'post'],
+    data: function (){
+        return {
+            text: ''
+        };
+    },
+    template:
+        '<div class="comment-form">' +
+            '<img class="comment-form-img" src="/img/stock_avatar_m.png" alt=""/>' +
+            '<input class="comment-form-text" type="text" placeholder="Напишите комментарий" v-model="text"/>' +
+            '<input class="comment-form-btn" type="button" value="✔" @click="save"/>' +
+        '</div>',
+    methods: {
+        save: function () {
+            let body = {text: this.text};
+            commentApi.save({id: this.post.id}, body).then(result => {
+                result.json().then(data => {
+                    this.comments.push(data);
+                    this.text = '';
+                });
+            });
+        }
+    }
+});
+
 Vue.component('comment', {
     props: ['comment'],
     data: function() {
@@ -60,9 +86,10 @@ Vue.component('comment', {
 });
 
 Vue.component('comment-section', {
-    props: ['comments'],
+    props: ['comments', 'post'],
     template:
         '<div class="comment-section">' +
+            '<comment-form :comments="comments" :post="post"/>' +
             '<comment v-for="comment in comments" :key="comment.id" :comment="comment"/>' +
         '</div>'
 });
@@ -74,7 +101,7 @@ Vue.component('post-el', {
             likeN: 0,
             isLiked: false,
             comments: [],
-            commentsVisible: true,
+            commentsVisible: false,
         }
     },
     template:
@@ -105,7 +132,7 @@ Vue.component('post-el', {
                 '<div class="post-footer-number">{{ comments.length }}</div>' +
             '</div>' +
 
-            '<comment-section v-if="commentsVisible" :comments="comments"/>' +
+            '<comment-section v-if="commentsVisible" :post="post" :comments="comments"/>' +
         '</div>',
     methods: {
         del: function () {
@@ -147,6 +174,7 @@ Vue.component('post-el', {
         commentApi.get({id: this.post.id}).then(result => {
             result.json().then(data => {
                 this.comments = data;
+                this.commentsVisible = this.comments.length !== 0;
             });
         });
     }
