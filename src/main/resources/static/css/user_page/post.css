@@ -1,5 +1,15 @@
 .post-list {
+    height: 900px;
+    overflow: auto;
+}
 
+.post-list::-webkit-scrollbar {
+    display: none;
+}
+
+.post-list {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
 .post-el {

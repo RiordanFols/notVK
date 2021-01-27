@@ -1,5 +1,15 @@
 .sub-list {
+    height: 900px;
+    overflow: auto;
+}
 
+.sub-list::-webkit-scrollbar {
+    display: none;
+}
+
+.sub-list {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
 .sub-el {
