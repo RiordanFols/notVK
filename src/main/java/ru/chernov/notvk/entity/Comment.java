@@ -27,8 +27,8 @@ public class Comment {
     private User author;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "post_id", updatable = false, nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Post post;
 
     @Column(length = 5000, updatable = false, nullable = false)
@@ -39,6 +39,7 @@ public class Comment {
     private LocalDateTime creationDateTime;
 
     @ManyToMany(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinTable(name = "comment_like",
             joinColumns = @JoinColumn(name = "comment_id", nullable = false, updatable = false),
             inverseJoinColumns = @JoinColumn(name = "user_id", nullable = false, updatable = false))

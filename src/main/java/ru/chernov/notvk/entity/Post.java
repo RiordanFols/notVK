@@ -3,6 +3,8 @@ package ru.chernov.notvk.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -32,6 +34,7 @@ public class Post {
     private LocalDateTime creationDateTime;
 
     @ManyToMany(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinTable(name = "post_like",
         joinColumns = @JoinColumn(name = "post_id", nullable = false, updatable = false),
         inverseJoinColumns = @JoinColumn(name = "user_id", nullable = false, updatable = false))

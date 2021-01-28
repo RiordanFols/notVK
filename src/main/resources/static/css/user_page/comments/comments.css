@@ -50,6 +50,23 @@
     color: darkgray;
 }
 
+.comment-action {
+    width: 90px;
+    height: inherit;
+    float: right;
+}
+
+.comment-del-btn {
+    margin-top: 5px;
+    width: 25px;
+    height: 25px;
+    float: right;
+}
+
+.comment-del-btn:hover {
+    cursor: pointer;
+}
+
 .comment-main {
     width: 620px;
     min-height: 30px;

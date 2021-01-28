@@ -30,7 +30,7 @@ Vue.component('comment-form', {
 });
 
 Vue.component('comment', {
-    props: ['comment'],
+    props: ['comment', 'deleteComment'],
     data: function() {
         return {
             isLiked: false,
@@ -48,6 +48,10 @@ Vue.component('comment', {
                         '<div class="comment-author">{{ comment.author.name }} {{ comment.author.surname }}</div>' +
                     '</a>' +
                     '<div class="comment-datetime">{{ comment.creationDateTime }}</div>' +
+                '</div>' +
+
+                '<div class="comment-action">' +
+                    '<img class="comment-del-btn" src="/img/del_btn.png" @click="del" alt=""/>' +
                 '</div>' +
             '</div>' +
 
@@ -76,6 +80,10 @@ Vue.component('comment', {
                 }
             });
         },
+        del: function () {
+            if (confirm("Вы уверены, что хотите удалить комментарий?"))
+                this.deleteComment(this.comment);
+        }
     },
     created: function () {
         commentLikeApi.get({id: this.comment.id}).then(result => {
@@ -92,8 +100,18 @@ Vue.component('comment-section', {
     template:
         '<div class="comment-section">' +
             '<comment-form :comments="comments" :post="post"/>' +
-            '<comment v-for="comment in comments" :key="comment.id" :comment="comment"/>' +
-        '</div>'
+            '<comment v-for="comment in comments" :key="comment.id" ' +
+                ':comment="comment" :deleteComment="deleteComment"/>' +
+        '</div>',
+    methods: {
+        deleteComment: function (comment) {
+            commentApi.remove({id: comment.id}).then(result => {
+                if (result.ok) {
+                    this.comments.splice(this.comments.indexOf(comment), 1);
+                }
+            });
+        }
+    }
 });
 
 Vue.component('post-form', {
@@ -126,7 +144,7 @@ Vue.component('post-form', {
 });
 
 Vue.component('post-el', {
-    props: ['post', 'posts'],
+    props: ['post', 'deletePost'],
     data: function () {
         return {
             likeN: 0,
@@ -172,12 +190,8 @@ Vue.component('post-el', {
         '</div>',
     methods: {
         del: function () {
-            if (confirm("Вы уверены, что хотите удалить пост?")) {
-                postApi.remove({id: this.post.id}).then(result => {
-                    if (result.ok)
-                        this.posts.splice(this.posts.indexOf(this.post), 1);
-                });
-            }
+            if (confirm("Вы уверены, что хотите удалить пост?"))
+                this.deletePost(this.post);
         },
         like: function () {
             postLikeApi.save({id: this.post.id}, {}).then(result => {
@@ -220,8 +234,17 @@ Vue.component('post-list', {
     props: ['posts'],
     template:
         '<div class="post-list">' +
-            '<post-el v-for="post in posts" :key="post.id" :post="post" :posts="posts"/>' +
+            '<post-el v-for="post in posts" :key="post.id" :post="post" ' +
+                ':posts="posts" :deletePost="deletePost"/>' +
         '</div>',
+    methods: {
+        deletePost: function (post) {
+            postApi.remove({id: post.id}).then(result => {
+                if (result.ok)
+                    this.posts.splice(this.posts.indexOf(post), 1);
+            });
+        }
+    }
 });
 
 Vue.component('user-info', {

@@ -29,7 +29,7 @@ Vue.component('comment-form', {
 });
 
 Vue.component('comment', {
-    props: ['comment'],
+    props: ['comment', 'me', 'deleteComment'],
     data: function() {
         return {
             isLiked: false,
@@ -47,6 +47,10 @@ Vue.component('comment', {
                         '<div class="comment-author">{{ comment.author.name }} {{ comment.author.surname }}</div>' +
                     '</a>' +
                     '<div class="comment-datetime">{{ comment.creationDateTime }}</div>' +
+                '</div>' +
+
+                '<div v-if="me.id === comment.author.id" class="comment-action">' +
+                    '<img class="comment-del-btn" src="/img/del_btn.png" @click="del" alt=""/>' +
                 '</div>' +
             '</div>' +
 
@@ -74,6 +78,10 @@ Vue.component('comment', {
                 }
             });
         },
+        del: function () {
+            if (confirm("Вы уверены, что хотите удалить комментарий?"))
+                this.deleteComment(this.comment);
+        }
     },
     created: function () {
         commentLikeApi.get({id: this.comment.id}).then(result => {
@@ -86,16 +94,26 @@ Vue.component('comment', {
 });
 
 Vue.component('comment-section', {
-    props: ['comments', 'post'],
+    props: ['comments', 'post', 'me'],
     template:
         '<div class="comment-section">' +
             '<comment-form :comments="comments" :post="post"/>' +
-            '<comment v-for="comment in comments" :key="comment.id" :comment="comment"/>' +
-        '</div>'
+            '<comment v-for="comment in comments" :key="comment.id" ' +
+                    ':comment="comment" :me="me" :deleteComment="deleteComment"/>' +
+        '</div>',
+    methods: {
+        deleteComment: function (comment) {
+            commentApi.remove({id: comment.id}).then(result => {
+                if (result.ok) {
+                    this.comments.splice(this.comments.indexOf(comment), 1);
+                }
+            });
+        }
+    }
 });
 
 Vue.component('post-el', {
-    props: ['post', 'posts'],
+    props: ['post', 'me'],
     data: function () {
         return {
             likeN: 0,
@@ -132,17 +150,9 @@ Vue.component('post-el', {
                 '<div class="post-footer-number">{{ comments.length }}</div>' +
             '</div>' +
 
-            '<comment-section v-if="commentsVisible" :post="post" :comments="comments"/>' +
+            '<comment-section v-if="commentsVisible" :post="post" :comments="comments" :me="me"/>' +
         '</div>',
     methods: {
-        del: function () {
-            if (confirm("Вы уверены, что хотите удалить пост?")) {
-                postApi.remove({id: this.post.id}).then(result => {
-                    if (result.ok)
-                        this.posts.splice(this.posts.indexOf(this.post), 1);
-                });
-            }
-        },
         like: function () {
             postLikeApi.save({id: this.post.id}, {}).then(result => {
                 if (result.ok) {
@@ -181,20 +191,21 @@ Vue.component('post-el', {
 });
 
 Vue.component('post-list', {
-    props: ['posts'],
+    props: ['posts', 'me'],
     template:
         '<div class="post-list">' +
-            '<post-el v-for="post in posts" :key="post.id" :post="post" :posts="posts"/>' +
+            '<post-el v-for="post in posts" :key="post.id" :post="post" :me="me"/>' +
         '</div>',
 });
 
 var app = new Vue({
     el: '#app',
     data: {
+        me: frontendData.me,
         feed: frontendData.feed,
     },
     template:
         '<div class="middle">' +
-            '<post-list :posts="feed"/>' +
+            '<post-list :posts="feed" :me="me"/>' +
         '</div>',
 });
