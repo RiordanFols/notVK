@@ -4,7 +4,7 @@
 }
 
 .main {
-    width: 1165px;
+    width: 965px;
     min-height: 800px;
     margin: auto;
 }
@@ -40,12 +40,7 @@
 .middle {
     margin-left: 5px;
     float: left;
-    width: 900px;
+    width: 700px;
     min-height: 500px;
     padding: 5px;
 }
-
-.content {
-
-}
-

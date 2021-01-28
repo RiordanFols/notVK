@@ -13,7 +13,7 @@
 }
 
 .post-el {
-    padding: 10px 20px;
+    padding: 10px 20px 10px 20px;
     min-height: 80px;
     background-color: #3C3C44;
     margin-bottom: 15px;
@@ -97,17 +97,17 @@
     padding-bottom: 5px;
 }
 
-.footer-btn {
+.post-footer-btn {
     float: left;
     height: 25px;
     width: 25px;
 }
 
-.footer-btn:hover {
+.post-footer-btn:hover {
     cursor: pointer;
 }
 
-.footer-number {
+.post-footer-number {
     height: 25px;
     width: 25px;
     float: left;

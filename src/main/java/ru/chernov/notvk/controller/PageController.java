@@ -41,6 +41,7 @@ public class PageController {
         Set<Post> feed = postService.getFeed(user.getId());
         Map<Object, Object> data = new HashMap<>();
         data.put("feed", feed);
+        data.put("me", user);
 
         model.addAttribute("frontendData", data);
         return "main/feed";
@@ -57,6 +58,7 @@ public class PageController {
             return "redirect:/me";
 
         Map<Object, Object> data = new HashMap<>();
+        data.put("me", user);
         data.put("user", foundUser);
         data.put("userPosts", postService.getUserPosts(foundUser.getId()));
 

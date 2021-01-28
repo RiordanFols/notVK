@@ -1,4 +1,4 @@
-let messagesApi = Vue.resource('/messages{/id}');
+let messagesApi = Vue.resource('/message{/id}');
 
 Vue.component('message', {
     props: ['message', 'user'],

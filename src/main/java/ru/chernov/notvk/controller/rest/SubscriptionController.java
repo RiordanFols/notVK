@@ -13,7 +13,7 @@ import java.util.Map;
  * @author Pavel Chernov
  */
 @RestController
-@RequestMapping("subscriptions")
+@RequestMapping("/subscription")
 public class SubscriptionController {
 
     private final UserService userService;
