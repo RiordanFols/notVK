@@ -10,7 +10,9 @@ import ru.chernov.notvk.repository.PostRepository;
 import ru.chernov.notvk.repository.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * @author Pavel Chernov
@@ -53,7 +55,12 @@ public class CommentService {
     }
 
     public Set<Comment> getPostComments(long postId) {
-        return commentRepository.findAllByPostIdOrderByCreationDateTime(postId);
+        Set<Comment> comments = new TreeSet<>(Comparator
+                .comparingInt((Comment c) -> c.getLikes().size())
+                .reversed()
+                .thenComparing(Comment::getCreationDateTime));
+        comments.addAll(commentRepository.findAllByPostId(postId));
+        return comments;
     }
 
     public void likeComment(long commentId, long userId) {

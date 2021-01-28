@@ -9,5 +9,5 @@ import java.util.Set;
  * @author Pavel Chernov
  */
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    Set<Comment> findAllByPostIdOrderByCreationDateTime(long id);
+    Set<Comment> findAllByPostId(long id);
 }
