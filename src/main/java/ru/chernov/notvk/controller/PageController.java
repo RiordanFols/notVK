@@ -85,7 +85,7 @@ public class PageController {
 
     @GetMapping("/messenger")
     public String messenger(@AuthenticationPrincipal User user,
-                               Model model) {
+                            Model model) {
 
         Map<Object, Object> data = new HashMap<>();
         // get all users who user contacted with

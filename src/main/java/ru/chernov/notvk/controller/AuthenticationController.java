@@ -28,11 +28,11 @@ public class AuthenticationController {
 
     @PostMapping("registration")
     public String registration(@RequestParam String username,
-                           @RequestParam String name,
-                           @RequestParam String surname,
-                           @RequestParam String password,
-                           @RequestParam String passwordConfirm,
-                           Model model) {
+                               @RequestParam String name,
+                               @RequestParam String surname,
+                               @RequestParam String password,
+                               @RequestParam String passwordConfirm,
+                               Model model) {
         String error = userService.checkRegistrationData(username, password, passwordConfirm);
         if (error == null) {
             userService.registration(username, name, surname, password);

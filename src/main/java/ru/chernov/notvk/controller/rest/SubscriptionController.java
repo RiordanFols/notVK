@@ -42,7 +42,7 @@ public class SubscriptionController {
 
     @DeleteMapping("{id}")
     public void unsubscribe(@AuthenticationPrincipal User user,
-                          @PathVariable(name = "id") long targetId) {
+                            @PathVariable(name = "id") long targetId) {
         userService.unsubscribe(user.getId(), targetId);
     }
 }

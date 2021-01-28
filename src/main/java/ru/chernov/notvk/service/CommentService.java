@@ -56,7 +56,7 @@ public class CommentService {
         return commentRepository.findAllByPostIdOrderByCreationDateTime(postId);
     }
 
-    public void likeComment(long commentId, long userId) {
+    public void like(long commentId, long userId) {
         User user = userRepository.getOne(userId);
         Comment comment = findById(commentId);
 
@@ -66,7 +66,7 @@ public class CommentService {
         }
     }
 
-    public void unlikeComment(long commentId, long userId) {
+    public void unlike(long commentId, long userId) {
         User user = userRepository.getOne(userId);
         Comment comment = findById(commentId);
 

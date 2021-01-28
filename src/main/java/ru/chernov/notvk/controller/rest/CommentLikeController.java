@@ -40,7 +40,7 @@ public class CommentLikeController {
     public void like(@AuthenticationPrincipal User user,
                      @PathVariable(name = "id") long commentId) {
 
-        commentService.likeComment(commentId, user.getId());
+        commentService.like(commentId, user.getId());
 
     }
 
@@ -48,6 +48,6 @@ public class CommentLikeController {
     public void unlike(@AuthenticationPrincipal User user,
                        @PathVariable(name = "id") long commentId) {
 
-        commentService.unlikeComment(commentId, user.getId());
+        commentService.unlike(commentId, user.getId());
     }
 }
