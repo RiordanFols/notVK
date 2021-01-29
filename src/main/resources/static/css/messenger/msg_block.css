@@ -35,6 +35,7 @@
 }
 
 .chat {
+    word-wrap: break-word;
     display: flex;
     flex-direction: column-reverse;
     overflow: auto;
