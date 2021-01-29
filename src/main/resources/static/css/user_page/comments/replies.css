@@ -1,0 +1,99 @@
+.reply-section {
+
+}
+
+.reply-el {
+    padding: 10px 20px 0 20px;
+    border-top: 1px #707078 solid;
+    margin-bottom: 5px;
+}
+
+.reply-el:first-child {
+    border-top: none;
+}
+
+.reply-el:last-child {
+    margin-bottom: 0;
+}
+
+.reply-header {
+    height: 40px;
+}
+
+.reply-author-img {
+    height: 40px;
+    width: 40px;
+    float: left;
+    border-radius: 20px;
+}
+
+.reply-info {
+    width: 400px;
+    float: left;
+    margin-left: 15px;
+}
+
+.reply-info a{
+    text-decoration: none;
+}
+
+.reply-author {
+    height: 15px;
+    margin-top: 7px;
+    font-size: 15px;
+    color: white;
+}
+
+.reply-datetime {
+    height: 15px;
+    font-size: 13px;
+    color: darkgray;
+}
+
+.reply-action {
+    width: 90px;
+    height: inherit;
+    float: right;
+}
+
+.reply-del-btn {
+    margin-top: 5px;
+    width: 25px;
+    height: 25px;
+    float: right;
+}
+
+.reply-del-btn:hover {
+    cursor: pointer;
+}
+
+.reply-main {
+    width: 620px;
+    min-height: 30px;
+}
+
+.reply-text {
+    margin-top: 10px;
+    font-size: 14px;
+    color: white;
+    float: left;
+}
+
+.reply-btn {
+    float: right;
+    height: 20px;
+    width: 20px;
+}
+
+.reply-btn:hover {
+    cursor: pointer;
+}
+
+.reply-number {
+    margin-left: 5px;
+    height: 20px;
+    width: 20px;
+    float: right;
+    font-size: 15px;
+    color: darkgray;
+}

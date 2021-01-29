@@ -39,7 +39,6 @@ public class ReplyLikeController {
     @PostMapping("{id}")
     public void like(@AuthenticationPrincipal User user,
                      @PathVariable(name = "id") long replyId) {
-
         replyService.like(replyId, user.getId());
 
     }
@@ -47,7 +46,6 @@ public class ReplyLikeController {
     @DeleteMapping("{id}")
     public void unlike(@AuthenticationPrincipal User user,
                        @PathVariable(name = "id") long replyId) {
-
         replyService.unlike(replyId, user.getId());
     }
 }
