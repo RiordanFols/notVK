@@ -74,18 +74,16 @@
 
 .comment-text {
     min-height: 20px;
-    width: 560px;
+    width: 540px;
     margin-top: 10px;
     font-size: 14px;
     color: white;
-    float: left;
 }
 
 .comment-like-section {
-    margin-left: 5px;
-    float: left;
     height: 20px;
-    width: 50px;
+    width: 70px;
+    margin: 10px 0;
 }
 
 .comment-btn {
@@ -101,7 +99,7 @@
 .comment-number {
     margin-left: 5px;
     height: 20px;
-    width: 25px;
+    min-width: 15px;
     float: left;
     font-size: 15px;
     color: darkgray;

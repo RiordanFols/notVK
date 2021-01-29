@@ -61,6 +61,7 @@ Vue.component('comment', {
                     '<img class="comment-btn" v-if="isLiked" @click="unlike" src="/img/liked.png" alt=""/>' +
                     '<img class="comment-btn" v-else="isLiked" @click="like" src="/img/unliked.png" alt=""/>' +
                     '<div class="comment-number">{{ likeN }}</div>' +
+                    '<img class="comment-btn" src="/img/reply_btn.png" alt="" />' +
                 '</div>' +
             '</div>' +
 
