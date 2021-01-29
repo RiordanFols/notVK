@@ -5,35 +5,9 @@ let commentLikeApi = Vue.resource('/comment-like{/id}');
 let replyApi = Vue.resource('/reply{/id}');
 let replyLikeApi = Vue.resource('/reply-like{/id}');
 
-Vue.component('comment-form', {
-    props: ['comments', 'post'],
-    data: function (){
-        return {
-            text: ''
-        };
-    },
-    template:
-        '<div class="comment-form">' +
-            '<img class="comment-form-img" src="/img/stock_avatar_m.png" alt=""/>' +
-            '<input class="comment-form-text" type="text" placeholder="Напишите комментарий" v-model="text"/>' +
-            '<input class="comment-form-btn" type="button" value="✔" @click="save"/>' +
-        '</div>',
-    methods: {
-        save: function () {
-            let body = {text: this.text};
-            commentApi.save({id: this.post.id}, body).then(result => {
-                result.json().then(data => {
-                    this.comments.push(data);
-                    this.text = '';
-                });
-            });
-        }
-    }
-});
-
 
 Vue.component('reply-el', {
-    props: ['reply', 'deleteReply', 'me'],
+    props: ['reply', 'me', 'deleteComment'],
     data: function() {
         return {
             likeN: 0,
@@ -60,9 +34,12 @@ Vue.component('reply-el', {
 
             '<div class="reply-main">' +
                 '<div class="reply-text">{{ reply.text }}</div>' +
-                '<div class="reply-number">{{ likeN }}</div>' +
-                '<img class="reply-btn" v-if="isLiked" @click="unlike" src="/img/liked.png" alt=""/>' +
-                '<img class="reply-btn" v-else="isLiked" @click="like" src="/img/unliked.png" alt=""/>' +
+                '<div class="reply-like-section">' +
+                    '<img class="reply-btn" v-if="isLiked" @click="unlike" src="/img/liked.png" alt=""/>' +
+                    '<img class="reply-btn" v-else="isLiked" @click="like" src="/img/unliked.png" alt=""/>' +
+                    '<div class="reply-number">{{ likeN }}</div>' +
+                    '<img class="reply-btn" src="/img/reply_btn.png" alt="" />' +
+                '</div>' +
             '</div>' +
         '</div>',
     methods: {
@@ -100,8 +77,8 @@ Vue.component('reply-section', {
     props: ['replies', 'me'],
     template:
         '<div class="reply-section">' +
-            '<reply-el v-for="reply in replies" :reply="reply" :key="reply.id" ' +
-                    ':deleteReply="deleteReply" :me="me"/>' +
+        '<reply-el v-for="reply in replies" :reply="reply" :key="reply.id" ' +
+        ':deleteReply="deleteReply" :me="me"/>' +
         '</div>',
     methods: {
         deleteReply: function (reply) {
@@ -109,6 +86,32 @@ Vue.component('reply-section', {
                 if (result.ok) {
                     this.replies.splice(this.replies.indexOf(reply), 1);
                 }
+            });
+        }
+    }
+});
+
+Vue.component('comment-form', {
+    props: ['comments', 'post'],
+    data: function (){
+        return {
+            text: ''
+        };
+    },
+    template:
+        '<div class="comment-form">' +
+            '<img class="comment-form-img" src="/img/stock_avatar_m.png" alt=""/>' +
+            '<input class="comment-form-text" type="text" placeholder="Напишите комментарий" v-model="text"/>' +
+            '<input class="comment-form-btn" type="button" value="✔" @click="save"/>' +
+        '</div>',
+    methods: {
+        save: function () {
+            let body = {text: this.text};
+            commentApi.save({id: this.post.id}, body).then(result => {
+                result.json().then(data => {
+                    this.comments.push(data);
+                    this.text = '';
+                });
             });
         }
     }
@@ -151,7 +154,7 @@ Vue.component('comment', {
                 '</div>' +
             '</div>' +
 
-            // '<reply-section :replies="replies" :me="me"/>' +
+            '<reply-section :replies="replies" :me="me"/>' +
         '</div>',
     methods: {
         like: function () {

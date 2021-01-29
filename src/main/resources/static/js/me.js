@@ -2,6 +2,94 @@ let postApi = Vue.resource('/post{/id}');
 let postLikeApi = Vue.resource('/post-like{/id}');
 let commentApi = Vue.resource('/comment{/id}');
 let commentLikeApi = Vue.resource('/comment-like{/id}');
+let replyApi = Vue.resource('/reply{/id}');
+let replyLikeApi = Vue.resource('/reply-like{/id}');
+
+
+Vue.component('reply-el', {
+    props: ['reply', 'deleteComment'],
+    data: function() {
+        return {
+            likeN: 0,
+            isLiked: false
+        };
+    },
+    template:
+        '<div class="reply-el">' +
+            '<div class="reply-header">' +
+                '<a v-bind:href="\'/user/\' + reply.author.username">' +
+                    '<img class="reply-author-img" src="/img/stock_avatar_m.png" alt=""/>' +
+                '</a>' +
+                '<div class="reply-info">' +
+                    '<a v-bind:href="\'/user/\' + reply.author.username">' +
+                        '<div class="reply-author">{{ reply.author.name }} {{ reply.author.surname }}</div>' +
+                    '</a>' +
+                    '<div class="reply-datetime">{{ reply.creationDateTime }}</div>' +
+                '</div>' +
+
+                '<div class="reply-action">' +
+                    '<img class="reply-del-btn" src="/img/del_btn.png" @click="del" alt=""/>' +
+                '</div>' +
+            '</div>' +
+
+            '<div class="reply-main">' +
+                '<div class="reply-text">{{ reply.text }}</div>' +
+                '<div class="reply-like-section">' +
+                    '<img class="reply-btn" v-if="isLiked" @click="unlike" src="/img/liked.png" alt=""/>' +
+                    '<img class="reply-btn" v-else="isLiked" @click="like" src="/img/unliked.png" alt=""/>' +
+                    '<div class="reply-number">{{ likeN }}</div>' +
+                    '<img class="reply-btn" src="/img/reply_btn.png" alt="" />' +
+                '</div>' +
+            '</div>' +
+        '</div>',
+    methods: {
+        like: function () {
+            replyLikeApi.save({id: this.reply.id}, {}).then(result => {
+                if (result.ok) {
+                    this.isLiked = true;
+                    this.likeN++;
+                }
+            });
+        },
+        unlike: function () {
+            replyLikeApi.remove({id: this.reply.id}).then(result => {
+                if (result.ok) {
+                    this.isLiked = false;
+                    this.likeN--;
+                }
+            });
+        },
+        del: function () {
+            this.deleteReply(this.reply);
+        }
+    },
+    created: function () {
+        replyLikeApi.get({id: this.reply.id}).then(result => {
+            result.json().then(data => {
+                this.likeN = data.likeN;
+                this.isLiked = data.isLiked;
+            });
+        });
+    }
+});
+
+Vue.component('reply-section', {
+    props: ['replies'],
+    template:
+        '<div class="reply-section">' +
+            '<reply-el v-for="reply in replies" :reply="reply" :key="reply.id" ' +
+                    ':deleteReply="deleteReply"/>' +
+        '</div>',
+    methods: {
+        deleteReply: function (reply) {
+            replyApi.remove({id: reply.id}).then(result => {
+                if (result.ok) {
+                    this.replies.splice(this.replies.indexOf(reply), 1);
+                }
+            });
+        }
+    }
+});
 
 Vue.component('comment-form', {
     props: ['comments', 'post'],
@@ -34,7 +122,8 @@ Vue.component('comment', {
     data: function() {
         return {
             isLiked: false,
-            likeN: 0
+            likeN: 0,
+            replies: []
         };
     },
     template:
@@ -65,6 +154,7 @@ Vue.component('comment', {
                 '</div>' +
             '</div>' +
 
+            '<reply-section :replies="replies"/>' +
         '</div>',
     methods: {
         like: function () {
@@ -93,6 +183,12 @@ Vue.component('comment', {
             result.json().then(data => {
                 this.likeN = data.likeN;
                 this.isLiked = data.isLiked;
+            });
+        });
+
+        replyApi.get({id: this.comment.id}).then(result => {
+            result.json().then(data => {
+                this.replies = data;
             });
         });
     }
