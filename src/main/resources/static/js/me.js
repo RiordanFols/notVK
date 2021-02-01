@@ -7,11 +7,12 @@ let replyLikeApi = Vue.resource('/reply-like{/id}');
 
 
 Vue.component('reply-el', {
-    props: ['reply', 'deleteComment'],
+    props: ['reply', 'replies', 'deleteReply'],
     data: function() {
         return {
             likeN: 0,
-            isLiked: false
+            isLiked: false,
+            isFormVisible: false
         };
     },
     template:
@@ -38,9 +39,12 @@ Vue.component('reply-el', {
                     '<img class="reply-btn" v-if="isLiked" @click="unlike" src="/img/liked.png" alt=""/>' +
                     '<img class="reply-btn" v-else="isLiked" @click="like" src="/img/unliked.png" alt=""/>' +
                     '<div class="reply-number">{{ likeN }}</div>' +
-                    '<img class="reply-btn" src="/img/reply_btn.png" alt="" />' +
+                    '<img class="reply-btn" src="/img/reply_btn.png" alt="" @click="switchForm"/>' +
                 '</div>' +
             '</div>' +
+
+            '<reply-form v-if="isFormVisible" :replies="replies" :comment="reply.comment" ' +
+                        ':name="reply.author.name" :hideMethod="switchForm"/>' +
         '</div>',
     methods: {
         like: function () {
@@ -61,6 +65,9 @@ Vue.component('reply-el', {
         },
         del: function () {
             this.deleteReply(this.reply);
+        },
+        switchForm: function () {
+            this.isFormVisible = !this.isFormVisible;
         }
     },
     created: function () {
@@ -78,22 +85,53 @@ Vue.component('reply-section', {
     template:
         '<div class="reply-section">' +
             '<reply-el v-for="reply in replies" :reply="reply" :key="reply.id" ' +
-                    ':deleteReply="deleteReply"/>' +
+                    ':deleteReply="deleteReply" :replies="replies"/>' +
         '</div>',
     methods: {
         deleteReply: function (reply) {
-            replyApi.remove({id: reply.id}).then(result => {
-                if (result.ok) {
-                    this.replies.splice(this.replies.indexOf(reply), 1);
-                }
-            });
+            if (confirm("Вы уверены, что хотите удалить комментарий?")) {
+                replyApi.remove({id: reply.id}).then(result => {
+                    if (result.ok) {
+                        this.replies.splice(this.replies.indexOf(reply), 1);
+                    }
+                });
+            }
+        }
+    }
+});
+
+Vue.component('reply-form', {
+    props: ['replies', 'comment', 'name', 'hideMethod'],
+    data: function () {
+        return {
+            text: this.name + ', '
+        };
+    },
+    template:
+        '<div class="reply-form">' +
+            '<img class="reply-form-img" src="/img/stock_avatar_m.png" alt=""/>' +
+            '<input class="reply-form-text" type="text" v-model="text"/>' +
+            '<input class="reply-form-btn" type="button" value="✔" @click="save"/>' +
+        '</div>',
+    methods: {
+        save: function () {
+            if (this.text !== '' && this.text !== (this.name + ', ')) {
+                let body = {text: this.text};
+                replyApi.save({id: this.comment.id}, body).then(result => {
+                    result.json().then(data => {
+                        this.replies.push(data);
+                        this.text = this.name + ', ';
+                        this.hideMethod();
+                    });
+                });
+            }
         }
     }
 });
 
 Vue.component('comment-form', {
     props: ['comments', 'post'],
-    data: function (){
+    data: function () {
         return {
             text: ''
         };
@@ -117,13 +155,14 @@ Vue.component('comment-form', {
     }
 });
 
-Vue.component('comment', {
+Vue.component('comment-el', {
     props: ['comment', 'deleteComment'],
     data: function() {
         return {
             isLiked: false,
             likeN: 0,
-            replies: []
+            replies: [],
+            isFormVisible: false
         };
     },
     template:
@@ -150,10 +189,12 @@ Vue.component('comment', {
                     '<img class="comment-btn" v-if="isLiked" @click="unlike" src="/img/liked.png" alt=""/>' +
                     '<img class="comment-btn" v-else="isLiked" @click="like" src="/img/unliked.png" alt=""/>' +
                     '<div class="comment-number">{{ likeN }}</div>' +
-                    '<img class="comment-btn" src="/img/reply_btn.png" alt="" />' +
+                    '<img class="comment-btn" src="/img/reply_btn.png" alt="" @click="switchForm"/>' +
                 '</div>' +
             '</div>' +
 
+            '<reply-form v-if="isFormVisible" :replies="replies" :comment="comment" ' +
+                        ':name="comment.author.name" :hideMethod="switchForm"/>' +
             '<reply-section :replies="replies"/>' +
         '</div>',
     methods: {
@@ -176,6 +217,9 @@ Vue.component('comment', {
         del: function () {
             if (confirm("Вы уверены, что хотите удалить комментарий?"))
                 this.deleteComment(this.comment);
+        },
+        switchForm: function () {
+            this.isFormVisible = !this.isFormVisible;
         }
     },
     created: function () {
@@ -199,7 +243,7 @@ Vue.component('comment-section', {
     template:
         '<div class="comment-section">' +
             '<comment-form :comments="comments" :post="post"/>' +
-            '<comment v-for="comment in comments" :key="comment.id" ' +
+            '<comment-el v-for="comment in comments" :key="comment.id" ' +
                 ':comment="comment" :deleteComment="deleteComment"/>' +
         '</div>',
     methods: {
