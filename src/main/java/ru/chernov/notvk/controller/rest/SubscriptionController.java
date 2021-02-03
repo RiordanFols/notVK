@@ -28,6 +28,7 @@ public class SubscriptionController {
                                                  @PathVariable(name = "id") long targetId) {
         Map<String, Object> data = new HashMap<>();
         User target = userService.findById(targetId);
+        data.put("subscriptionsN", target.getSubscriptions().size());
         data.put("subscribersN", target.getSubscribers().size());
         data.put("isSubscribed", target.getSubscribers().contains(user));
 

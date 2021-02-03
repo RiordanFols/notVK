@@ -1,5 +1,6 @@
 package ru.chernov.notvk.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -7,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,19 +23,26 @@ import java.util.Set;
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
 
-    @Column(nullable = false)
+    @Column(length = 30, nullable = false)
     private String username;
 
-    @Column(nullable = false)
+    @Column(length = 30, nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(length = 30, nullable = false)
     private String surname;
 
-    @Column(nullable = false)
+    @Column(length = 50)
+    private String status;
+
+    @Column
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    private LocalDate birthday;
+
+    @Column(length = 30, nullable = false)
     @JsonIgnore
     private String password;
 

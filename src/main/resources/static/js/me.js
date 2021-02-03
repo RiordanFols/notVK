@@ -4,6 +4,7 @@ let commentApi = Vue.resource('/comment{/id}');
 let commentLikeApi = Vue.resource('/comment-like{/id}');
 let replyApi = Vue.resource('/reply{/id}');
 let replyLikeApi = Vue.resource('/reply-like{/id}');
+let subscriptionApi = Vue.resource('/subscription{/id}');
 
 
 Vue.component('reply-el', {
@@ -392,27 +393,49 @@ Vue.component('post-list', {
 
 Vue.component('user-info', {
     props: ['user'],
+    data: function () {
+        return {
+            subscribersN: 0,
+            subscriptionsN: 0,
+        }
+    },
     template:
         '<div class="user-info">' +
             '<div class="user-info-left">' +
                 '<img class="user-photo" src="/img/stock_avatar_m.png" alt=""/>' +
             '</div>' +
             '<div class="user-info-right">' +
-                '<div class="user-info-right-header">{{ user.name }} {{ user.surname }}</div>' +
+                '<div class="user-info-right-header">' +
+                    '<div class="user-name">{{ user.name }} {{ user.surname }}</div>' +
+                    '<div class="user-status">{{ user.status }}</div>' +
+                '</div>' +
                 '<div class="user-info-right-main">' +
-            // день рождения, статус и т.д.
-                    '<div></div>' +
+                    '<div class="user-birthday">День рождения: {{ user.birthday }}</div>' +
                     '<div></div>' +
                     '<div></div>' +
                     '<div></div>' +
                     '<div></div>' +
                 '</div>' +
                 '<div class="user-info-right-footer">' +
-                '' +
-                // кол-во подписчиков и другие показатели
+                    '<div class="user-info-footer-box">' +
+                        '<div class="user-info-footer-box-caption">Подписчики</div>' +
+                        '<div class="user-info-footer-box-number">{{ subscribersN }}</div>' +
+                    '</div>' +
+                    '<a href="/subscriptions"><div class="user-info-footer-box">' +
+                        '<div class="user-info-footer-box-caption">Подписки</div>' +
+                        '<div class="user-info-footer-box-number">{{ subscriptionsN }}</div>' +
+                    '</div></a>' +
                 '</div>' +
             '</div>' +
         '</div>',
+    created: function () {
+        subscriptionApi.get({id: this.user.id}).then(result => {
+            result.json().then(data => {
+                this.subscribersN = data.subscribersN;
+                this.subscriptionsN = data.subscriptionsN;
+            });
+        });
+    }
 });
 
 var app = new Vue({

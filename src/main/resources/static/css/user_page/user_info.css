@@ -49,23 +49,65 @@
 
 .user-info-right {
     min-height: 240px;
-    padding: 15px;
+    padding: 15px 15px 5px 15px;
     width: 460px;
     float: left;
     background-color: #3C3C44;
 }
 
 .user-info-right-header {
-    height: 40px;
+    height: 55px;
+}
+
+.user-name {
     font-size: 22px;
 }
 
+.user-status {
+    margin-top: 5px;
+    font-size: 16px;
+    color: darkgray;
+}
+
 .user-info-right-main {
-    height: 160px;
+    height: 135px;
     border-top: 1px solid #707078;
     border-bottom: 1px solid #707078;
 }
 
+.user-birthday {
+    font-size: 15px;
+    margin-top: 5px;
+}
+
 .user-info-right-footer {
-    height: 40px;
+    height: 58px;
+}
+
+.user-info-right-footer a{
+    text-decoration: none;
+    color: white;
+}
+
+.user-info-footer-box {
+    margin-top: 10px;
+    height: 48px;
+    min-width: 85px;
+    float: left;
+    text-align: center;
+}
+
+.user-info-footer-box:hover {
+    background-color: #707078;
+}
+
+.user-info-footer-box-caption {
+    height: 20px;
+    font-size: 14px;
+    color: darkgray;
+}
+
+.user-info-footer-box-number {
+    height: 20px;
+    font-size: 22px;
 }

@@ -347,6 +347,7 @@ Vue.component('user-info', {
     data: function () {
         return {
             subscribersN: 0,
+            subscriptionsN: 0,
             isSubscribed: false,
         }
     },
@@ -361,18 +362,26 @@ Vue.component('user-info', {
                 '<div class="user-subscribe-btn" v-else @click="unsubscribe">Отписаться</div>' +
             '</div>' +
             '<div class="user-info-right">' +
-                '<div class="user-info-right-header">{{ user.name }} {{ user.surname }}</div>' +
+                '<div class="user-info-right-header">' +
+                    '<div class="user-name">{{ user.name }} {{ user.surname }}</div>' +
+                    '<div class="user-status">{{ user.status }}</div>' +
+                '</div>' +
                 '<div class="user-info-right-main">' +
-                    // день рождения, статус и т.д.
-                    '<div></div>' +
+                    '<div class="user-birthday">День рождения: {{ user.birthday }}</div>' +
                     '<div></div>' +
                     '<div></div>' +
                     '<div></div>' +
                     '<div></div>' +
                 '</div>' +
                 '<div class="user-info-right-footer">' +
-                    '' +
-                // кол-во подписчиков и другие показатели
+                    '<div class="user-info-footer-box">' +
+                        '<div class="user-info-footer-box-caption">Подписчики</div>' +
+                        '<div class="user-info-footer-box-number">{{ subscribersN }}</div>' +
+                    '</div>' +
+                    '<div class="user-info-footer-box">' +
+                        '<div class="user-info-footer-box-caption">Подписки</div>' +
+                        '<div class="user-info-footer-box-number">{{ subscriptionsN }}</div>' +
+                    '</div>' +
                 '</div>' +
             '</div>' +
         '</div>',
@@ -401,6 +410,7 @@ Vue.component('user-info', {
             result.json().then(data => {
                 this.isSubscribed = data.isSubscribed;
                 this.subscribersN = data.subscribersN;
+                this.subscriptionsN = data.subscriptionsN;
             });
         });
     }

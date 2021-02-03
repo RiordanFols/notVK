@@ -35,7 +35,7 @@ public class Reply {
     private String text;
 
     @Column(nullable = false, updatable = false)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy HH:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm")
     private LocalDateTime creationDateTime;
 
     @ManyToMany(fetch = FetchType.LAZY)
