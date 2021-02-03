@@ -39,7 +39,7 @@ public class User implements UserDetails {
     private String status;
 
     @Column
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate birthday;
 
     @Column(length = 30, nullable = false)

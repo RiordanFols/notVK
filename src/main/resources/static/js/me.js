@@ -392,7 +392,7 @@ Vue.component('post-list', {
 });
 
 Vue.component('user-info', {
-    props: ['user'],
+    props: ['me'],
     data: function () {
         return {
             subscribersN: 0,
@@ -406,11 +406,11 @@ Vue.component('user-info', {
             '</div>' +
             '<div class="user-info-right">' +
                 '<div class="user-info-right-header">' +
-                    '<div class="user-name">{{ user.name }} {{ user.surname }}</div>' +
-                    '<div class="user-status">{{ user.status }}</div>' +
+                    '<div class="user-name">{{ me.name }} {{ me.surname }}</div>' +
+                    '<div class="user-status">{{ me.status }}</div>' +
                 '</div>' +
                 '<div class="user-info-right-main">' +
-                    '<div class="user-birthday">День рождения: {{ user.birthday }}</div>' +
+                    '<div class="user-birthday">День рождения: {{ me.birthday }}</div>' +
                     '<div></div>' +
                     '<div></div>' +
                     '<div></div>' +
@@ -429,7 +429,7 @@ Vue.component('user-info', {
             '</div>' +
         '</div>',
     created: function () {
-        subscriptionApi.get({id: this.user.id}).then(result => {
+        subscriptionApi.get({id: this.me.id}).then(result => {
             result.json().then(data => {
                 this.subscribersN = data.subscribersN;
                 this.subscriptionsN = data.subscriptionsN;
@@ -441,12 +441,12 @@ Vue.component('user-info', {
 var app = new Vue({
     el: '#app',
     data: {
-        user: frontendData.user,
+        me: frontendData.me,
         posts: frontendData.userPosts,
     },
     template:
         '<div class="middle">' +
-            '<user-info :user="user"/>' +
+            '<user-info :me="me"/>' +
             '<post-form :posts="posts"/>' +
             '<post-list :posts="posts"/>' +
         '</div>'

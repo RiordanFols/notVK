@@ -70,7 +70,7 @@ public class PageController {
     public String myPage(@AuthenticationPrincipal User user,
                          Model model) {
         Map<Object, Object> data = new HashMap<>();
-        data.put("user", userService.findById(user.getId()));
+        data.put("me", userService.findById(user.getId()));
         data.put("userPosts", postService.getUserPosts(user.getId()));
 
         model.addAttribute("frontendData", data);
@@ -80,6 +80,10 @@ public class PageController {
     @GetMapping("/profile")
     public String profilePage(@AuthenticationPrincipal User user,
                               Model model) {
+        Map<Object, Object> data = new HashMap<>();
+        data.put("me", userService.findById(user.getId()));
+
+        model.addAttribute("frontendData", data);
         return "main/profile";
     }
 

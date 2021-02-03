@@ -10,10 +10,8 @@ import ru.chernov.notvk.entity.User;
 import ru.chernov.notvk.repository.MessageRepository;
 import ru.chernov.notvk.repository.UserRepository;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.time.LocalDate;
+import java.util.*;
 
 /**
  * @author Pavel Chernov
@@ -110,5 +108,18 @@ public class UserService implements UserDetailsService {
         }
 
         return contacts;
+    }
+
+    public User changeData(User user, String username, String name, String surname,
+                           String status, String password, LocalDate birthday) {
+        user.setUsername(username);
+        user.setName(name);
+        user.setSurname(surname);
+        user.setStatus(status);
+        user.setBirthday(birthday);
+        if (password != null)
+            user.setPassword(password);
+
+        return userRepository.save(user);
     }
 }

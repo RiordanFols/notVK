@@ -72,7 +72,6 @@
 .user-info-right-main {
     height: 135px;
     border-top: 1px solid #707078;
-    border-bottom: 1px solid #707078;
 }
 
 .user-birthday {
@@ -82,6 +81,7 @@
 
 .user-info-right-footer {
     height: 58px;
+    border-top: 1px solid #707078;
 }
 
 .user-info-right-footer a{
