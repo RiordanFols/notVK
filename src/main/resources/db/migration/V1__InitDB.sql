@@ -75,6 +75,7 @@ create table usr
     status    varchar(50),
     surname   varchar(30) not null,
     username  varchar(30) not null,
+    email     varchar(30) not null,
     primary key (id)
 );
 

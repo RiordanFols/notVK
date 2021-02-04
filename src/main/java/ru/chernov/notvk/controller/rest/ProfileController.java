@@ -31,6 +31,7 @@ public class ProfileController {
     public User changeData(@AuthenticationPrincipal User user,
                            @RequestBody Map<String, Object> body) {
         String username = body.get("username").toString();
+        String email = body.get("email").toString();
         String name = body.get("name").toString();
         String surname = body.get("surname").toString();
         String status = body.get("status").toString();
@@ -43,6 +44,6 @@ public class ProfileController {
         var dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate birthday = LocalDate.parse(body.get("birthday").toString(), dtf);
 
-        return userService.changeData(user, username, name, surname, status, password, birthday);
+        return userService.changeData(user, email, username, name, surname, status, password, birthday);
     }
 }

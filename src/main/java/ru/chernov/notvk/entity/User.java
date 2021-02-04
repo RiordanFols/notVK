@@ -30,6 +30,9 @@ public class User implements UserDetails {
     private String username;
 
     @Column(length = 30, nullable = false)
+    private String email;
+
+    @Column(length = 30, nullable = false)
     private String name;
 
     @Column(length = 30, nullable = false)
@@ -41,6 +44,9 @@ public class User implements UserDetails {
     @Column
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate birthday;
+
+    @Transient
+    private String birthdayString;
 
     @Column(length = 30, nullable = false)
     @JsonIgnore
@@ -69,6 +75,16 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "subscriber_id", updatable = false, nullable = false))
     @JsonIgnore
     private Set<User> subscribers = new HashSet<>();
+
+    public void formatBirthday() {
+        String day = String.valueOf(this.getBirthday().getDayOfMonth());
+        String month = this.getBirthday().getMonthValue() >= 10 ?
+                String.valueOf(this.getBirthday().getMonthValue()) :
+                "0" + this.getBirthday().getMonthValue();
+        String year = String.valueOf(this.getBirthday().getYear());
+
+        this.setBirthdayString(day + "." + month + "." + year);
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

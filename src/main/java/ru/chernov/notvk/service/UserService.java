@@ -21,6 +21,7 @@ public class UserService implements UserDetailsService {
 
     private static final String PASSWORDS_NOT_SAME = "Пароли не совпадают";
     private static final String USERNAME_IS_TAKEN = "Пользователь с таким именем уже существует";
+    private static final String EMAIL_IS_TAKEN = "Эта почта уже занята другим пользователем";
 
     private final UserRepository userRepository;
     private final MessageRepository messageRepository;
@@ -40,7 +41,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findById(id).orElse(null) != null;
     }
 
-    public String checkRegistrationData(String username, String password, String passwordConfirm) {
+    public String checkRegistrationData(String username, String email, String password, String passwordConfirm) {
         // если пароль и подтверждение пароля не совпадают
         if (!password.equals(passwordConfirm))
             return PASSWORDS_NOT_SAME;
@@ -50,17 +51,25 @@ public class UserService implements UserDetailsService {
             return USERNAME_IS_TAKEN;
         }
 
+        // если email уже привязан
+        if (userRepository.findByEmail(email) != null) {
+            return EMAIL_IS_TAKEN;
+        }
+
         return null;
     }
 
-    public void registration(String username, String name, String surname, String password) {
+    public void registration(String username, String email, String name, String surname, String password) {
         User user = new User();
         user.setUsername(username);
+        user.setEmail(email);
         user.setName(name);
         user.setSurname(surname);
         user.setPassword(password);
+
         // todo: activation
         user.setActive(true);
+
         user.setRoles(Collections.singleton(Role.USER));
 
         userRepository.save(user);
@@ -110,9 +119,10 @@ public class UserService implements UserDetailsService {
         return contacts;
     }
 
-    public User changeData(User user, String username, String name, String surname,
+    public User changeData(User user, String email, String username, String name, String surname,
                            String status, String password, LocalDate birthday) {
         user.setUsername(username);
+        user.setEmail(email);
         user.setName(name);
         user.setSurname(surname);
         user.setStatus(status);

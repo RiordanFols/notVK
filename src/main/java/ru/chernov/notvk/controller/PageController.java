@@ -13,6 +13,7 @@ import ru.chernov.notvk.service.MessageService;
 import ru.chernov.notvk.service.PostService;
 import ru.chernov.notvk.service.UserService;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -56,6 +57,7 @@ public class PageController {
             return "error/404";
         if (foundUser.equals(user))
             return "redirect:/me";
+        foundUser.formatBirthday();
 
         Map<Object, Object> data = new HashMap<>();
         data.put("me", user);
@@ -69,8 +71,11 @@ public class PageController {
     @GetMapping("/me")
     public String myPage(@AuthenticationPrincipal User user,
                          Model model) {
+        User me = userService.findById(user.getId());
+        me.formatBirthday();
+
         Map<Object, Object> data = new HashMap<>();
-        data.put("me", userService.findById(user.getId()));
+        data.put("me", me);
         data.put("userPosts", postService.getUserPosts(user.getId()));
 
         model.addAttribute("frontendData", data);

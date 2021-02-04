@@ -23,16 +23,21 @@ Vue.component('user-profile', {
                     '</div>' +
 
                     '<div class="profile-input-line">' +
-                        '<div class="profile-label user-status-label" >Статус: </div>' +
-                        '<input maxlength="50" type="text" v-model="me.status"/>' +
-
+                        '<label class="profile-label">Юзернейм: </label>' +
+                        '<input type="text" required maxlength="30" v-model="me.username"/>' +
                     '</div>' +
+
                 '</div>' +
                 '<div class="user-info-right-main">' +
 
                     '<div class="profile-input-line">' +
-                        '<label class="profile-label user-name-label">Юзернейм: </label>' +
-                        '<input class="user-name-input" type="text" required maxlength="30" v-model="me.username"/>' +
+                        '<label class="profile-label">Почта: </label>' +
+                        '<input type="email" required maxlength="30" v-model="me.email"/>' +
+                    '</div>' +
+
+                    '<div class="profile-input-line">' +
+                        '<div class="profile-label" >Статус: </div>' +
+                        '<input maxlength="50" type="text" v-model="me.status"/>' +
                     '</div>' +
 
                     '<div class="profile-input-line profile-birthday-input-line">' +
@@ -51,6 +56,7 @@ Vue.component('user-profile', {
                 surname: this.me.surname,
                 status: this.me.status,
                 username: this.me.username,
+                email: this.me.email,
                 birthday: this.me.birthday
             };
             profileApi.save({}, body).then(result => {
