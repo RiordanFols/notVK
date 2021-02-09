@@ -1,7 +1,6 @@
-let profileApi = Vue.resource('/profile');
 
 Vue.component('user-profile', {
-    props: ['me', 'updateMethod'],
+    props: ['me'],
     template:
         '<div class="user-info">' +
             '<div class="user-info-left">' +
@@ -10,63 +9,65 @@ Vue.component('user-profile', {
                 '<div class="under-avatar-btn">Удалить фото</div>' +
             '</div>' +
             '<div class="user-info-right">' +
-                '<div class="user-info-right-header">' +
+                '<form action="profile/update/profile" method="post">' +
+                    '<div class="user-info-right-names">' +
 
-                    '<div class="profile-input-line">' +
-                        '<div class="profile-label user-name-label">Имя: </div>' +
-                        '<input class="user-name-input" required maxlength="30" type="text" v-model="me.name"/><br/>' +
+                        '<div class="profile-input-line">' +
+                            '<div class="profile-label user-name-label">Имя: </div>' +
+                            '<input class="profile-input user-name-input" name="name" required maxlength="30" type="text" v-model="me.name"/><br/>' +
+                        '</div>' +
+
+                        '<div class="profile-input-line">' +
+                            '<div class="profile-label user-name-label">Фамилия: </div>' +
+                            '<input class="profile-input user-name-input" name="surname" required maxlength="30" type="text" v-model="me.surname"/><br/>' +
+                        '</div>' +
+
+                        '<div class="profile-input-line">' +
+                            '<div class="profile-label">Юзернейм: </div>' +
+                            '<input class="profile-input" name="username" type="text" required maxlength="30" v-model="me.username"/>' +
+                        '</div>' +
+
                     '</div>' +
+                    '<div class="user-info-right-other">' +
+                        '<div class="profile-input-line">' +
+                            '<div class="profile-label">Почта: </div>' +
+                            '<input class="profile-input" name="email" type="email" required maxlength="30" v-model="me.email"/>' +
+                        '</div>' +
 
-                    '<div class="profile-input-line">' +
-                        '<div class="profile-label user-name-label">Фамилия: </div>' +
-                        '<input class="user-name-input" required maxlength="30" type="text" v-model="me.surname"/><br/>' +
+                        '<div class="profile-input-line">' +
+                            '<div class="profile-label" >Статус: </div>' +
+                            '<input class="profile-input" name="status" maxlength="50" type="text" v-model="me.status"/>' +
+                        '</div>' +
+
+                        '<div class="profile-input-line profile-birthday-input-line">' +
+                            '<div class="profile-label">День рождения: </div>' +
+                            '<input class="profile-input user-birthday-input" name="birthday" type="date" v-model="me.birthday"/>' +
+                        '</div>' +
+
+                        '<input class="profile-submit" type="submit"/>' +
                     '</div>' +
+                '</form>' +
 
-                    '<div class="profile-input-line">' +
-                        '<label class="profile-label">Юзернейм: </label>' +
-                        '<input type="text" required maxlength="30" v-model="me.username"/>' +
+                '<form action="profile/update/password" method="post">' +
+                    '<div class="user-info-right-password">' +
+                        '<div class="profile-input-line">' +
+                            '<label class="profile-label-password">Старый пароль</label>' +
+                            '<input class="profile-input-password" name="oldPassword" type="password">' +
+                        '</div>' +
+                        '<div class="profile-input-line">' +
+                            '<label class="profile-label-password">Новый пароль</label>' +
+                            '<input class="profile-input-password" name="newPassword" type="password">' +
+                        '</div>' +
+                        '<div class="profile-input-line">' +
+                            '<label class="profile-label-password">Подтвердите новый пароль</label>' +
+                            '<input class="profile-input-password" name="newPasswordConfirm" type="password">' +
+                        '</div>' +
+
+                        '<input class="profile-submit" type="submit"/>' +
                     '</div>' +
-
-                '</div>' +
-                '<div class="user-info-right-main">' +
-
-                    '<div class="profile-input-line">' +
-                        '<label class="profile-label">Почта: </label>' +
-                        '<input type="email" required maxlength="30" v-model="me.email"/>' +
-                    '</div>' +
-
-                    '<div class="profile-input-line">' +
-                        '<div class="profile-label" >Статус: </div>' +
-                        '<input maxlength="50" type="text" v-model="me.status"/>' +
-                    '</div>' +
-
-                    '<div class="profile-input-line profile-birthday-input-line">' +
-                        '<label class="profile-label">День рождения: </label>' +
-                        '<input class="user-birthday-input" type="date" v-model="me.birthday"/>' +
-                    '</div>' +
-
-                    '<div class="profile-save-btn" @click="saveProfile">Сохранить</div>' +
-                '</div>' +
+                '</form>' +
             '</div>' +
-        '</div>',
-    methods: {
-        saveProfile: function () {
-            let body = {
-                name: this.me.name,
-                surname: this.me.surname,
-                status: this.me.status,
-                username: this.me.username,
-                email: this.me.email,
-                birthday: this.me.birthday
-            };
-            profileApi.save({}, body).then(result => {
-                result.json().then(data => {
-                    this.updateMethod(data);
-                    alert("Изменения сохранены");
-                });
-            });
-        }
-    }
+        '</div>'
 });
 
 var app = new Vue({
@@ -76,11 +77,6 @@ var app = new Vue({
     },
     template:
         '<div class="middle">' +
-            '<user-profile :me="me" :updateMethod="updateUser"/>' +
+            '<user-profile :me="me"/>' +
         '</div>',
-    methods: {
-        updateUser: function (user) {
-            this.me = user;
-        }
-    }
 });

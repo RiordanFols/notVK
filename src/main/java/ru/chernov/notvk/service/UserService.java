@@ -4,13 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.chernov.notvk.entity.Role;
 import ru.chernov.notvk.entity.User;
+import ru.chernov.notvk.mail.MailInfo;
+import ru.chernov.notvk.mail.MailManager;
 import ru.chernov.notvk.repository.MessageRepository;
 import ru.chernov.notvk.repository.UserRepository;
 
-import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -25,11 +27,18 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final MessageRepository messageRepository;
+    private final MailManager mailManager;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository, MessageRepository messageRepository) {
+    public UserService(UserRepository userRepository,
+                       MessageRepository messageRepository,
+                       MailManager mailManager,
+                       PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.messageRepository = messageRepository;
+        this.mailManager = mailManager;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -65,12 +74,12 @@ public class UserService implements UserDetailsService {
         user.setEmail(email);
         user.setName(name);
         user.setSurname(surname);
-        user.setPassword(password);
-
-        // todo: activation
-        user.setActive(true);
-
+        user.setPassword(passwordEncoder.encode(password));
         user.setRoles(Collections.singleton(Role.USER));
+
+        user.setActive(false);
+        user.setActivationCode(UUID.randomUUID().toString());
+        mailManager.send(new MailInfo(user, "1"));
 
         userRepository.save(user);
     }
@@ -119,17 +128,14 @@ public class UserService implements UserDetailsService {
         return contacts;
     }
 
-    public User changeData(User user, String email, String username, String name, String surname,
-                           String status, String password, LocalDate birthday) {
-        user.setUsername(username);
-        user.setEmail(email);
-        user.setName(name);
-        user.setSurname(surname);
-        user.setStatus(status);
-        user.setBirthday(birthday);
-        if (password != null)
-            user.setPassword(password);
+    public boolean activateUser(String code) {
+        User user = userRepository.findByActivationCode(code);
 
-        return userRepository.save(user);
+        if (user == null)
+            return false;
+
+        user.setActive(true);
+        return true;
     }
+
 }

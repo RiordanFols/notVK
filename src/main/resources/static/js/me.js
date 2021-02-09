@@ -405,11 +405,11 @@ Vue.component('user-info', {
                 '<img class="user-photo" src="/img/stock_avatar_m.png" alt=""/>' +
             '</div>' +
             '<div class="user-info-right">' +
-                '<div class="user-info-right-header">' +
+                '<div class="user-info-right-names">' +
                     '<div class="user-name">{{ me.name }} {{ me.surname }}</div>' +
                     '<div class="user-status">{{ me.status }}</div>' +
                 '</div>' +
-                '<div class="user-info-right-main">' +
+                '<div class="user-info-right-other">' +
                     '<div class="user-birthday">День рождения: {{ me.birthdayString }}</div>' +
                     '<div></div>' +
                     '<div></div>' +

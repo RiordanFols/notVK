@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.chernov.notvk.service.UserService;
@@ -41,6 +42,15 @@ public class AuthenticationController {
         } else {
             model.addAttribute("error", error);
             return "registration";
+        }
+    }
+
+    @GetMapping("activation{code}")
+    public String activation(@PathVariable String code) {
+        if (userService.activateUser(code)) {
+            return "redirect:/login";
+        } else {
+            return "error/404";
         }
     }
 }

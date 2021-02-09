@@ -55,7 +55,7 @@
     background-color: #3C3C44;
 }
 
-.user-info-right-header {
+.user-info-right-names {
     height: 55px;
 }
 
@@ -69,7 +69,7 @@
     color: darkgray;
 }
 
-.user-info-right-main {
+.user-info-right-other {
     height: 135px;
     border-top: 1px solid #707078;
 }

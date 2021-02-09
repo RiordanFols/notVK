@@ -67,15 +67,16 @@ create sequence hibernate_sequence start 100 increment 1;
 
 create table usr
 (
-    id        int8        not null,
-    birthday  date,
-    is_active boolean     not null,
-    name      varchar(30) not null,
-    password  varchar(30) not null,
-    status    varchar(50),
-    surname   varchar(30) not null,
-    username  varchar(30) not null,
-    email     varchar(30) not null,
+    id              int8        not null,
+    birthday        date,
+    is_active       boolean     not null,
+    activation_code varchar,
+    name            varchar(30) not null,
+    password        varchar(100) not null,
+    status          varchar(50),
+    surname         varchar(30) not null,
+    username        varchar(30) not null,
+    email           varchar(30) not null,
     primary key (id)
 );
 

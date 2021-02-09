@@ -48,12 +48,16 @@ public class User implements UserDetails {
     @Transient
     private String birthdayString;
 
-    @Column(length = 30, nullable = false)
+    @Column(length = 100, nullable = false)
     @JsonIgnore
     private String password;
 
     @Column(nullable = false)
     private boolean isActive;
+
+    @Column
+    @JsonIgnore
+    private String activationCode;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role",

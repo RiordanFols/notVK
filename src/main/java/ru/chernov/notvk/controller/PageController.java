@@ -13,7 +13,6 @@ import ru.chernov.notvk.service.MessageService;
 import ru.chernov.notvk.service.PostService;
 import ru.chernov.notvk.service.UserService;
 
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -99,6 +98,7 @@ public class PageController {
         Map<Object, Object> data = new HashMap<>();
         // get all users who user contacted with
         data.put("userList", userService.getAllContacts(user.getId()));
+        data.put("me", user);
 
         model.addAttribute("frontendData", data);
         return "main/messenger";
@@ -112,6 +112,7 @@ public class PageController {
         Map<Object, Object> data = new HashMap<>();
         data.put("userList", userService.getAllContacts(user.getId()));
         data.put("messages", messageService.getCorrespondence(target.getId(), user.getId()));
+        data.put("me", user);
         data.put("target", target);
 
         model.addAttribute("frontendData", data);
@@ -124,6 +125,8 @@ public class PageController {
 
         Map<Object, Object> data = new HashMap<>();
         data.put("subscriptions", userService.findById(user.getId()).getSubscriptions());
+        data.put("me", user);
+
         model.addAttribute("frontendData", data);
         return "main/subscriptions";
     }

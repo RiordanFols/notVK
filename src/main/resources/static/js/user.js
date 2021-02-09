@@ -362,11 +362,11 @@ Vue.component('user-info', {
                 '<div class="user-subscribe-btn" v-else @click="unsubscribe">Отписаться</div>' +
             '</div>' +
             '<div class="user-info-right">' +
-                '<div class="user-info-right-header">' +
+                '<div class="user-info-right-names">' +
                     '<div class="user-name">{{ user.name }} {{ user.surname }}</div>' +
                     '<div class="user-status">{{ user.status }}</div>' +
                 '</div>' +
-                '<div class="user-info-right-main">' +
+                '<div class="user-info-right-other">' +
                     '<div class="user-birthday">День рождения: {{ user.birthdayString }}</div>' +
                     '<div></div>' +
                     '<div></div>' +

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Подписки</title>
+    <link rel="stylesheet" href="/css/reset.css">
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/user_page/user_info.css">
     <link rel="stylesheet" href="/css/user_page/subscriptions_info.css">
@@ -13,6 +14,21 @@
     </script>
 </head>
 <body class="body">
+
+<div class="header">
+    <div class="header-content">
+        <div class="header-app-name">NotVK</div>
+        <div class="header-middle">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <a th:href="@{/me}"><div class="header-profile">
+            <img class="header-profile-img" src="/img/stock_avatar_m.png" alt=""/>
+            <div class="header-profile-name" th:text="${frontendData.me.name} + ' ' + ${frontendData.me.surname}"></div>
+        </div></a>
+    </div>
+</div>
 
 <div class="main">
     <div class="left">
