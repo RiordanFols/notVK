@@ -3,6 +3,9 @@
     background-color: #303038;
 }
 
+/*header*/
+/**/
+
 .header {
     background-color: #505068;
     width: 100%;
@@ -31,7 +34,7 @@
 .header-middle {
     height: 40px;
     float: left;
-    width: 600px;
+    width: 587px;
 }
 
 .header-profile {
@@ -58,7 +61,21 @@
     font-size: 20px;
 }
 
-/*////////////////////////*/
+.header-logout {
+    border-left: 1px solid #656573;
+    float: left;
+    display: block;
+    padding-top: 12px;
+    padding-left: 10px;
+    height: 28px;
+    margin-left: 10px;
+    color: darkgray;
+    font-size: 15px;
+    align-content: center;
+}
+
+/*main content*/
+/**/
 
 .main {
     width: 965px;
