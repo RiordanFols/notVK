@@ -19,7 +19,7 @@ Vue.component('reply-el', {
         '<div class="reply-el">' +
             '<div class="reply-header">' +
                 '<a v-bind:href="\'/user/\' + reply.author.username">' +
-                    '<img class="reply-author-img" src="/img/stock_avatar_m.png" alt=""/>' +
+                    '<img class="reply-author-img" v-bind:src="\'/uploads/img/avatar/\' + reply.author.avatarFilename" alt=""/>' +
                 '</a>' +
                 '<div class="reply-info">' +
                     '<a v-bind:href="\'/user/\' + reply.author.username">' +
@@ -101,7 +101,7 @@ Vue.component('reply-section', {
 });
 
 Vue.component('reply-form', {
-    props: ['replies', 'comment', 'name', 'hideMethod'],
+    props: ['replies', 'comment', 'name', 'hideMethod', 'me'],
     data: function () {
         return {
             text: this.name + ', '
@@ -109,7 +109,7 @@ Vue.component('reply-form', {
     },
     template:
         '<div class="reply-form">' +
-            '<img class="reply-form-img" src="/img/stock_avatar_m.png" alt=""/>' +
+            '<img class="reply-form-img" v-bind:src="\'/uploads/img/avatar/\' + me.avatarFilename" alt=""/>' +
             '<input class="reply-form-text" type="text" v-model="text"/>' +
             '<input class="reply-form-btn" type="button" value="✔" @click="save"/>' +
         '</div>',
@@ -130,7 +130,7 @@ Vue.component('reply-form', {
 });
 
 Vue.component('comment-form', {
-    props: ['comments', 'post'],
+    props: ['comments', 'post', 'me'],
     data: function () {
         return {
             text: ''
@@ -138,7 +138,7 @@ Vue.component('comment-form', {
     },
     template:
         '<div class="comment-form">' +
-            '<img class="comment-form-img" src="/img/stock_avatar_m.png" alt=""/>' +
+            '<img class="comment-form-img" v-bind:src="\'/uploads/img/avatar/\' + me.avatarFilename" alt=""/>' +
             '<input class="comment-form-text" type="text" placeholder="Напишите комментарий" v-model="text"/>' +
             '<input class="comment-form-btn" type="button" value="✔" @click="save"/>' +
         '</div>',
@@ -169,7 +169,7 @@ Vue.component('comment-el', {
         '<div class="comment-el">' +
             '<div class="comment-header">' +
                 '<a v-bind:href="\'/user/\' + comment.author.username">' +
-                    '<img class="comment-author-img" src="/img/stock_avatar_m.png" alt=""/>' +
+                    '<img class="comment-author-img" v-bind:src="\'/uploads/img/avatar/\' + comment.author.avatarFilename" alt=""/>' +
                 '</a>' +
                 '<div class="comment-info">' +
                     '<a v-bind:href="\'/user/\' + comment.author.username">' +
@@ -194,7 +194,7 @@ Vue.component('comment-el', {
             '</div>' +
 
             '<reply-form v-if="isFormVisible" :replies="replies" :comment="comment" ' +
-                        ':name="comment.author.name" :hideMethod="switchForm"/>' +
+                        ':name="comment.author.name" :hideMethod="switchForm" :me="me"/>' +
             '<reply-section :replies="replies" :me="me"/>' +
         '</div>',
     methods: {
@@ -242,7 +242,7 @@ Vue.component('comment-section', {
     props: ['comments', 'post', 'me'],
     template:
         '<div class="comment-section">' +
-            '<comment-form :comments="comments" :post="post"/>' +
+            '<comment-form :comments="comments" :post="post" :me="me"/>' +
             '<comment-el v-for="comment in comments" :key="comment.id" ' +
                     ':comment="comment" :me="me" :deleteComment="deleteComment"/>' +
         '</div>',
@@ -271,7 +271,7 @@ Vue.component('post-el', {
         '<div class="post-el">' +
             '<div class="post-header">' +
                 '<a v-bind:href="\'/user/\' + post.author.username">' +
-                    '<img class="post-author-img" src="/img/stock_avatar_m.png" alt=""/>' +
+                    '<img class="post-author-img" v-bind:src="\'/uploads/img/avatar/\' + post.author.avatarFilename" alt=""/>' +
                 '</a>' +
                 '<div class="post-info">' +
                     '<a v-bind:href="\'/user/\' + post.author.username" style="text-decoration: none">' +
@@ -354,7 +354,7 @@ Vue.component('user-info', {
     template:
         '<div class="user-info">' +
             '<div class="user-info-left">' +
-                '<img class="user-photo" src="/img/stock_avatar_m.png" alt=""/>' +
+                '<img class="user-photo" v-bind:src="\'/uploads/img/avatar/\' + user.avatarFilename" alt=""/>' +
                 '<a v-bind:href="\'/messenger/\' + user.username" style="text-decoration: none">' +
                     '<div class="user-message-btn">Написать сообщение</div>' +
                 '</a>' +

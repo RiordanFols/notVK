@@ -77,7 +77,7 @@ create table usr
     surname         varchar(30)  not null,
     username        varchar(30)  not null,
     email           varchar(30)  not null,
-    avatar_filename varchar(100),
+    avatar_filename varchar(100) not null,
     primary key (id)
 );
 

@@ -5,7 +5,7 @@ Vue.component('sub-info', {
     template:
         '<div class="sub-el">' +
             '<a v-bind:href="\'/user/\' + sub.username">' +
-                '<img src="/img/stock_avatar_m.png" class="sub-el-img" alt=""/>' +
+                '<img v-bind:src="\'/uploads/img/avatar/\' + sub.avatarFilename" class="sub-el-img" alt=""/>' +
             '</a>' +
             '<div class="sub-info">' +
                 '<a v-bind:href="\'/user/\' + sub.username" style="text-decoration: none">' +

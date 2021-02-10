@@ -96,6 +96,13 @@
             <optional>true</optional>
         </dependency>
 
+        <!--apache tika-->
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-core</artifactId>
+            <version>1.25</version>
+        </dependency>
+
     </dependencies>
 
     <build>

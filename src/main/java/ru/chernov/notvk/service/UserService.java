@@ -47,39 +47,19 @@ public class UserService implements UserDetailsService {
     }
 
     public User findById(long id) {
-        User user = userRepository.findById(id).orElse(null);
-
-        if (user != null && user.getAvatarFilename() == null)
-            user.setAvatarFilename(user.AVATAR_STOCK_FILENAME);
-
-        return user;
+        return userRepository.findById(id).orElse(null);
     }
 
     public User findByUsername(String username) {
-        User user = userRepository.findByUsername(username);
-
-        if (user != null && user.getAvatarFilename() == null)
-            user.setAvatarFilename(user.AVATAR_STOCK_FILENAME);
-
-        return user;
+        return userRepository.findByUsername(username);
     }
 
     public User findByEmail(String email) {
-        User user = userRepository.findByEmail(email);
-
-        if (user != null && user.getAvatarFilename() == null)
-            user.setAvatarFilename(user.AVATAR_STOCK_FILENAME);
-
-        return user;
+        return userRepository.findByEmail(email);
     }
 
     public User findByActivationCode(String activationCode) {
-        User user = userRepository.findByActivationCode(activationCode);
-
-        if (user != null && user.getAvatarFilename() == null)
-            user.setAvatarFilename(user.AVATAR_STOCK_FILENAME);
-
-        return user;
+        return userRepository.findByActivationCode(activationCode);
     }
 
     public List<User> findAll() {
@@ -115,6 +95,7 @@ public class UserService implements UserDetailsService {
     public void registration(String username, String email, String name, String surname, String password) {
         User user = new User();
         user.setUsername(username);
+        user.setAvatarFilename(user.M_AVATAR_STOCK_FILENAME);
         user.setEmail(email);
         user.setName(name);
         user.setSurname(surname);

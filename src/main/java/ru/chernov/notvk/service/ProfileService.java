@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.chernov.notvk.entity.User;
 import ru.chernov.notvk.mail.MailInfo;
 import ru.chernov.notvk.mail.MailManager;
+import ru.chernov.notvk.utils.ImageUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,7 +38,7 @@ public class ProfileService {
     }
 
     public void updateAvatar(User user, MultipartFile avatar) throws IOException {
-        if (avatar != null) {
+        if (ImageUtils.isImageTypeAllowed(avatar)) {
             File uploadDir = new File(uploadPath);
 
             // если папка не существует
@@ -49,6 +50,7 @@ public class ProfileService {
 
             String filename = UUID.randomUUID() + "." + avatar.getOriginalFilename();
             avatar.transferTo(new File(uploadPath + "/img/avatar/" + filename));
+
             user.setAvatarFilename(filename);
             userService.save(user);
         }

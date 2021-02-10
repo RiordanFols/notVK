@@ -24,9 +24,10 @@
             <div></div>
         </div>
         <a th:href="@{/me}"><div class="header-profile">
-            <img class="header-profile-img" src="/img/stock_avatar_m.png" alt=""/>
+            <img class="header-profile-img" src="" th:src="@{/uploads/img/avatar/} + ${frontendData.me.avatarFilename}" alt=""/>
             <div class="header-profile-name" th:text="${frontendData.me.name} + ' ' + ${frontendData.me.surname}"></div>
         </div></a>
+        <a class="header-logout" href="/logout">Выйти</a>
     </div>
 </div>
 

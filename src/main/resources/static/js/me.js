@@ -8,7 +8,7 @@ let subscriptionApi = Vue.resource('/subscription{/id}');
 
 
 Vue.component('reply-el', {
-    props: ['reply', 'replies', 'deleteReply'],
+    props: ['reply', 'replies', 'deleteReply', 'me'],
     data: function() {
         return {
             likeN: 0,
@@ -20,7 +20,7 @@ Vue.component('reply-el', {
         '<div class="reply-el">' +
             '<div class="reply-header">' +
                 '<a v-bind:href="\'/user/\' + reply.author.username">' +
-                    '<img class="reply-author-img" src="/img/stock_avatar_m.png" alt=""/>' +
+                    '<img class="reply-author-img" v-bind:src="\'/uploads/img/avatar/\' + reply.author.avatarFilename" alt=""/>' +
                 '</a>' +
                 '<div class="reply-info">' +
                     '<a v-bind:href="\'/user/\' + reply.author.username">' +
@@ -45,7 +45,7 @@ Vue.component('reply-el', {
             '</div>' +
 
             '<reply-form v-if="isFormVisible" :replies="replies" :comment="reply.comment" ' +
-                        ':name="reply.author.name" :hideMethod="switchForm"/>' +
+                        ':name="reply.author.name" :hideMethod="switchForm" :me="me"/>' +
         '</div>',
     methods: {
         like: function () {
@@ -82,11 +82,11 @@ Vue.component('reply-el', {
 });
 
 Vue.component('reply-section', {
-    props: ['replies'],
+    props: ['replies', 'me'],
     template:
         '<div class="reply-section">' +
             '<reply-el v-for="reply in replies" :reply="reply" :key="reply.id" ' +
-                    ':deleteReply="deleteReply" :replies="replies"/>' +
+                    ':deleteReply="deleteReply" :replies="replies" :me="me"/>' +
         '</div>',
     methods: {
         deleteReply: function (reply) {
@@ -102,7 +102,7 @@ Vue.component('reply-section', {
 });
 
 Vue.component('reply-form', {
-    props: ['replies', 'comment', 'name', 'hideMethod'],
+    props: ['replies', 'comment', 'name', 'hideMethod', 'me'],
     data: function () {
         return {
             text: this.name + ', '
@@ -110,7 +110,7 @@ Vue.component('reply-form', {
     },
     template:
         '<div class="reply-form">' +
-            '<img class="reply-form-img" src="/img/stock_avatar_m.png" alt=""/>' +
+            '<img class="reply-form-img" v-bind:src="\'/uploads/img/avatar/\' + me.avatarFilename" alt=""/>' +
             '<input class="reply-form-text" type="text" v-model="text"/>' +
             '<input class="reply-form-btn" type="button" value="✔" @click="save"/>' +
         '</div>',
@@ -131,7 +131,7 @@ Vue.component('reply-form', {
 });
 
 Vue.component('comment-form', {
-    props: ['comments', 'post'],
+    props: ['comments', 'post', 'me'],
     data: function () {
         return {
             text: ''
@@ -139,7 +139,7 @@ Vue.component('comment-form', {
     },
     template:
         '<div class="comment-form">' +
-            '<img class="comment-form-img" src="/img/stock_avatar_m.png" alt=""/>' +
+            '<img class="comment-form-img" v-bind:src="\'/uploads/img/avatar/\' + me.avatarFilename" alt=""/>' +
             '<input class="comment-form-text" type="text" placeholder="Напишите комментарий" v-model="text"/>' +
             '<input class="comment-form-btn" type="button" value="✔" @click="save"/>' +
         '</div>',
@@ -157,7 +157,7 @@ Vue.component('comment-form', {
 });
 
 Vue.component('comment-el', {
-    props: ['comment', 'deleteComment'],
+    props: ['comment', 'deleteComment', 'me'],
     data: function() {
         return {
             isLiked: false,
@@ -170,7 +170,7 @@ Vue.component('comment-el', {
         '<div class="comment-el">' +
             '<div class="comment-header">' +
                 '<a v-bind:href="\'/user/\' + comment.author.username">' +
-                    '<img class="comment-author-img" src="/img/stock_avatar_m.png" alt=""/>' +
+                    '<img class="comment-author-img" v-bind:src="\'/uploads/img/avatar/\' + comment.author.avatarFilename" alt=""/>' +
                 '</a>' +
                 '<div class="comment-info">' +
                     '<a v-bind:href="\'/user/\' + comment.author.username">' +
@@ -195,8 +195,8 @@ Vue.component('comment-el', {
             '</div>' +
 
             '<reply-form v-if="isFormVisible" :replies="replies" :comment="comment" ' +
-                        ':name="comment.author.name" :hideMethod="switchForm"/>' +
-            '<reply-section :replies="replies"/>' +
+                        ':name="comment.author.name" :hideMethod="switchForm" :me="me"/>' +
+            '<reply-section :replies="replies" :me="me"/>' +
         '</div>',
     methods: {
         like: function () {
@@ -240,12 +240,12 @@ Vue.component('comment-el', {
 });
 
 Vue.component('comment-section', {
-    props: ['comments', 'post'],
+    props: ['comments', 'post', "me"],
     template:
         '<div class="comment-section">' +
-            '<comment-form :comments="comments" :post="post"/>' +
+            '<comment-form :comments="comments" :post="post" :me="me"/>' +
             '<comment-el v-for="comment in comments" :key="comment.id" ' +
-                ':comment="comment" :deleteComment="deleteComment"/>' +
+                ':comment="comment" :deleteComment="deleteComment" :me="me"/>' +
         '</div>',
     methods: {
         deleteComment: function (comment) {
@@ -259,7 +259,7 @@ Vue.component('comment-section', {
 });
 
 Vue.component('post-form', {
-    props: ['posts'],
+    props: ['posts', 'me'],
     data: function () {
         return {
             text: ''
@@ -267,7 +267,7 @@ Vue.component('post-form', {
     },
     template:
         '<div class="post-form">' +
-            '<img class="post-form-img" src="/img/stock_avatar_m.png" alt=""/>' +
+            '<img class="post-form-img" v-bind:src="\'/uploads/img/avatar/\' + me.avatarFilename" alt=""/>' +
             '<input class="post-form-text" type="text" placeholder="Что у вас нового?" v-model="text"/>' +
             '<input class="post-form-btn" type="button" value="✔" @click="save"/>' +
         '</div>',
@@ -288,7 +288,7 @@ Vue.component('post-form', {
 });
 
 Vue.component('post-el', {
-    props: ['post', 'deletePost'],
+    props: ['post', 'deletePost', 'me'],
     data: function () {
         return {
             likeN: 0,
@@ -301,7 +301,7 @@ Vue.component('post-el', {
         '<div class="post-el">' +
             '<div class="post-header">' +
                 '<a v-bind:href="\'/user/\' + post.author.username">' +
-                    '<img class="post-author-img" src="/img/stock_avatar_m.png" alt=""/>' +
+                    '<img class="post-author-img" v-bind:src="\'/uploads/img/avatar/\' + me.avatarFilename" alt=""/>' +
                 '</a>' +
 
                 '<div class="post-info">' +
@@ -330,7 +330,7 @@ Vue.component('post-el', {
                 '<div v-if="comments.length !== 0" class="post-footer-number">{{ comments.length }}</div>' +
             '</div>' +
 
-            '<comment-section v-if="commentsVisible" :post="post" :comments="comments"/>' +
+            '<comment-section v-if="commentsVisible" :post="post" :comments="comments" :me="me"/>' +
         '</div>',
     methods: {
         del: function () {
@@ -375,11 +375,11 @@ Vue.component('post-el', {
 });
 
 Vue.component('post-list', {
-    props: ['posts'],
+    props: ['posts', 'me'],
     template:
         '<div class="post-list">' +
             '<post-el v-for="post in posts" :key="post.id" :post="post" ' +
-                ':posts="posts" :deletePost="deletePost"/>' +
+                ':posts="posts" :deletePost="deletePost" :me="me"/>' +
         '</div>',
     methods: {
         deletePost: function (post) {
@@ -402,7 +402,7 @@ Vue.component('user-info', {
     template:
         '<div class="user-info">' +
             '<div class="user-info-left">' +
-                '<img class="user-photo" src="/img/stock_avatar_m.png" alt=""/>' +
+                '<img class="user-photo" v-bind:src="\'/uploads/img/avatar/\' + me.avatarFilename" alt=""/>' +
             '</div>' +
             '<div class="user-info-right">' +
                 '<div class="user-info-right-names">' +
@@ -447,7 +447,7 @@ var app = new Vue({
     template:
         '<div class="middle">' +
             '<user-info :me="me"/>' +
-            '<post-form :posts="posts"/>' +
-            '<post-list :posts="posts"/>' +
+            '<post-form :posts="posts" :me="me"/>' +
+            '<post-list :posts="posts" :me="me"/>' +
         '</div>'
 });

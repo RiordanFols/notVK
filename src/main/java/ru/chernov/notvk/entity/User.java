@@ -23,7 +23,9 @@ import java.util.Set;
 public class User implements UserDetails {
 
     @Transient
-    public final String AVATAR_STOCK_FILENAME = "stock_avatar_m.png";
+    public final String M_AVATAR_STOCK_FILENAME = "stock_m.png";
+    @Transient
+    public final String F_AVATAR_STOCK_FILENAME = "stock_f.png";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -32,8 +34,8 @@ public class User implements UserDetails {
     @Column(length = 30, nullable = false)
     private String username;
 
-    @Column(length = 100)
-    private String avatarFilename = null;
+    @Column(length = 100, nullable = false)
+    private String avatarFilename;
 
     @Column(length = 30, nullable = false)
     private String email;

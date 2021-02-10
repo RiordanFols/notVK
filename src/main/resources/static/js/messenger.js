@@ -5,7 +5,7 @@ Vue.component('message', {
     template:
         '<div class="message">' +
             '<a v-bind:href="\'/user/\' + message.author.username">' +
-                '<img class="message-author-img" src="/img/stock_avatar_m.png" alt=""/>' +
+                '<img class="message-author-img" v-bind:src="\'/uploads/img/avatar/\' + message.author.avatarFilename" alt=""/>' +
             '</a>' +
             '<div class="message-main">' +
                 '<div class="message-info">' +
@@ -36,7 +36,7 @@ Vue.component('chat-header', {
             '</a>' +
             '<div class="chat-header-last-online">*последний раз онлайн*</div>' +
             '<a v-bind:href="\'/user/\' + target.username">' +
-                '<img class="chat-header-img" src="/img/stock_avatar_m.png" alt=""/>' +
+                '<img class="chat-header-img" v-bind:src="\'/uploads/img/avatar/\' + target.avatarFilename" alt=""/>' +
             '</a>' +
         '</div>'
 });
@@ -84,7 +84,7 @@ Vue.component('user-el', {
     template:
         '<a v-bind:href="\'/messenger/\' + user.username">' +
             '<div class="contact">' +
-                '<img class="contact-img" src="/img/stock_avatar_m.png" alt=""/>' +
+                '<img class="contact-img" v-bind:src="\'/uploads/img/avatar/\' + user.avatarFilename" alt=""/>' +
                 '<div class="contact-info">' +
                     '<div class="contact-name">{{ user.name }} {{ user.surname }}</div>' +
                     '<div class="contact-last-message">*Последнее сообщение*</div>' +
