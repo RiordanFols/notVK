@@ -7,7 +7,6 @@ import ru.chernov.notvk.entity.Reply;
 import ru.chernov.notvk.entity.User;
 import ru.chernov.notvk.repository.CommentRepository;
 import ru.chernov.notvk.repository.ReplyRepository;
-import ru.chernov.notvk.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -18,15 +17,15 @@ import java.util.Set;
 @Service
 public class ReplyService {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final ReplyRepository replyRepository;
     private final CommentRepository commentRepository;
 
     @Autowired
-    public ReplyService(UserRepository userRepository,
+    public ReplyService(UserService userService,
                         ReplyRepository replyRepository,
                         CommentRepository commentRepository) {
-        this.userRepository = userRepository;
+        this.userService = userService;
         this.replyRepository = replyRepository;
         this.commentRepository = commentRepository;
     }
@@ -36,7 +35,7 @@ public class ReplyService {
     }
 
     public Reply create(long userId, long commentId, String text) {
-        User author = userRepository.findById(userId).orElse(null);
+        User author = userService.findById(userId);
         Comment comment = commentRepository.findById(commentId).orElse(null);
 
         Reply reply = new Reply();
@@ -57,7 +56,7 @@ public class ReplyService {
     }
 
     public void like(long replyId, long userId) {
-        User user = userRepository.getOne(userId);
+        User user = userService.findById(userId);
         Reply reply = findById(replyId);
 
         if (!reply.getLikes().contains(user)) {
@@ -67,7 +66,7 @@ public class ReplyService {
     }
 
     public void unlike(long replyId, long userId) {
-        User user = userRepository.getOne(userId);
+        User user = userService.findById(userId);
         Reply reply = findById(replyId);
 
         if (reply.getLikes().contains(user)) {

@@ -1,13 +1,16 @@
 package ru.chernov.notvk.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ru.chernov.notvk.entity.User;
 import ru.chernov.notvk.mail.MailInfo;
 import ru.chernov.notvk.mail.MailManager;
-import ru.chernov.notvk.repository.UserRepository;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -17,18 +20,41 @@ import java.util.UUID;
 @Service
 public class ProfileService {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final MailManager mailManager;
     private final PasswordEncoder passwordEncoder;
 
+    @Value("${upload.path}")
+    private String uploadPath;
+
     @Autowired
-    public ProfileService(UserRepository userRepository, MailManager mailManager, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
+    public ProfileService(UserService userService,
+                          MailManager mailManager,
+                          PasswordEncoder passwordEncoder) {
+        this.userService = userService;
         this.mailManager = mailManager;
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void changeData(User user, String username, String name, String surname,
+    public void updateAvatar(User user, MultipartFile avatar) throws IOException {
+        if (avatar != null) {
+            File uploadDir = new File(uploadPath);
+
+            // если папка не существует
+            if (!uploadDir.exists()) {
+                // если не удалось создать папку
+                if (!uploadDir.mkdir())
+                    return;
+            }
+
+            String filename = UUID.randomUUID() + "." + avatar.getOriginalFilename();
+            avatar.transferTo(new File(uploadPath + "/img/avatar/" + filename));
+            user.setAvatarFilename(filename);
+            userService.save(user);
+        }
+    }
+
+    public void updateData(User user, String username, String name, String surname,
                            String status, LocalDate birthday) {
         user.setUsername(username);
         user.setName(name);
@@ -36,25 +62,25 @@ public class ProfileService {
         user.setStatus(status);
         user.setBirthday(birthday);
 
-        userRepository.save(user);
+        userService.save(user);
     }
 
-    public boolean changeEmail(User user, String email) {
+    public boolean updateEmail(User user, String email) {
         if (!user.getEmail().equals(email)) {
             user.setEmail(email);
             user.setActive(false);
             user.setActivationCode(UUID.randomUUID().toString());
-            userRepository.save(user);
+            userService.save(user);
             mailManager.send(new MailInfo(user, "2"));
             return true;
         }
         return false;
     }
 
-    public boolean changePassword(User user, String oldPassword, String newPassword, String newPasswordConfirm) {
+    public boolean updatePassword(User user, String oldPassword, String newPassword, String newPasswordConfirm) {
         if (passwordEncoder.matches(oldPassword, user.getPassword()) && newPassword.equals(newPasswordConfirm)) {
             user.setPassword(passwordEncoder.encode(newPassword));
-            userRepository.save(user);
+            userService.save(user);
             mailManager.send(new MailInfo(user, "3"));
             return true;
         }

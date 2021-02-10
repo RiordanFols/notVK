@@ -20,17 +20,41 @@
     border-radius: 80px;
 }
 
-.under-avatar-btn {
-    padding-top: 4px;
+.user-info-left input {
+    width: 160px;
+    height: 24px;
     text-align: center;
     border-radius: 4px;
     margin-top: 10px;
-    background-color: #707078;
     color: white;
-    height: 22px;
+    outline: none;
+    border: none;
 }
 
-.under-avatar-btn:hover {
+.user-info-left input:hover {
+    cursor: pointer;
+}
+
+.profile-img-update {
+    background-color: #707078;
+}
+
+.profile-img-submit {
+    background-color: #016c01;
+}
+
+.profile-img-delete {
+    width: 160px;
+    background-color: #c70f0f;
+    padding-top: 4px;
+    height: 20px;
+    text-align: center;
+    border-radius: 4px;
+    margin-top: 10px;
+    color: white;
+}
+
+.profile-img-delete:hover {
     cursor: pointer;
 }
 

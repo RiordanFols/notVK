@@ -43,11 +43,55 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username);
+        return findByUsername(username);
+    }
+
+    public User findById(long id) {
+        User user = userRepository.findById(id).orElse(null);
+
+        if (user != null && user.getAvatarFilename() == null)
+            user.setAvatarFilename(user.AVATAR_STOCK_FILENAME);
+
+        return user;
+    }
+
+    public User findByUsername(String username) {
+        User user = userRepository.findByUsername(username);
+
+        if (user != null && user.getAvatarFilename() == null)
+            user.setAvatarFilename(user.AVATAR_STOCK_FILENAME);
+
+        return user;
+    }
+
+    public User findByEmail(String email) {
+        User user = userRepository.findByEmail(email);
+
+        if (user != null && user.getAvatarFilename() == null)
+            user.setAvatarFilename(user.AVATAR_STOCK_FILENAME);
+
+        return user;
+    }
+
+    public User findByActivationCode(String activationCode) {
+        User user = userRepository.findByActivationCode(activationCode);
+
+        if (user != null && user.getAvatarFilename() == null)
+            user.setAvatarFilename(user.AVATAR_STOCK_FILENAME);
+
+        return user;
+    }
+
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    public User save(User user) {
+        return userRepository.save(user);
     }
 
     public boolean checkUserExisting(long id) {
-        return userRepository.findById(id).orElse(null) != null;
+        return findById(id) != null;
     }
 
     public String checkRegistrationData(String username, String email, String password, String passwordConfirm) {
@@ -61,7 +105,7 @@ public class UserService implements UserDetailsService {
         }
 
         // если email уже привязан
-        if (userRepository.findByEmail(email) != null) {
+        if (findByEmail(email) != null) {
             return EMAIL_IS_TAKEN;
         }
 
@@ -82,18 +126,6 @@ public class UserService implements UserDetailsService {
         mailManager.send(new MailInfo(user, "1"));
 
         userRepository.save(user);
-    }
-
-    public User findById(long id) {
-        return userRepository.findById(id).orElse(null);
-    }
-
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
-
-    public List<User> findAll() {
-        return userRepository.findAll();
     }
 
     public void subscribe(long userId, long targetId) {
@@ -129,7 +161,7 @@ public class UserService implements UserDetailsService {
     }
 
     public boolean activateUser(String code) {
-        User user = userRepository.findByActivationCode(code);
+        User user = findByActivationCode(code);
 
         if (user == null)
             return false;
@@ -137,5 +169,4 @@ public class UserService implements UserDetailsService {
         user.setActive(true);
         return true;
     }
-
 }

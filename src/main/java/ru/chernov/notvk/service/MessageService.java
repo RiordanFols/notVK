@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import ru.chernov.notvk.entity.Message;
 import ru.chernov.notvk.entity.User;
 import ru.chernov.notvk.repository.MessageRepository;
-import ru.chernov.notvk.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -18,12 +17,12 @@ import java.util.TreeSet;
 @Service
 public class MessageService {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final MessageRepository messageRepository;
 
     @Autowired
-    public MessageService(UserRepository userRepository, MessageRepository messageRepository) {
-        this.userRepository = userRepository;
+    public MessageService(UserService userService, MessageRepository messageRepository) {
+        this.userService = userService;
         this.messageRepository = messageRepository;
     }
 
@@ -40,8 +39,8 @@ public class MessageService {
     }
 
     public Message create(long authorId, long targetId, String text) {
-        User author = userRepository.findById(authorId).orElse(null);
-        User target = userRepository.findById(targetId).orElse(null);
+        User author = userService.findById(authorId);
+        User target = userService.findById(targetId);
 
         Message message = new Message();
         message.setCreationDateTime(LocalDateTime.now());

@@ -7,7 +7,6 @@ import ru.chernov.notvk.entity.Post;
 import ru.chernov.notvk.entity.User;
 import ru.chernov.notvk.repository.CommentRepository;
 import ru.chernov.notvk.repository.PostRepository;
-import ru.chernov.notvk.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -20,15 +19,15 @@ import java.util.TreeSet;
 @Service
 public class CommentService {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
 
     @Autowired
-    public CommentService(UserRepository userRepository,
+    public CommentService(UserService userService,
                           CommentRepository commentRepository,
                           PostRepository postRepository) {
-        this.userRepository = userRepository;
+        this.userService = userService;
         this.commentRepository = commentRepository;
         this.postRepository = postRepository;
     }
@@ -38,7 +37,7 @@ public class CommentService {
     }
 
     public Comment create(long userId, long postId, String text) {
-        User author = userRepository.findById(userId).orElse(null);
+        User author = userService.findById(userId);
         Post post = postRepository.findById(postId).orElse(null);
 
         Comment comment = new Comment();
@@ -64,7 +63,7 @@ public class CommentService {
     }
 
     public void like(long commentId, long userId) {
-        User user = userRepository.getOne(userId);
+        User user = userService.findById(userId);
         Comment comment = findById(commentId);
 
         if (!comment.getLikes().contains(user)) {
@@ -74,7 +73,7 @@ public class CommentService {
     }
 
     public void unlike(long commentId, long userId) {
-        User user = userRepository.getOne(userId);
+        User user = userService.findById(userId);
         Comment comment = findById(commentId);
 
         if (comment.getLikes().contains(user)) {

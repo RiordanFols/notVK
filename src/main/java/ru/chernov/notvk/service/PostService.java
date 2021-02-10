@@ -20,12 +20,12 @@ import java.util.TreeSet;
 public class PostService {
 
     private final PostRepository postRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Autowired
-    public PostService(PostRepository postRepository, UserRepository userRepository) {
+    public PostService(PostRepository postRepository, UserService userService) {
         this.postRepository = postRepository;
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     public List<Post> getUserPosts(long authorId) {
@@ -33,7 +33,7 @@ public class PostService {
     }
 
     public Set<Post> getFeed(long userId) {
-        User user = userRepository.getOne(userId);
+        User user = userService.findById(userId);
         Set<Post> feed = new TreeSet<>(Comparator.comparing(Post::getCreationDateTime).reversed());
         for (var subscription : user.getSubscriptions()) {
             feed.addAll(getUserPosts(subscription.getId()));
@@ -47,7 +47,7 @@ public class PostService {
 
     public Post create(String text, long userId) {
         Post post = new Post();
-        post.setAuthor(userRepository.getOne(userId));
+        post.setAuthor(userService.findById(userId));
         post.setText(text);
         post.setCreationDateTime(LocalDateTime.now());
 
@@ -60,7 +60,7 @@ public class PostService {
 
     public void likePost(long postId, long userId) {
         Post post = findById(postId);
-        User user = userRepository.getOne(userId);
+        User user = userService.findById(userId);
 
         if (!post.getLikes().contains(user)) {
             post.getLikes().add(user);
@@ -70,7 +70,7 @@ public class PostService {
 
     public void unlikePost(long postId, long userId) {
         Post post = findById(postId);
-        User user = userRepository.getOne(userId);
+        User user = userService.findById(userId);
 
         if (post.getLikes().contains(user)) {
             post.getLikes().remove(user);

@@ -22,12 +22,18 @@ import java.util.Set;
 @EqualsAndHashCode(of = {"id"})
 public class User implements UserDetails {
 
+    @Transient
+    public final String AVATAR_STOCK_FILENAME = "stock_avatar_m.png";
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
 
     @Column(length = 30, nullable = false)
     private String username;
+
+    @Column(length = 100)
+    private String avatarFilename = null;
 
     @Column(length = 30, nullable = false)
     private String email;
@@ -43,6 +49,7 @@ public class User implements UserDetails {
 
     @Column
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonIgnore
     private LocalDate birthday;
 
     @Transient
@@ -53,6 +60,7 @@ public class User implements UserDetails {
     private String password;
 
     @Column(nullable = false)
+    @JsonIgnore
     private boolean isActive;
 
     @Column

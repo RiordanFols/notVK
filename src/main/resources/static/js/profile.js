@@ -4,9 +4,12 @@ Vue.component('user-profile', {
     template:
         '<div class="user-info">' +
             '<div class="user-info-left">' +
-                '<img class="user-photo" src="/img/stock_avatar_m.png" alt=""/>' +
-                '<div class="under-avatar-btn">Сменить фото</div>' +
-                '<div class="under-avatar-btn">Удалить фото</div>' +
+                '<img class="user-photo" v-bind:src="\'/uploads/img/avatar/\' + me.avatarFilename" alt=""/>' +
+                '<form action="/profile/update/avatar" method="post" enctype="multipart/form-data">' +
+                    '<input class="profile-img-update" type="file" name="avatar"/>' +
+                    '<input class="profile-img-submit" type="submit" value="Готово">' +
+                '</form>' +
+                '<div class="profile-img-delete">Удалить фото</div>' +
             '</div>' +
             '<div class="user-info-right">' +
                 '<form action="profile/update/profile" method="post">' +
@@ -44,7 +47,7 @@ Vue.component('user-profile', {
                             '<input class="profile-input user-birthday-input" name="birthday" type="date" v-model="me.birthday"/>' +
                         '</div>' +
 
-                        '<input class="profile-submit" type="submit"/>' +
+                        '<input class="profile-submit" type="submit" value="Готово"/>' +
                     '</div>' +
                 '</form>' +
 
@@ -63,7 +66,7 @@ Vue.component('user-profile', {
                             '<input class="profile-input-password" name="newPasswordConfirm" type="password">' +
                         '</div>' +
 
-                        '<input class="profile-submit" type="submit"/>' +
+                        '<input class="profile-submit" type="submit" value="Готово"/>' +
                     '</div>' +
                 '</form>' +
             '</div>' +

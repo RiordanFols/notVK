@@ -2,14 +2,15 @@ package ru.chernov.notvk.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import ru.chernov.notvk.entity.User;
 import ru.chernov.notvk.service.ProfileService;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -27,6 +28,19 @@ public class ProfileController {
         this.profileService = profileService;
     }
 
+    @PostMapping("/update/avatar")
+    public String updateAvatar(@AuthenticationPrincipal User user,
+                               @RequestParam("avatar") MultipartFile avatar){
+
+        try {
+            profileService.updateAvatar(user, avatar);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return "redirect:/profile";
+    }
+
     @PostMapping("/update/profile")
     public String updateProfile(@AuthenticationPrincipal User user,
                                 @RequestParam String username,
@@ -39,9 +53,9 @@ public class ProfileController {
         var dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate birthday = LocalDate.parse(birthdayString, dtf);
 
-        profileService.changeData(user, username, name, surname, status, birthday);
+        profileService.updateData(user, username, name, surname, status, birthday);
 
-        if (profileService.changeEmail(user, email)) {
+        if (profileService.updateEmail(user, email)) {
             return "redirect:/login";
         }
 
@@ -53,7 +67,7 @@ public class ProfileController {
                                  @RequestParam String oldPassword,
                                  @RequestParam String newPassword,
                                  @RequestParam String newPasswordConfirm) {
-        if (profileService.changePassword(user, oldPassword, newPassword, newPasswordConfirm)) {
+        if (profileService.updatePassword(user, oldPassword, newPassword, newPasswordConfirm)) {
             return "redirect:/login";
         } else {
             return "redirect:/profile";
