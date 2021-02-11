@@ -43,7 +43,7 @@ Vue.component('reply-el', {
             '</div>' +
 
             '<reply-form v-if="isFormVisible" :replies="replies" :comment="reply.comment" ' +
-                        ':name="reply.author.name" :hideMethod="switchForm"/>' +
+                        ':name="reply.author.name" :hideMethod="switchForm" :me="me"/>' +
         '</div>',
     methods: {
         like: function () {

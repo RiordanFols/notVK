@@ -2,8 +2,7 @@ package ru.chernov.notvk.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -18,8 +17,10 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "usr")
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(of = {"id"})
+@ToString(of = {"id", "username", "name", "surname", "avatarFilename", "email", "status", "birthdayString"})
 public class User implements UserDetails {
 
     @Transient

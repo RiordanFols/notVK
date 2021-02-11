@@ -12,6 +12,7 @@ import ru.chernov.notvk.utils.ImageUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -37,7 +38,7 @@ public class ProfileService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void updateAvatar(User user, MultipartFile avatar) throws IOException {
+    public User updateAvatar(User user, MultipartFile avatar) throws IOException {
         if (ImageUtils.isImageTypeAllowed(avatar)) {
             File uploadDir = new File(uploadPath);
 
@@ -45,15 +46,28 @@ public class ProfileService {
             if (!uploadDir.exists()) {
                 // если не удалось создать папку
                 if (!uploadDir.mkdir())
-                    return;
+                    return user;
             }
 
             String filename = UUID.randomUUID() + "." + avatar.getOriginalFilename();
             avatar.transferTo(new File(uploadPath + "/img/avatar/" + filename));
 
             user.setAvatarFilename(filename);
-            userService.save(user);
         }
+
+        return userService.save(user);
+    }
+
+    public User deleteAvatar(User user) throws IOException {
+        if (!user.getAvatarFilename().equals(user.M_AVATAR_STOCK_FILENAME)
+                && !user.getAvatarFilename().equals(user.F_AVATAR_STOCK_FILENAME)) {
+            File avatar = new File(uploadPath + "/img/avatar" + user.getAvatarFilename());
+
+            Files.deleteIfExists(avatar.toPath());
+            user.setAvatarFilename(user.M_AVATAR_STOCK_FILENAME);
+        }
+
+        return userService.save(user);
     }
 
     public void updateData(User user, String username, String name, String surname,

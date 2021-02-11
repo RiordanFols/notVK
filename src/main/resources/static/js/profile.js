@@ -1,15 +1,16 @@
+let profilePhotoApi = Vue.resource('/profile/photo');
 
 Vue.component('user-profile', {
-    props: ['me'],
+    props: ['me', 'updateAvatarMethod'],
     template:
         '<div class="user-info">' +
             '<div class="user-info-left">' +
                 '<img class="user-photo" v-bind:src="\'/uploads/img/avatar/\' + me.avatarFilename" alt=""/>' +
                 '<form action="/profile/update/avatar" method="post" enctype="multipart/form-data">' +
                     '<input class="profile-img-update" type="file" name="avatar"/>' +
-                    '<input class="profile-img-submit" type="submit" value="Готово">' +
+                    '<input class="profile-img-submit" type="submit" value="Обновить фото"/>' +
                 '</form>' +
-                '<div class="profile-img-delete">Удалить фото</div>' +
+                '<div class="profile-img-delete" @click="deletePhoto">Удалить фото</div>' +
             '</div>' +
             '<div class="user-info-right">' +
                 '<form action="profile/update/profile" method="post">' +
@@ -70,7 +71,18 @@ Vue.component('user-profile', {
                     '</div>' +
                 '</form>' +
             '</div>' +
-        '</div>'
+        '</div>',
+    methods: {
+        deletePhoto: function () {
+            if (confirm("Вы уверены, что хотите удалить своё фото?")) {
+                profilePhotoApi.remove().then(result => {
+                    result.json().then(data => {
+                        this.updateAvatarMethod(data);
+                    });
+                });
+            }
+        }
+    }
 });
 
 var app = new Vue({
@@ -80,6 +92,11 @@ var app = new Vue({
     },
     template:
         '<div class="middle">' +
-            '<user-profile :me="me"/>' +
+            '<user-profile :me="me" :updateAvatarMethod="updateUser"/>' +
         '</div>',
+    methods: {
+        updateUser: function (user) {
+            this.me = user;
+        }
+    }
 });

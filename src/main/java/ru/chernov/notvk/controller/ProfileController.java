@@ -1,17 +1,15 @@
 package ru.chernov.notvk.controller;
 
-import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartFile;
 import ru.chernov.notvk.entity.User;
 import ru.chernov.notvk.service.ProfileService;
+import ru.chernov.notvk.service.UserService;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -25,21 +23,18 @@ import java.time.format.DateTimeFormatter;
 public class ProfileController {
 
     private final ProfileService profileService;
+    private final UserService userService;
 
     @Autowired
-    public ProfileController(ProfileService profileService) {
+    public ProfileController(ProfileService profileService, UserService userService) {
         this.profileService = profileService;
+        this.userService = userService;
     }
 
     @PostMapping("/update/avatar")
-    public String updateAvatar(@AuthenticationPrincipal User user,
-                               @RequestParam("avatar") MultipartFile avatar) {
-
-        try {
-            profileService.updateAvatar(user, avatar);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public String updateProfilePhoto(@AuthenticationPrincipal User user,
+                                   @RequestParam("avatar") MultipartFile avatar) throws IOException {
+        profileService.updateAvatar(user, avatar);
 
         return "redirect:/profile";
     }
