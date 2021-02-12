@@ -29,6 +29,7 @@ public class AuthenticationController {
 
     @PostMapping("registration")
     public String registration(@RequestParam String username,
+                               @RequestParam String gender,
                                @RequestParam String email,
                                @RequestParam String name,
                                @RequestParam String surname,
@@ -37,7 +38,7 @@ public class AuthenticationController {
                                Model model) {
         String error = userService.checkRegistrationData(username, email, password, passwordConfirm);
         if (error == null) {
-            userService.registration(username, email, name, surname, password);
+            userService.registration(username, gender, email, name, surname, password);
             return "redirect:/login";
         } else {
             model.addAttribute("error", error);

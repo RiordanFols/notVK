@@ -6,8 +6,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.chernov.notvk.entity.Role;
-import ru.chernov.notvk.entity.User;
+import ru.chernov.notvk.domain.Gender;
+import ru.chernov.notvk.domain.Role;
+import ru.chernov.notvk.domain.entity.User;
 import ru.chernov.notvk.mail.MailInfo;
 import ru.chernov.notvk.mail.MailManager;
 import ru.chernov.notvk.repository.MessageRepository;
@@ -62,19 +63,12 @@ public class UserService implements UserDetailsService {
         return userRepository.findByActivationCode(activationCode);
     }
 
-    public List<User> findAll() {
-        return userRepository.findAll();
-    }
-
     public User save(User user) {
         return userRepository.save(user);
     }
 
-    public boolean checkUserExisting(long id) {
-        return findById(id) != null;
-    }
-
     public String checkRegistrationData(String username, String email, String password, String passwordConfirm) {
+
         // если пароль и подтверждение пароля не совпадают
         if (!password.equals(passwordConfirm))
             return PASSWORDS_NOT_SAME;
@@ -92,18 +86,21 @@ public class UserService implements UserDetailsService {
         return null;
     }
 
-    public void registration(String username, String email, String name, String surname, String password) {
+    public void registration(String username, String gender, String email, String name, String surname, String password) {
         User user = new User();
         user.setUsername(username);
-        user.setAvatarFilename(user.M_AVATAR_STOCK_FILENAME);
+
+        user.setGender(gender);
+
         user.setEmail(email);
         user.setName(name);
         user.setSurname(surname);
         user.setPassword(passwordEncoder.encode(password));
         user.setRoles(Collections.singleton(Role.USER));
 
-        user.setActive(false);
-        user.setActivationCode(UUID.randomUUID().toString());
+        user.setActive(true);
+//        user.setActive(false);
+//        user.setActivationCode(UUID.randomUUID().toString());
         mailManager.send(new MailInfo(user, "1"));
 
         userRepository.save(user);

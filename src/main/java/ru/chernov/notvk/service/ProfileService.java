@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.chernov.notvk.entity.User;
+import ru.chernov.notvk.domain.entity.User;
 import ru.chernov.notvk.mail.MailInfo;
 import ru.chernov.notvk.mail.MailManager;
 import ru.chernov.notvk.utils.ImageUtils;
@@ -49,6 +49,7 @@ public class ProfileService {
                     return user;
             }
 
+            Files.deleteIfExists(new File(user.getAvatarFilename()).toPath());
             String filename = UUID.randomUUID() + "." + avatar.getOriginalFilename();
             avatar.transferTo(new File(uploadPath + "/img/avatar/" + filename));
 
@@ -59,12 +60,13 @@ public class ProfileService {
     }
 
     public User deleteAvatar(User user) throws IOException {
-        if (!user.getAvatarFilename().equals(user.M_AVATAR_STOCK_FILENAME)
-                && !user.getAvatarFilename().equals(user.F_AVATAR_STOCK_FILENAME)) {
+
+        // если у пользователя не стоковый аватар
+        if (!user.getAvatarFilename().equals(user.getGender().getStockAvatarFilename())) {
             File avatar = new File(uploadPath + "/img/avatar" + user.getAvatarFilename());
 
             Files.deleteIfExists(avatar.toPath());
-            user.setAvatarFilename(user.M_AVATAR_STOCK_FILENAME);
+            user.setAvatarFilename(user.getGender().getStockAvatarFilename());
         }
 
         return userService.save(user);
@@ -72,24 +74,35 @@ public class ProfileService {
 
     public void updateData(User user, String username, String name, String surname,
                            String status, LocalDate birthday) {
-        user.setUsername(username);
-        user.setName(name);
-        user.setSurname(surname);
-        user.setStatus(status);
-        user.setBirthday(birthday);
 
-        userService.save(user);
+        // если юзер с таким юзернэймом еще не существует или это текущий юзер
+        if (userService.findByUsername(username) == null || userService.findByUsername(username).equals(user)) {
+            user.setUsername(username);
+            user.setName(name);
+            user.setSurname(surname);
+            user.setStatus(status);
+            user.setBirthday(birthday);
+
+            userService.save(user);
+        }
+        // else error
     }
 
     public boolean updateEmail(User user, String email) {
-        if (!user.getEmail().equals(email)) {
-            user.setEmail(email);
-            user.setActive(false);
-            user.setActivationCode(UUID.randomUUID().toString());
-            userService.save(user);
-            mailManager.send(new MailInfo(user, "2"));
-            return true;
+
+        // если юзер с такой почтой еще не существует или это текущий юзер
+        if (userService.findByEmail(email) == null || userService.findByEmail(email).equals(user)) {
+            if (!user.getEmail().equals(email)) {
+                user.setEmail(email);
+                user.setActive(false);
+                user.setActivationCode(UUID.randomUUID().toString());
+                userService.save(user);
+                mailManager.send(new MailInfo(user, "2"));
+                return true;
+            }
         }
+        // else error
+
         return false;
     }
 

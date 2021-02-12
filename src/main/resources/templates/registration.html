@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Регистрация</title>
@@ -12,6 +12,14 @@
     <p>
         <label for="username" >Имя пользователя</label>
         <input type="text" id="username" name="username" required autofocus>
+    </p>
+    <p>
+        <label for="gender">Выберите ваш пол</label>
+        <select size="1" id="gender" name="gender" required>
+            <option value="undefined" selected>Не определено</option>
+            <option value="male">Мужчина</option>
+            <option value="female">Женщина</option>
+        </select>
     </p>
     <p>
         <label for="email" >Почта</label>

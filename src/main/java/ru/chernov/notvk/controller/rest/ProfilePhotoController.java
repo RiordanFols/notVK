@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.chernov.notvk.entity.User;
+import ru.chernov.notvk.domain.entity.User;
 import ru.chernov.notvk.service.ProfileService;
 
 import java.io.IOException;

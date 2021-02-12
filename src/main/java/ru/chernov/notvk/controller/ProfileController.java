@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import ru.chernov.notvk.entity.User;
+import ru.chernov.notvk.domain.entity.User;
 import ru.chernov.notvk.service.ProfileService;
 import ru.chernov.notvk.service.UserService;
 
@@ -23,12 +23,10 @@ import java.time.format.DateTimeFormatter;
 public class ProfileController {
 
     private final ProfileService profileService;
-    private final UserService userService;
 
     @Autowired
-    public ProfileController(ProfileService profileService, UserService userService) {
+    public ProfileController(ProfileService profileService) {
         this.profileService = profileService;
-        this.userService = userService;
     }
 
     @PostMapping("/update/avatar")
@@ -48,8 +46,11 @@ public class ProfileController {
                                 @RequestParam(name = "birthday") String birthdayString,
                                 @RequestParam String email) {
 
-        var dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate birthday = LocalDate.parse(birthdayString, dtf);
+        LocalDate birthday = null;
+        if (!birthdayString.equals("")){
+            var dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            birthday = LocalDate.parse(birthdayString, dtf);
+        }
 
         profileService.updateData(user, username, name, surname, status, birthday);
 

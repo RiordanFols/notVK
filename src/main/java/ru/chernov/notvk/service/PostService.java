@@ -2,10 +2,9 @@ package ru.chernov.notvk.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.chernov.notvk.entity.Post;
-import ru.chernov.notvk.entity.User;
+import ru.chernov.notvk.domain.entity.Post;
+import ru.chernov.notvk.domain.entity.User;
 import ru.chernov.notvk.repository.PostRepository;
-import ru.chernov.notvk.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;

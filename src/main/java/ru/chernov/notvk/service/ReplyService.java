@@ -2,9 +2,9 @@ package ru.chernov.notvk.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.chernov.notvk.entity.Comment;
-import ru.chernov.notvk.entity.Reply;
-import ru.chernov.notvk.entity.User;
+import ru.chernov.notvk.domain.entity.Comment;
+import ru.chernov.notvk.domain.entity.Reply;
+import ru.chernov.notvk.domain.entity.User;
 import ru.chernov.notvk.repository.CommentRepository;
 import ru.chernov.notvk.repository.ReplyRepository;
 

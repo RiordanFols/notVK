@@ -1,7 +1,7 @@
 package ru.chernov.notvk.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.chernov.notvk.entity.User;
+import ru.chernov.notvk.domain.entity.User;
 
 /**
  * @author Pavel Chernov

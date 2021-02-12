@@ -2,7 +2,7 @@ package ru.chernov.notvk.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import ru.chernov.notvk.entity.Message;
+import ru.chernov.notvk.domain.entity.Message;
 
 import java.util.Set;
 

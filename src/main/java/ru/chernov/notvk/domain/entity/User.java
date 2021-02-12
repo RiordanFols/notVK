@@ -1,10 +1,12 @@
-package ru.chernov.notvk.entity;
+package ru.chernov.notvk.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.chernov.notvk.domain.Gender;
+import ru.chernov.notvk.domain.Role;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -23,17 +25,16 @@ import java.util.Set;
 @ToString(of = {"id", "username", "name", "surname", "avatarFilename", "email", "status", "birthdayString"})
 public class User implements UserDetails {
 
-    @Transient
-    public final String M_AVATAR_STOCK_FILENAME = "stock_m.png";
-    @Transient
-    public final String F_AVATAR_STOCK_FILENAME = "stock_f.png";
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
 
     @Column(length = 30, nullable = false)
     private String username;
+
+    @Column(length = 10, nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
     @Column(length = 100, nullable = false)
     private String avatarFilename;
@@ -92,13 +93,15 @@ public class User implements UserDetails {
     private Set<User> subscribers = new HashSet<>();
 
     public void formatBirthday() {
-        String day = String.valueOf(this.getBirthday().getDayOfMonth());
-        String month = this.getBirthday().getMonthValue() >= 10 ?
-                String.valueOf(this.getBirthday().getMonthValue()) :
-                "0" + this.getBirthday().getMonthValue();
-        String year = String.valueOf(this.getBirthday().getYear());
+        if (this.birthday != null) {
+            String day = String.valueOf(this.getBirthday().getDayOfMonth());
+            String month = this.getBirthday().getMonthValue() >= 10 ?
+                    String.valueOf(this.getBirthday().getMonthValue()) :
+                    "0" + this.getBirthday().getMonthValue();
+            String year = String.valueOf(this.getBirthday().getYear());
 
-        this.setBirthdayString(day + "." + month + "." + year);
+            this.setBirthdayString(day + "." + month + "." + year);
+        }
     }
 
     @Override
@@ -134,5 +137,10 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return isActive;
+    }
+
+    public void setGender(String gender) {
+        this.gender = Gender.valueOf(gender.toUpperCase());
+        this.avatarFilename = this.getGender().getStockAvatarFilename();
     }
 }

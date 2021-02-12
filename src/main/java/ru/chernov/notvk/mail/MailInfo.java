@@ -1,7 +1,7 @@
 package ru.chernov.notvk.mail;
 
 import lombok.Data;
-import ru.chernov.notvk.entity.User;
+import ru.chernov.notvk.domain.entity.User;
 
 /**
  * @author Pavel Chernov

@@ -76,6 +76,7 @@ create table usr
     status          varchar(50),
     surname         varchar(30)  not null,
     username        varchar(30)  not null,
+    gender          varchar(10)  not null,
     email           varchar(30)  not null,
     avatar_filename varchar(100) not null,
     primary key (id)

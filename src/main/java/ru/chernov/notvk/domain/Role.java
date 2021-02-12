@@ -1,4 +1,4 @@
-package ru.chernov.notvk.entity;
+package ru.chernov.notvk.domain;
 
 import org.springframework.security.core.GrantedAuthority;
 

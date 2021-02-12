@@ -3,7 +3,7 @@ package ru.chernov.notvk.controller.rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import ru.chernov.notvk.entity.User;
+import ru.chernov.notvk.domain.entity.User;
 import ru.chernov.notvk.service.UserService;
 
 import java.util.HashMap;

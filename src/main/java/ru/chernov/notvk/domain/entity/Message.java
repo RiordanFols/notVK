@@ -1,4 +1,4 @@
-package ru.chernov.notvk.entity;
+package ru.chernov.notvk.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
