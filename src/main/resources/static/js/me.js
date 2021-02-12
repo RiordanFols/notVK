@@ -410,8 +410,8 @@ Vue.component('user-info', {
                     '<div class="user-status">{{ me.status }}</div>' +
                 '</div>' +
                 '<div class="user-info-right-other">' +
-                    '<div class="user-birthday">День рождения: {{ me.birthdayString }}</div>' +
-                    '<div></div>' +
+                    '<div class="user-info-line">Пол: {{ me.gender }}</div>' +
+                    '<div class="user-info-line">День рождения: {{ me.birthdayString }}</div>' +
                     '<div></div>' +
                     '<div></div>' +
                     '<div></div>' +

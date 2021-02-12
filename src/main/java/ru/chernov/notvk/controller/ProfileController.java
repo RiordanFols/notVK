@@ -37,9 +37,10 @@ public class ProfileController {
         return "redirect:/profile";
     }
 
-    @PostMapping("/update/profile")
+    @PostMapping("/update/data")
     public String updateProfile(@AuthenticationPrincipal User user,
                                 @RequestParam String username,
+                                @RequestParam String gender,
                                 @RequestParam String name,
                                 @RequestParam String surname,
                                 @RequestParam String status,
@@ -52,7 +53,7 @@ public class ProfileController {
             birthday = LocalDate.parse(birthdayString, dtf);
         }
 
-        profileService.updateData(user, username, name, surname, status, birthday);
+        profileService.updateData(user, username, gender, name, surname, status, birthday);
 
         if (profileService.updateEmail(user, email)) {
             return "redirect:/login";

@@ -39,6 +39,9 @@ public class ProfileService {
     }
 
     public User updateAvatar(User user, MultipartFile avatar) throws IOException {
+
+        user = userService.findById(user.getId());
+
         if (ImageUtils.isImageTypeAllowed(avatar)) {
             File uploadDir = new File(uploadPath);
 
@@ -61,6 +64,8 @@ public class ProfileService {
 
     public User deleteAvatar(User user) throws IOException {
 
+        user = userService.findById(user.getId());
+
         // если у пользователя не стоковый аватар
         if (!user.getAvatarFilename().equals(user.getGender().getStockAvatarFilename())) {
             File avatar = new File(uploadPath + "/img/avatar" + user.getAvatarFilename());
@@ -72,12 +77,14 @@ public class ProfileService {
         return userService.save(user);
     }
 
-    public void updateData(User user, String username, String name, String surname,
+    public void updateData(User user, String username, String gender, String name, String surname,
                            String status, LocalDate birthday) {
 
+        user = userService.findById(user.getId());
         // если юзер с таким юзернэймом еще не существует или это текущий юзер
         if (userService.findByUsername(username) == null || userService.findByUsername(username).equals(user)) {
             user.setUsername(username);
+            user.setGender(gender);
             user.setName(name);
             user.setSurname(surname);
             user.setStatus(status);

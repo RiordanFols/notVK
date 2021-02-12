@@ -59,6 +59,8 @@
     cursor: pointer;
 }
 
+/**/
+
 .user-info-right {
     min-height: 250px;
     padding: 0 15px;
@@ -73,7 +75,7 @@
 }
 
 .user-info-right-other {
-    min-height: 138px;
+    min-height: 175px;
     border-top: 1px solid #707078;
     padding: 10px 0;
 }
@@ -89,7 +91,7 @@
 }
 
 .profile-input-line {
-    height: 30px;
+    min-height: 30px;
     margin-bottom: 5px;
     width: 460px;
 }
@@ -126,6 +128,22 @@
 
 .profile-input {
     width: 350px;
+}
+
+.profile-gender-input {
+    color: white;
+    background: #505068;
+    min-height: 20px;
+}
+
+.profile-gender-input div{
+    min-height: 20px;
+    width: 350px;
+}
+
+.profile-gender-input option {
+    color: white;
+    min-height: 20px;
 }
 
 .profile-input-password {

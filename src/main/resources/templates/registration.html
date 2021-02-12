@@ -16,9 +16,7 @@
     <p>
         <label for="gender">Выберите ваш пол</label>
         <select size="1" id="gender" name="gender" required>
-            <option value="undefined" selected>Не определено</option>
-            <option value="male">Мужчина</option>
-            <option value="female">Женщина</option>
+            <option th:each="gender: ${genders}" th:value="${gender.name}" th:text="${gender.description}"></option>
         </select>
     </p>
     <p>

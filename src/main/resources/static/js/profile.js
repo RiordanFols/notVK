@@ -1,7 +1,7 @@
 let profilePhotoApi = Vue.resource('/profile/photo');
 
 Vue.component('user-profile', {
-    props: ['me', 'updateAvatarMethod'],
+    props: ['me', 'updateAvatarMethod', 'genders'],
     template:
         '<div class="user-info">' +
             '<div class="user-info-left">' +
@@ -13,7 +13,7 @@ Vue.component('user-profile', {
                 '<div class="profile-img-delete" @click="deletePhoto">Удалить фото</div>' +
             '</div>' +
             '<div class="user-info-right">' +
-                '<form action="profile/update/profile" method="post">' +
+                '<form action="profile/update/data" method="post">' +
                     '<div class="user-info-right-names">' +
 
                         '<div class="profile-input-line">' +
@@ -36,6 +36,14 @@ Vue.component('user-profile', {
                         '<div class="profile-input-line">' +
                             '<div class="profile-label">Почта: </div>' +
                             '<input class="profile-input" name="email" type="email" required maxlength="30" v-model="me.email"/>' +
+                        '</div>' +
+
+                        '<div class="profile-input-line">' +
+                            '<div class="profile-label" >Пол: </div>' +
+                            '<select class="profile-input profile-gender-input" size="1" id="gender" name="gender" required>' +
+                                '<option v-for="gender in genders" v-if="me.gender == gender.description" v-bind:value="gender.name" selected>{{ gender.description }}</option>' +
+                                '<option v-else v-bind:value="gender.name">{{ gender.description }}</option>' +
+                            '</select>' +
                         '</div>' +
 
                         '<div class="profile-input-line">' +
@@ -89,10 +97,11 @@ var app = new Vue({
     el: '#app',
     data: {
         me: frontendData.me,
+        genders: frontendData.genders,
     },
     template:
         '<div class="middle">' +
-            '<user-profile :me="me" :updateAvatarMethod="updateUser"/>' +
+            '<user-profile :me="me" :updateAvatarMethod="updateUser" :genders="genders"/>' +
         '</div>',
     methods: {
         updateUser: function (user) {

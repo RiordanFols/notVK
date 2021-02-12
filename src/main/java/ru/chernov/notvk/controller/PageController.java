@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import ru.chernov.notvk.domain.Gender;
 import ru.chernov.notvk.domain.entity.Post;
 import ru.chernov.notvk.domain.entity.User;
 import ru.chernov.notvk.service.MessageService;
@@ -86,6 +87,7 @@ public class PageController {
                               Model model) {
         Map<Object, Object> data = new HashMap<>();
         data.put("me", userService.findById(user.getId()));
+        data.put("genders", Gender.getAll());
 
         model.addAttribute("frontendData", data);
         return "main/profile";

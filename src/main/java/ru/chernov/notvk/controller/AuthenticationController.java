@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.chernov.notvk.domain.Gender;
 import ru.chernov.notvk.service.UserService;
 
 /**
@@ -23,7 +24,9 @@ public class AuthenticationController {
     }
 
     @GetMapping("registration")
-    public String registrationPage() {
+    public String registrationPage(Model model) {
+
+        model.addAttribute("genders", Gender.getAll());
         return "registration";
     }
 

@@ -34,6 +34,7 @@ public class User implements UserDetails {
 
     @Column(length = 10, nullable = false)
     @Enumerated(EnumType.STRING)
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Gender gender;
 
     @Column(length = 100, nullable = false)
@@ -140,7 +141,12 @@ public class User implements UserDetails {
     }
 
     public void setGender(String gender) {
-        this.gender = Gender.valueOf(gender.toUpperCase());
-        this.avatarFilename = this.getGender().getStockAvatarFilename();
+        Gender newGender = Gender.valueOf(gender);
+        // если пользователь еще не создан или имеет стоковый аватар
+        if (this.getGender() == null || this.avatarFilename.equals(this.getGender().getStockAvatarFilename()))
+            // ставим ему новый стоковый аватар
+            this.avatarFilename = newGender.getStockAvatarFilename();
+
+        this.gender = newGender;
     }
 }
