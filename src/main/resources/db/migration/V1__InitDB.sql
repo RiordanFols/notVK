@@ -14,6 +14,8 @@ alter table if exists message
 alter table if exists message
     drop constraint if exists FKc3jkt36cxuic4o8eubtfau5w6;
 
+alter table if exists message_imgs
+    drop constraint if exists FKia79vkwsrxwmkralw50xuclvl;
 
 alter table if exists post
     drop constraint if exists FKrm2u0ujvvi9euawhsm1km29m4;
@@ -52,6 +54,7 @@ drop table if exists usr cascade;
 drop table if exists user_role cascade;
 drop table if exists user_subscriptions cascade;
 drop table if exists message cascade;
+drop table if exists message_imgs cascade;
 drop table if exists post cascade;
 drop table if exists post_like cascade;
 drop table if exists comment cascade;
@@ -106,6 +109,12 @@ create table message
     primary key (id)
 );
 
+create table message_imgs
+(
+    message_id   int8         not null,
+    img_filename varchar(100) not null,
+    primary key (message_id, img_filename)
+);
 create table post
 (
     id                 int8          not null,
@@ -170,6 +179,8 @@ alter table if exists message
 alter table if exists message
     add constraint FKc3jkt36cxuic4o8eubtfau5w6 foreign key (target_id) references usr;
 
+alter table if exists message_imgs
+    add constraint FKia79vkwsrxwmkralw50xuclvl foreign key (message_id) references message;
 
 alter table if exists post
     add constraint FKrm2u0ujvvi9euawhsm1km29m4 foreign key (user_id) references usr;

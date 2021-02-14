@@ -1,7 +1,23 @@
 let messagesApi = Vue.resource('/message{/id}');
 
+Vue.component('message-img', {
+    props: ['imgFilename'],
+    template:
+        '<div>' +
+            '<img class="message-img" v-bind:src="\'/uploads/img/message/\' + imgFilename" alt=""/>' +
+        '</div>'
+});
+
+Vue.component ('message-imgs', {
+    props: ['message'],
+    template:
+        '<div class="message-image-section">' +
+            '<message-img v-for="filename in message.imgFilenames" :key="filename" :imgFilename="filename"/>' +
+        '</div>'
+});
+
 Vue.component('message', {
-    props: ['message', 'user'],
+    props: ['message', 'user', 'me'],
     template:
         '<div class="message">' +
             '<a v-bind:href="\'/user/\' + message.author.username">' +
@@ -15,15 +31,16 @@ Vue.component('message', {
                     '<div class="message-time">{{ message.creationDateTime }}</div>' +
                 '</div>' +
                 '<div class="message-text">{{ message.text }}</div>' +
+                '<message-imgs :message="message"/>' +
             '</div>' +
         '</div>'
 });
 
 Vue.component('chat', {
-    props: ['messages'],
+    props: ['messages', 'me'],
     template:
         '<div class="chat">' +
-            '<message v-for="message in messages" :key="message.id" :message="message"/>' +
+            '<message v-for="message in messages" :key="message.id" :message="message" :me="me"/>' +
         '</div>'
 });
 
@@ -70,11 +87,11 @@ Vue.component('message-form', {
 });
 
 Vue.component('msg-block', {
-    props: ['messages', 'target'],
+    props: ['messages', 'target', 'me'],
     template:
         '<div class="msg-block" >' +
             '<chat-header v-if="target != null" :target="target"/>' +
-            '<chat v-if="target != null" :messages="messages"/>' +
+            '<chat v-if="target != null" :messages="messages" :me="me"/>' +
             '<message-form v-if="target != null" :target="target" :messages="messages"/>' +
         '</div>'
 });
@@ -106,11 +123,12 @@ var app = new Vue({
     data: {
         userList: frontendData.userList,
         messages: frontendData.messages,
+        me: frontendData.me,
         target: frontendData.target,
     },
     template:
         '<div class="content">' +
             '<user-list :users="userList"/>' +
-            '<msg-block :messages="messages" :target="target"/>' +
+            '<msg-block :messages="messages" :target="target" :me="me"/>' +
         '</div>'
 });

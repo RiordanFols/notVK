@@ -74,9 +74,9 @@ public class User implements UserDetails {
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role",
-            joinColumns = @JoinColumn(name = "user_id", nullable = false))
+            joinColumns = @JoinColumn(name = "user_id", nullable = false, updatable = false))
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
+    @Column(name = "role", nullable = false, updatable = false)
     private Set<Role> roles = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)

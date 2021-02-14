@@ -38,3 +38,13 @@
     color: white;
     font-size: 14px;
 }
+
+.message-image-section {
+
+}
+
+.message-img {
+    max-height: 400px;
+    max-width: 500px;
+    margin-bottom: 10px;
+}

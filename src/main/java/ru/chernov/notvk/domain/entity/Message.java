@@ -5,6 +5,8 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author Pavel Chernov
@@ -27,6 +29,12 @@ public class Message {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "target_id", updatable = false, nullable = false)
     private User target;
+
+    @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "message_imgs",
+            joinColumns = @JoinColumn(name = "message_id", nullable = false, updatable = false))
+    @Column(name = "img_filename", length = 100, nullable = false, updatable = false)
+    private List<String> imgFilenames;
 
     @Column(nullable = false, updatable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy HH:mm")
