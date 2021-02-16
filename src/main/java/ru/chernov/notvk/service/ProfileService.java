@@ -1,13 +1,13 @@
 package ru.chernov.notvk.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.chernov.notvk.domain.entity.User;
 import ru.chernov.notvk.mail.MailInfo;
 import ru.chernov.notvk.mail.MailManager;
+import ru.chernov.notvk.utils.FileUtils;
 import ru.chernov.notvk.utils.ImageUtils;
 
 import java.io.File;
@@ -26,33 +26,28 @@ public class ProfileService {
     private final MailManager mailManager;
     private final PasswordEncoder passwordEncoder;
 
-    @Value("${upload.path}")
-    private String uploadPath;
+    private final String uploadPath;
 
     @Autowired
-    public ProfileService(UserService userService,
-                          MailManager mailManager,
-                          PasswordEncoder passwordEncoder) {
+    public ProfileService(UserService userService, MailManager mailManager,
+                          PasswordEncoder passwordEncoder, String uploadPath) {
         this.userService = userService;
         this.mailManager = mailManager;
         this.passwordEncoder = passwordEncoder;
+        this.uploadPath = uploadPath;
     }
 
-    public User updateAvatar(User user, MultipartFile avatar) throws IOException {
+    public User updateAvatar(long userId, MultipartFile avatar) throws IOException {
 
-        user = userService.findById(user.getId());
+        User user = userService.findById(userId);
 
-        if (ImageUtils.isImageTypeAllowed(avatar)) {
-            File uploadDir = new File(uploadPath);
+        if (ImageUtils.isImageTypeAllowed(avatar) && FileUtils.isUploadFolderCreatedOrCreate(uploadPath)) {
 
-            // если папка не существует
-            if (!uploadDir.exists()) {
-                // если не удалось создать папку
-                if (!uploadDir.mkdir())
-                    return user;
-            }
+            // если у пользователя не стоковый аватар
+            if (!user.getAvatarFilename().equals(user.getGender().getStockAvatarFilename()))
+                // удаляем его старое фото
+                Files.deleteIfExists(new File(uploadPath + "/img/avatar/" + user.getAvatarFilename()).toPath());
 
-            Files.deleteIfExists(new File(user.getAvatarFilename()).toPath());
             String filename = UUID.randomUUID() + "." + avatar.getOriginalFilename();
             avatar.transferTo(new File(uploadPath + "/img/avatar/" + filename));
 
@@ -62,26 +57,27 @@ public class ProfileService {
         return userService.save(user);
     }
 
-    public User deleteAvatar(User user) throws IOException {
+    public User deleteAvatar(long userId) throws IOException {
 
-        user = userService.findById(user.getId());
+        User user = userService.findById(userId);
 
         // если у пользователя не стоковый аватар
         if (!user.getAvatarFilename().equals(user.getGender().getStockAvatarFilename())) {
-            File avatar = new File(uploadPath + "/img/avatar" + user.getAvatarFilename());
-
+            // удаляем его аватар
+            File avatar = new File(uploadPath + "/img/avatar/" + user.getAvatarFilename());
             Files.deleteIfExists(avatar.toPath());
+            // ставим стоковое фото
             user.setAvatarFilename(user.getGender().getStockAvatarFilename());
         }
 
         return userService.save(user);
     }
 
-    public void updateData(User user, String username, String gender, String name, String surname,
+    public void updateData(long userId, String username, String gender, String name, String surname,
                            String status, LocalDate birthday) {
 
-        user = userService.findById(user.getId());
-        // если юзер с таким юзернэймом еще не существует или это текущий юзер
+        User user = userService.findById(userId);
+        // если юзернейм свободен или занят текущим юзером
         if (userService.findByUsername(username) == null || userService.findByUsername(username).equals(user)) {
             user.setUsername(username);
             user.setGender(gender);
@@ -95,8 +91,9 @@ public class ProfileService {
         // else error
     }
 
-    public boolean updateEmail(User user, String email) {
+    public boolean updateEmail(long userId, String email) {
 
+        User user = userService.findById(userId);
         // если юзер с такой почтой еще не существует или это текущий юзер
         if (userService.findByEmail(email) == null || userService.findByEmail(email).equals(user)) {
             if (!user.getEmail().equals(email)) {
@@ -113,7 +110,9 @@ public class ProfileService {
         return false;
     }
 
-    public boolean updatePassword(User user, String oldPassword, String newPassword, String newPasswordConfirm) {
+    public boolean updatePassword(long userId, String oldPassword, String newPassword, String newPasswordConfirm) {
+        User user = userService.findById(userId);
+
         if (passwordEncoder.matches(oldPassword, user.getPassword()) && newPassword.equals(newPasswordConfirm)) {
             user.setPassword(passwordEncoder.encode(newPassword));
             userService.save(user);

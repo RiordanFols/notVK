@@ -4,9 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.chernov.notvk.domain.Gender;
 import ru.chernov.notvk.domain.entity.Post;
 import ru.chernov.notvk.domain.entity.User;
@@ -14,6 +13,7 @@ import ru.chernov.notvk.service.MessageService;
 import ru.chernov.notvk.service.PostService;
 import ru.chernov.notvk.service.UserService;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -111,6 +111,10 @@ public class PageController {
                        @AuthenticationPrincipal User user,
                        Model model) {
         User target = userService.findByUsername(username);
+
+        if (user.getUsername().equals(username) || target == null)
+            return "error/404";
+
         Map<Object, Object> data = new HashMap<>();
         data.put("userList", userService.getAllContacts(user.getId()));
         data.put("messages", messageService.getCorrespondence(target.getId(), user.getId()));
@@ -119,6 +123,17 @@ public class PageController {
 
         model.addAttribute("frontendData", data);
         return "main/messenger";
+    }
+
+    @PostMapping("/messenger/{id}")
+    public String addMessage(@AuthenticationPrincipal User user,
+                             @PathVariable(name = "id") long targetId,
+                             @RequestParam String text,
+                             @RequestParam MultipartFile[] images) throws IOException {
+        messageService.create(user.getId(), targetId, text, images);
+
+        User target = userService.findById(targetId);
+        return "redirect:/messenger/" + target.getUsername();
     }
 
     @GetMapping("/subscriptions")

@@ -59,31 +59,15 @@ Vue.component('chat-header', {
 });
 
 Vue.component('message-form', {
-    props: ['target', 'messages'],
-    data: function () {
-        return {
-            text: ''
-        }
-    },
+    props: ['target'],
     template:
-        '<div class="message-form">' +
-            '<input class="message-form-text" type="text" placeholder="Напишите сообщение" v-model="text"/>' +
-            '<input class="message-form-btn" type="button" value="✔" @click="save"/>' +
-        '</div>',
-    methods: {
-        save: function () {
-            if (this.text !== '') {
-                let body = {text: this.text};
-
-                messagesApi.save({id: this.target.id}, body).then(result => {
-                    result.json().then(data => {
-                        this.messages.splice(0, 0, data);
-                        this.text = '';
-                    });
-                });
-            }
-        }
-    }
+        '<form v-bind:action="\'/messenger/\' + target.id" enctype="multipart/form-data" method="post">' +
+            '<div class="message-form">' +
+                '<input class="message-form-text" type="text" name="text" placeholder="Напишите сообщение"/>' +
+                '<input class="message-form-files" type="file" multiple name="images">' +
+                '<input class="message-form-btn" type="submit" value="✔"/>' +
+            '</div>' +
+        '</form>'
 });
 
 Vue.component('msg-block', {
@@ -92,7 +76,7 @@ Vue.component('msg-block', {
         '<div class="msg-block" >' +
             '<chat-header v-if="target != null" :target="target"/>' +
             '<chat v-if="target != null" :messages="messages" :me="me"/>' +
-            '<message-form v-if="target != null" :target="target" :messages="messages"/>' +
+            '<message-form v-if="target != null" :target="target"/>' +
         '</div>'
 });
 

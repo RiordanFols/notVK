@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import ru.chernov.notvk.domain.entity.User;
 import ru.chernov.notvk.service.ProfileService;
-import ru.chernov.notvk.service.UserService;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -31,8 +30,8 @@ public class ProfileController {
 
     @PostMapping("/update/avatar")
     public String updateProfilePhoto(@AuthenticationPrincipal User user,
-                                   @RequestParam("avatar") MultipartFile avatar) throws IOException {
-        profileService.updateAvatar(user, avatar);
+                                     @RequestParam("avatar") MultipartFile avatar) throws IOException {
+        profileService.updateAvatar(user.getId(), avatar);
 
         return "redirect:/profile";
     }
@@ -48,14 +47,14 @@ public class ProfileController {
                                 @RequestParam String email) {
 
         LocalDate birthday = null;
-        if (!birthdayString.equals("")){
+        if (!birthdayString.equals("")) {
             var dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             birthday = LocalDate.parse(birthdayString, dtf);
         }
 
-        profileService.updateData(user, username, gender, name, surname, status, birthday);
+        profileService.updateData(user.getId(), username, gender, name, surname, status, birthday);
 
-        if (profileService.updateEmail(user, email)) {
+        if (profileService.updateEmail(user.getId(), email)) {
             return "redirect:/login";
         }
 
@@ -67,7 +66,7 @@ public class ProfileController {
                                  @RequestParam String oldPassword,
                                  @RequestParam String newPassword,
                                  @RequestParam String newPasswordConfirm) {
-        if (profileService.updatePassword(user, oldPassword, newPassword, newPasswordConfirm)) {
+        if (profileService.updatePassword(user.getId(), oldPassword, newPassword, newPasswordConfirm)) {
             return "redirect:/login";
         } else {
             return "redirect:/profile";

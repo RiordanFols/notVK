@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -34,7 +35,7 @@ public class Message {
     @CollectionTable(name = "message_imgs",
             joinColumns = @JoinColumn(name = "message_id", nullable = false, updatable = false))
     @Column(name = "img_filename", length = 100, nullable = false, updatable = false)
-    private List<String> imgFilenames;
+    private List<String> imgFilenames = new ArrayList<>(10);
 
     @Column(nullable = false, updatable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy HH:mm")

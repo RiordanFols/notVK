@@ -25,12 +25,12 @@ public class ProfilePhotoController {
 
     @PostMapping
     public User updateProfilePhoto(@AuthenticationPrincipal User user,
-                                     @RequestParam("avatar") MultipartFile avatar) throws IOException {
-        return profileService.updateAvatar(user, avatar);
+                                   @RequestParam("avatar") MultipartFile avatar) throws IOException {
+        return profileService.updateAvatar(user.getId(), avatar);
     }
 
     @DeleteMapping
     public User deleteAvatar(@AuthenticationPrincipal User user) throws IOException {
-        return profileService.deleteAvatar(user);
+        return profileService.deleteAvatar(user.getId());
     }
 }

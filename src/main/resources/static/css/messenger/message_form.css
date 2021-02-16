@@ -9,7 +9,7 @@
     color: white;
     background: none;
     float: left;
-    width: 570px;
+    width: 470px;
     height: 36px;
     padding: 4px 0 2px 15px;
     font-size: 14px;
@@ -17,6 +17,11 @@
 
 .message-form-text::placeholder {
     color: white;
+}
+
+.message-form-files {
+    width: 100px;
+    float: left;
 }
 
 .message-form-btn {
