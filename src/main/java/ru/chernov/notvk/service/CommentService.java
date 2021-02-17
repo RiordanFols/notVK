@@ -2,12 +2,14 @@ package ru.chernov.notvk.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ru.chernov.notvk.domain.entity.Comment;
 import ru.chernov.notvk.domain.entity.Post;
 import ru.chernov.notvk.domain.entity.User;
 import ru.chernov.notvk.repository.CommentRepository;
-import ru.chernov.notvk.repository.PostRepository;
+import ru.chernov.notvk.utils.ImageUtils;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.Set;
@@ -21,24 +23,25 @@ public class CommentService {
 
     private final UserService userService;
     private final CommentRepository commentRepository;
-    private final PostRepository postRepository;
+    private final PostService postService;
+    private final FileService fileService;
 
     @Autowired
-    public CommentService(UserService userService,
-                          CommentRepository commentRepository,
-                          PostRepository postRepository) {
+    public CommentService(UserService userService, CommentRepository commentRepository,
+                          PostService postService, FileService fileService) {
         this.userService = userService;
         this.commentRepository = commentRepository;
-        this.postRepository = postRepository;
+        this.postService = postService;
+        this.fileService = fileService;
     }
 
     public Comment findById(long commentId) {
         return commentRepository.findById(commentId).orElse(null);
     }
 
-    public Comment create(long userId, long postId, String text) {
+    public Comment create(long userId, long postId, String text, MultipartFile[] images) throws IOException {
         User author = userService.findById(userId);
-        Post post = postRepository.findById(postId).orElse(null);
+        Post post = postService.findById(postId);
 
         Comment comment = new Comment();
         comment.setCreationDateTime(LocalDateTime.now());
@@ -46,10 +49,21 @@ public class CommentService {
         comment.setAuthor(author);
         comment.setPost(post);
 
+        for (var image: images) {
+            if (ImageUtils.isImageTypeAllowed(image) && comment.getImgFilenames().size() < Comment.MAX_IMAGES) {
+                String filename = fileService.saveImage(image);
+                comment.getImgFilenames().add(filename);
+            }
+        }
+
         return commentRepository.save(comment);
     }
 
-    public void delete(long commentId) {
+    public void delete(long commentId) throws IOException {
+        Comment comment = findById(commentId);
+        for (var filename: comment.getImgFilenames())
+            fileService.deleteImage(filename);
+
         commentRepository.deleteById(commentId);
     }
 

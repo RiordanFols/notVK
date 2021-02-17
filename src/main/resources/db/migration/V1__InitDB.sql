@@ -37,6 +37,9 @@ alter table if exists comment
 alter table if exists comment
     drop constraint if exists FKs1slvnkuemjsq2kj4h3vhx7i1;
 
+alter table if exists comment_imgs
+    drop constraint if exists FKkyb55iynybimf7npdjrpfr8rl;
+
 alter table if exists comment_like
     drop constraint if exists FKeh0kvj98rlb19mbg8ooifb9be;
 
@@ -46,10 +49,16 @@ alter table if exists comment_like
 
 alter table if exists reply
     drop constraint if exists FKipvbdtr2tvlo08122kmha4p9r;
+
 alter table if exists reply
     drop constraint if exists FK6w0ns67lrq1jdiwi5xvtj1vxx;
+
+alter table if exists reply_imgs
+    drop constraint if exists FK8w8qe9hc88nacy1viiwbxkkr7;
+
 alter table if exists reply_like
     drop constraint if exists FKk68gc42n9ljju6tsbtbn5ifrj;
+
 alter table if exists reply_like
     drop constraint if exists FKqf4y6h9cfw6jtjrd04p1rpbbj;
 
@@ -63,8 +72,10 @@ drop table if exists post cascade;
 drop table if exists post_imgs cascade;
 drop table if exists post_like cascade;
 drop table if exists comment cascade;
+drop table if exists comment_imgs cascade;
 drop table if exists comment_like cascade;
 drop table if exists reply cascade;
+drop table if exists reply_imgs cascade;
 drop table if exists reply_like cascade;
 
 
@@ -147,10 +158,16 @@ create table comment
 (
     id                 int8          not null,
     creation_date_time timestamp     not null,
-    text               varchar(5000) not null,
+    text               varchar(500) not null,
     user_id            int8          not null,
     post_id            int8          not null,
     primary key (id)
+);
+
+create table comment_imgs
+(
+    comment_id   int8         not null,
+    img_filename varchar(100) not null
 );
 
 create table comment_like
@@ -164,10 +181,16 @@ create table reply
 (
     id                 int8          not null,
     creation_date_time timestamp     not null,
-    text               varchar(5000) not null,
+    text               varchar(500) not null,
     user_id            int8          not null,
     comment_id         int8          not null,
     primary key (id)
+);
+
+create table reply_imgs
+(
+    reply_id     int8         not null,
+    img_filename varchar(100) not null
 );
 
 create table reply_like
@@ -216,6 +239,9 @@ alter table if exists comment
 alter table if exists comment
     add constraint FKs1slvnkuemjsq2kj4h3vhx7i1 foreign key (post_id) references post on delete cascade;
 
+alter table if exists comment_imgs
+    add constraint FKkyb55iynybimf7npdjrpfr8rl foreign key (comment_id) references comment;
+
 alter table if exists comment_like
     add constraint FKeh0kvj98rlb19mbg8ooifb9be foreign key (user_id) references usr;
 
@@ -228,6 +254,9 @@ alter table if exists reply
 
 alter table if exists reply
     add constraint FK6w0ns67lrq1jdiwi5xvtj1vxx foreign key (comment_id) references comment on delete cascade;
+
+alter table if exists reply_imgs
+    add constraint FK8w8qe9hc88nacy1viiwbxkkr7 foreign key (reply_id) references reply;
 
 alter table if exists reply_like
     add constraint FKk68gc42n9ljju6tsbtbn5ifrj foreign key (user_id) references usr;

@@ -3,10 +3,12 @@ package ru.chernov.notvk.controller.rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.chernov.notvk.domain.entity.Reply;
 import ru.chernov.notvk.domain.entity.User;
 import ru.chernov.notvk.service.ReplyService;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 
@@ -32,12 +34,12 @@ public class ReplyController {
     @PostMapping("{id}")
     public Reply create(@AuthenticationPrincipal User user,
                           @PathVariable(name = "id") long commentId,
-                          @RequestBody Map<String, Object> body) {
-        return replyService.create(user.getId(), commentId, (String) body.get("text"));
+                          @RequestBody Map<String, Object> body) throws IOException {
+        return replyService.create(user.getId(), commentId, (String) body.get("text"), new MultipartFile[]{});
     }
 
     @DeleteMapping("{id}")
-    public void delete(@PathVariable(name = "id") long replyId) {
+    public void delete(@PathVariable(name = "id") long replyId) throws IOException {
         replyService.delete(replyId);
     }
 }

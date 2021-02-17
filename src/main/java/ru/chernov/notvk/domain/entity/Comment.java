@@ -3,12 +3,16 @@ package ru.chernov.notvk.domain.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -17,6 +21,8 @@ import java.util.Set;
 @Entity
 @Data
 public class Comment {
+
+    public static final int MAX_IMAGES = 3;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -31,8 +37,15 @@ public class Comment {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Post post;
 
-    @Column(length = 5000, updatable = false, nullable = false)
+    @Column(length = 500, updatable = false, nullable = false)
     private String text;
+
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ElementCollection(targetClass = String.class)
+    @CollectionTable(name = "comment_imgs",
+            joinColumns = @JoinColumn(name = "comment_id", nullable = false, updatable = false))
+    @Column(name = "img_filename", length = 100, nullable = false, updatable = false)
+    private List<String> imgFilenames = new ArrayList<>(MAX_IMAGES);
 
     @Column(nullable = false, updatable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm")

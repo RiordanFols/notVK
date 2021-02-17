@@ -67,10 +67,8 @@ public class PostService {
 
     public void delete(long postId) throws IOException {
         Post post = findById(postId);
-
-        for (var filename: post.getImgFilenames()) {
+        for (var filename: post.getImgFilenames())
             fileService.deleteImage(filename);
-        }
 
         postRepository.deleteById(postId);
     }

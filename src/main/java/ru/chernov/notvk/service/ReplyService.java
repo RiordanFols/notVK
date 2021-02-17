@@ -2,12 +2,15 @@ package ru.chernov.notvk.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ru.chernov.notvk.domain.entity.Comment;
 import ru.chernov.notvk.domain.entity.Reply;
 import ru.chernov.notvk.domain.entity.User;
 import ru.chernov.notvk.repository.CommentRepository;
 import ru.chernov.notvk.repository.ReplyRepository;
+import ru.chernov.notvk.utils.ImageUtils;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -19,24 +22,25 @@ public class ReplyService {
 
     private final UserService userService;
     private final ReplyRepository replyRepository;
-    private final CommentRepository commentRepository;
+    private final CommentService commentService;
+    private final FileService fileService;
 
     @Autowired
-    public ReplyService(UserService userService,
-                        ReplyRepository replyRepository,
-                        CommentRepository commentRepository) {
+    public ReplyService(UserService userService, ReplyRepository replyRepository,
+                        CommentService commentService, FileService fileService) {
         this.userService = userService;
         this.replyRepository = replyRepository;
-        this.commentRepository = commentRepository;
+        this.commentService = commentService;
+        this.fileService = fileService;
     }
 
     public Reply findById(long replyId) {
         return replyRepository.findById(replyId).orElse(null);
     }
 
-    public Reply create(long userId, long commentId, String text) {
+    public Reply create(long userId, long commentId, String text, MultipartFile[] images) throws IOException {
         User author = userService.findById(userId);
-        Comment comment = commentRepository.findById(commentId).orElse(null);
+        Comment comment = commentService.findById(commentId);
 
         Reply reply = new Reply();
         reply.setCreationDateTime(LocalDateTime.now());
@@ -44,10 +48,21 @@ public class ReplyService {
         reply.setComment(comment);
         reply.setText(text);
 
+        for (var image: images) {
+            if (ImageUtils.isImageTypeAllowed(image) && reply.getImgFilenames().size() < Reply.MAX_IMAGES) {
+                String filename = fileService.saveImage(image);
+                reply.getImgFilenames().add(filename);
+            }
+        }
+
         return replyRepository.save(reply);
     }
 
-    public void delete(long replyId) {
+    public void delete(long replyId) throws IOException {
+        Reply reply = findById(replyId);
+        for (var filename: reply.getImgFilenames())
+            fileService.deleteImage(filename);
+
         replyRepository.deleteById(replyId);
     }
 
