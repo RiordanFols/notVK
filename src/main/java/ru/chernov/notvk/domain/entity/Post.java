@@ -8,7 +8,9 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -17,6 +19,8 @@ import java.util.Set;
 @Entity
 @Data
 public class Post {
+
+    public static final int MAX_IMAGES = 10;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -28,6 +32,12 @@ public class Post {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", updatable = false, nullable = false)
     private User author;
+
+    @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "post_imgs",
+            joinColumns = @JoinColumn(name = "post_id", nullable = false, updatable = false))
+    @Column(name = "img_filename", length = 100, nullable = false, updatable = false)
+    private List<String> imgFilenames = new ArrayList<>(MAX_IMAGES);
 
     @Column(nullable = false, updatable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm")

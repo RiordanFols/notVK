@@ -17,8 +17,12 @@ alter table if exists message
 alter table if exists message_imgs
     drop constraint if exists FKia79vkwsrxwmkralw50xuclvl;
 
+
 alter table if exists post
     drop constraint if exists FKrm2u0ujvvi9euawhsm1km29m4;
+
+alter table if exists post_imgs
+    drop constraint if exists FK3f6mdb7s5bilmv3jq04j7idlf;
 
 alter table if exists post_like
     drop constraint if exists FK9j3wh3dvfv4flpe7ouv6qtcau;
@@ -56,6 +60,7 @@ drop table if exists user_subscriptions cascade;
 drop table if exists message cascade;
 drop table if exists message_imgs cascade;
 drop table if exists post cascade;
+drop table if exists post_imgs cascade;
 drop table if exists post_like cascade;
 drop table if exists comment cascade;
 drop table if exists comment_like cascade;
@@ -77,7 +82,7 @@ create table usr
     name            varchar(30)  not null,
     password        varchar(100) not null,
     status          varchar(50),
-    surname         varchar(30)  not null,
+    surname         varchar(30),
     username        varchar(30)  not null,
     gender          varchar(10)  not null,
     email           varchar(30)  not null,
@@ -115,6 +120,7 @@ create table message_imgs
     img_filename varchar(100) not null,
     primary key (message_id, img_filename)
 );
+
 create table post
 (
     id                 int8          not null,
@@ -123,6 +129,13 @@ create table post
     user_id            int8          not null,
     primary key (id)
 );
+
+create table post_imgs
+(
+    post_id      int8         not null,
+    img_filename varchar(100) not null
+);
+
 create table post_like
 (
     post_id int8 not null,
@@ -139,6 +152,7 @@ create table comment
     post_id            int8          not null,
     primary key (id)
 );
+
 create table comment_like
 (
     comment_id int8 not null,
@@ -182,8 +196,12 @@ alter table if exists message
 alter table if exists message_imgs
     add constraint FKia79vkwsrxwmkralw50xuclvl foreign key (message_id) references message;
 
+
 alter table if exists post
     add constraint FKrm2u0ujvvi9euawhsm1km29m4 foreign key (user_id) references usr;
+
+alter table if exists post_imgs
+    add constraint FK3f6mdb7s5bilmv3jq04j7idlf foreign key (post_id) references post;
 
 alter table if exists post_like
     add constraint FK9j3wh3dvfv4flpe7ouv6qtcau foreign key (user_id) references usr;

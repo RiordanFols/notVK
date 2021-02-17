@@ -2,10 +2,13 @@ package ru.chernov.notvk.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ru.chernov.notvk.domain.entity.Post;
 import ru.chernov.notvk.domain.entity.User;
 import ru.chernov.notvk.repository.PostRepository;
+import ru.chernov.notvk.utils.ImageUtils;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
@@ -20,11 +23,13 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final UserService userService;
+    private final FileService fileService;
 
     @Autowired
-    public PostService(PostRepository postRepository, UserService userService) {
+    public PostService(PostRepository postRepository, UserService userService, FileService fileService) {
         this.postRepository = postRepository;
         this.userService = userService;
+        this.fileService = fileService;
     }
 
     public List<Post> getUserPosts(long authorId) {
@@ -44,17 +49,30 @@ public class PostService {
         return postRepository.findById(id).orElse(null);
     }
 
-    public Post create(String text, long userId) {
+    public Post create(long userId, String text, MultipartFile[] images) throws IOException {
         Post post = new Post();
         post.setAuthor(userService.findById(userId));
         post.setText(text);
         post.setCreationDateTime(LocalDateTime.now());
 
+        for (var image: images) {
+            if (ImageUtils.isImageTypeAllowed(image) && post.getImgFilenames().size() < Post.MAX_IMAGES) {
+                String filename = fileService.saveImage(image);
+                post.getImgFilenames().add(filename);
+            }
+        }
+
         return postRepository.save(post);
     }
 
-    public void delete(long id) {
-        postRepository.deleteById(id);
+    public void delete(long postId) throws IOException {
+        Post post = findById(postId);
+
+        for (var filename: post.getImgFilenames()) {
+            fileService.deleteImage(filename);
+        }
+
+        postRepository.deleteById(postId);
     }
 
     public void likePost(long postId, long userId) {

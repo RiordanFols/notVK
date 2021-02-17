@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.chernov.notvk.service.MessageService;
 
+import java.io.IOException;
+
 /**
  * @author Pavel Chernov
  */
@@ -22,7 +24,7 @@ public class MessageController {
     }
 
     @DeleteMapping("{id}")
-    public void delete(@PathVariable(name = "id") long messageId) {
+    public void delete(@PathVariable(name = "id") long messageId) throws IOException {
         messageService.delete(messageId);
     }
 }

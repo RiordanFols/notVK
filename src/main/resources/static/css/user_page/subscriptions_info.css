@@ -13,7 +13,7 @@
 }
 
 .sub-el {
-    padding: 10px 20px;
+    padding: 5px 20px;
     min-height: 50px;
     background-color: #3C3C44;
     margin-bottom: 15px;
@@ -24,7 +24,7 @@
     height: 50px;
     width: 50px;
     float: left;
-    border-radius: 25px;
+    border-radius: 26px;
 }
 
 .sub-info {
@@ -47,4 +47,5 @@
 
 .unsubscribe-btn:hover {
     cursor: pointer;
+    text-decoration: underline;
 }

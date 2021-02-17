@@ -10,8 +10,16 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class UploadConfig {
 
+    @Value("${upload.path}")
+    private String uploadPath;
+
     @Bean
-    public String uploadPath(@Value("${upload.path}") String uploadPath) {
-        return uploadPath;
+    public String avatarPath(@Value("${upload.path.avatar}") String avatarPath) {
+        return uploadPath + avatarPath;
+    }
+
+    @Bean
+    public String imagePath(@Value("${upload.path.images}") String imagePath) {
+        return uploadPath + imagePath;
     }
 }

@@ -259,32 +259,30 @@ Vue.component('comment-section', {
 });
 
 Vue.component('post-form', {
-    props: ['posts', 'me'],
-    data: function () {
-        return {
-            text: ''
-        }
-    },
+    props: ['me'],
     template:
-        '<div class="post-form">' +
-            '<img class="post-form-img" v-bind:src="\'/uploads/img/avatar/\' + me.avatarFilename" alt=""/>' +
-            '<input class="post-form-text" type="text" placeholder="Что у вас нового?" v-model="text"/>' +
-            '<input class="post-form-btn" type="button" value="✔" @click="save"/>' +
-        '</div>',
-    methods: {
-        save: function () {
-            if (this.text !== '') {
-                let body = {text: this.text};
+        '<form action="/me" enctype="multipart/form-data" method="post">' +
+            '<div class="post-form">' +
+                '<img class="post-form-img" v-bind:src="\'/uploads/img/avatar/\' + me.avatarFilename" alt=""/>' +
+                '<input class="post-form-text" name="text" type="text" placeholder="Что у вас нового?"/>' +
+                '<input class="post-form-files" name="images" type="file" multiple >' +
+                '<input class="post-form-btn" type="submit" value="✔"/>' +
+            '</div>' +
+        '</form>',
+});
 
-                postApi.save({}, body).then(result => {
-                    result.json().then(data => {
-                        this.posts.splice(0, 0, data);
-                        this.text = '';
-                    });
-                });
-            }
-        }
-    }
+Vue.component('post-img', {
+    props: ['imgFilename'],
+    template:
+        '<img class="post-img" src="" v-bind:src="\'/uploads/img/content/\' + imgFilename" alt=""/>',
+});
+
+Vue.component('post-imgs', {
+    props: ['post'],
+    template:
+        '<div class="post-image-section">' +
+            '<post-img v-for="filename in post.imgFilenames" :key="filename" :imgFilename="filename"/>' +
+        '</div>',
 });
 
 Vue.component('post-el', {
@@ -319,6 +317,7 @@ Vue.component('post-el', {
 
             '<div class="post-main">' +
                 '<div class="post-text">{{ post.text }}</div>' +
+                '<post-imgs :post="post"/>' +
             '</div>' +
 
             '<div class="post-footer">' +
@@ -447,7 +446,7 @@ var app = new Vue({
     template:
         '<div class="middle">' +
             '<user-info :me="me"/>' +
-            '<post-form :posts="posts" :me="me"/>' +
+            '<post-form :me="me"/>' +
             '<post-list :posts="posts" :me="me"/>' +
         '</div>'
 });

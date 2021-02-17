@@ -7,12 +7,9 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.chernov.notvk.domain.entity.User;
 import ru.chernov.notvk.mail.MailInfo;
 import ru.chernov.notvk.mail.MailManager;
-import ru.chernov.notvk.utils.FileUtils;
 import ru.chernov.notvk.utils.ImageUtils;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -25,32 +22,29 @@ public class ProfileService {
     private final UserService userService;
     private final MailManager mailManager;
     private final PasswordEncoder passwordEncoder;
-
-    private final String uploadPath;
+    private final FileService fileService;
 
     @Autowired
     public ProfileService(UserService userService, MailManager mailManager,
-                          PasswordEncoder passwordEncoder, String uploadPath) {
+                          PasswordEncoder passwordEncoder, FileService fileService) {
         this.userService = userService;
         this.mailManager = mailManager;
         this.passwordEncoder = passwordEncoder;
-        this.uploadPath = uploadPath;
+        this.fileService = fileService;
     }
 
     public User updateAvatar(long userId, MultipartFile avatar) throws IOException {
 
         User user = userService.findById(userId);
 
-        if (ImageUtils.isImageTypeAllowed(avatar) && FileUtils.isUploadFolderCreatedOrCreate(uploadPath)) {
+        if (ImageUtils.isImageTypeAllowed(avatar)) {
 
             // если у пользователя не стоковый аватар
             if (!user.getAvatarFilename().equals(user.getGender().getStockAvatarFilename()))
                 // удаляем его старое фото
-                Files.deleteIfExists(new File(uploadPath + "/img/avatar/" + user.getAvatarFilename()).toPath());
+                fileService.deleteAvatar(user.getAvatarFilename());
 
-            String filename = UUID.randomUUID() + "." + avatar.getOriginalFilename();
-            avatar.transferTo(new File(uploadPath + "/img/avatar/" + filename));
-
+            String filename = fileService.saveAvatar(avatar);
             user.setAvatarFilename(filename);
         }
 
@@ -64,8 +58,7 @@ public class ProfileService {
         // если у пользователя не стоковый аватар
         if (!user.getAvatarFilename().equals(user.getGender().getStockAvatarFilename())) {
             // удаляем его аватар
-            File avatar = new File(uploadPath + "/img/avatar/" + user.getAvatarFilename());
-            Files.deleteIfExists(avatar.toPath());
+            fileService.deleteAvatar(user.getAvatarFilename());
             // ставим стоковое фото
             user.setAvatarFilename(user.getGender().getStockAvatarFilename());
         }

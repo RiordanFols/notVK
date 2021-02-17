@@ -117,3 +117,13 @@
     font-size: 18px;
     color: darkgray;
 }
+
+.post-image-section {
+
+}
+
+.post-img {
+    max-height: 400px;
+    max-width: 500px;
+    margin-bottom: 10px;
+}

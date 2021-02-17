@@ -7,7 +7,6 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author Pavel Chernov
@@ -15,6 +14,8 @@ import java.util.Set;
 @Entity
 @Data
 public class Message {
+
+    public static final int MAX_IMAGES = 10;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -35,7 +36,7 @@ public class Message {
     @CollectionTable(name = "message_imgs",
             joinColumns = @JoinColumn(name = "message_id", nullable = false, updatable = false))
     @Column(name = "img_filename", length = 100, nullable = false, updatable = false)
-    private List<String> imgFilenames = new ArrayList<>(10);
+    private List<String> imgFilenames = new ArrayList<>(MAX_IMAGES);
 
     @Column(nullable = false, updatable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy HH:mm")

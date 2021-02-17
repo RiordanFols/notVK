@@ -6,16 +6,13 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.chernov.notvk.domain.entity.Message;
 import ru.chernov.notvk.domain.entity.User;
 import ru.chernov.notvk.repository.MessageRepository;
-import ru.chernov.notvk.utils.FileUtils;
 import ru.chernov.notvk.utils.ImageUtils;
 
-import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.UUID;
 
 /**
  * @author Pavel Chernov
@@ -25,14 +22,13 @@ public class MessageService {
 
     private final UserService userService;
     private final MessageRepository messageRepository;
-
-    private final String uploadPath;
+    private final FileService fileService;
 
     @Autowired
-    public MessageService(UserService userService, MessageRepository messageRepository, String uploadPath) {
+    public MessageService(UserService userService, MessageRepository messageRepository, FileService fileService) {
         this.userService = userService;
         this.messageRepository = messageRepository;
-        this.uploadPath = uploadPath;
+        this.fileService = fileService;
     }
 
     public Message findById(long id) {
@@ -58,19 +54,23 @@ public class MessageService {
         message.setText(text);
 
         for(var image: images) {
-            if (ImageUtils.isImageTypeAllowed(image) && FileUtils.isUploadFolderCreatedOrCreate(uploadPath)) {
-                String filename = UUID.randomUUID() + "." + image.getOriginalFilename();
-                image.transferTo(new File(uploadPath + "/img/message/" + filename));
-
-                if (message.getImgFilenames().size() < 10)
-                    message.getImgFilenames().add(filename);
+            // если тип файла соответсвует изображению и кол-во файлов в сообщении меньше допустимого максимума
+            if (ImageUtils.isImageTypeAllowed(image) && message.getImgFilenames().size() < Message.MAX_IMAGES) {
+                // сохраняем изображение
+                String filename = fileService.saveImage(image);
+                message.getImgFilenames().add(filename);
             }
         }
 
         return messageRepository.save(message);
     }
 
-    public void delete(long id) {
-        messageRepository.deleteById(id);
+    public void delete(long messageId) throws IOException {
+        Message message = findById(messageId);
+        for (var filename: message.getImgFilenames()) {
+            fileService.deleteImage(filename);
+        }
+
+        messageRepository.deleteById(messageId);
     }
 }

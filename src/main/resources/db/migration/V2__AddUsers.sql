@@ -1,9 +1,9 @@
 INSERT INTO usr (id, is_active, username, gender, avatar_filename, email, password, name, surname, status, birthday)
-VALUES (1, TRUE, 'pavel', 'MALE', 'stock_m.png', 'pavel@gmail.com' , 123, 'Павел', 'Чернов', 'Скажи статусу нет', '1999-09-24'),
-       (2, TRUE, 'anton', 'MALE','stock_m.png', 'anton@gmail.com' , '123', 'Антон', 'Янушевский', 'Alcohol is my love', '2001-10-08'),
-       (3, TRUE, 'anna', 'FEMALE','stock_f.png', 'anna@gmail.com', '123', 'Анна', 'Каренина', 'Люблю свою кошку', '1993-01-23'),
-       (4, TRUE, 'vlad', 'MALE','stock_m.png', 'vlad@gmail.com', '123', 'Влад', 'Вишневский', 'На спорте', '2000-04-11'),
-       (5, TRUE, 'cat', 'UNDEFINED','2cf6dd7a-7d8f-4f89-a94d-16eee7793859.Matroskin.jpg', 'matroskin@gmail.com', '123', 'Кот', 'Матроскин', 'Неправильно ты, Дядя Федор, колбасу ешь', '1961-09-12');
+VALUES (1, TRUE, 'fedor', 'MALE', '13f46ce2-f0a0-41be-8023-fc7e558a6c65.Fedor.jpg', 'fedor@gmail.com', '123', 'Дядя', 'Фёдор', 'Я ничей. Я сам по себе мальчик. Свой собственный', '1966-09-23'),
+       (2, TRUE, 'galchonok', 'UNDEFINED','cffb996c-d608-4a8a-b15a-42a41dd46813.Galchonok.jpg', 'galchonok@gmail.com' , '123', 'Галчонок', 'Простоквашинский', 'Кто там?', '1976-10-08'),
+       (3, TRUE, 'pechkin', 'MALE','db50aaf5-a660-4233-bf9a-e2d2176c2099.Pechkin.jpg', 'pechkin@gmail.com', '123', 'Почтальон', 'Печкин', 'Я, может, только жить начинаю: на пенсию перехожу', '1920-01-23'),
+       (4, TRUE, 'dog', 'UNDEFINED','ed99779a-55d5-42b4-afab-569a651b8435.Sharik.jpg', 'sharik@gmail.com', '123', 'Шарик', '', 'Пойти, что-ль, пожрать. Ну их в болото', '1971-04-11'),
+       (5, TRUE, 'cat', 'UNDEFINED','2cf6dd7a-7d8f-4f89-a94d-16eee7793859.Matroskin.jpg', 'matroskin@gmail.com', '123', 'Кот', 'Матроскин', 'Неправильно ты, Дядя Федор, колбасу ешь', '1972-09-12');
 
 INSERT INTO user_role(user_id, role)
 VALUES (1, 'USER'),

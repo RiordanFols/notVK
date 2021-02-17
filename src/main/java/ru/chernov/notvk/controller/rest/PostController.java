@@ -1,13 +1,11 @@
 package ru.chernov.notvk.controller.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import ru.chernov.notvk.domain.entity.Post;
-import ru.chernov.notvk.domain.entity.User;
 import ru.chernov.notvk.service.PostService;
 
-import java.util.Map;
+import java.io.IOException;
 
 /**
  * @author Pavel Chernov
@@ -28,14 +26,8 @@ public class PostController {
         return postService.findById(id);
     }
 
-    @PostMapping
-    public Post create(@RequestBody Map<String, Object> body,
-                       @AuthenticationPrincipal User user) {
-        return postService.create((String) body.get("text"), user.getId());
-    }
-
     @DeleteMapping("{id}")
-    public void delete(@PathVariable long id) {
+    public void delete(@PathVariable long id) throws IOException {
         postService.delete(id);
     }
 }

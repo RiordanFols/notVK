@@ -82,6 +82,15 @@ public class PageController {
         return "main/me";
     }
 
+    @PostMapping("/me")
+    public String addPost(@AuthenticationPrincipal User user,
+                          @RequestParam String text,
+                          @RequestParam MultipartFile[] images) throws IOException {
+        postService.create(user.getId(), text, images);
+
+        return "redirect:/me";
+    }
+
     @GetMapping("/profile")
     public String profilePage(@AuthenticationPrincipal User user,
                               Model model) {

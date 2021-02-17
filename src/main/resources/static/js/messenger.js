@@ -1,11 +1,8 @@
-let messagesApi = Vue.resource('/message{/id}');
 
 Vue.component('message-img', {
     props: ['imgFilename'],
     template:
-        '<div>' +
-            '<img class="message-img" v-bind:src="\'/uploads/img/message/\' + imgFilename" alt=""/>' +
-        '</div>'
+        '<img class="message-img" src="" v-bind:src="\'/uploads/img/content/\' + imgFilename" alt=""/>',
 });
 
 Vue.component ('message-imgs', {

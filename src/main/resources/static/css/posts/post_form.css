@@ -13,7 +13,7 @@
 }
 
 .post-form-text {
-    width: 570px;
+    width: 470px;
     border: none;
     outline: none;
     color: white;
@@ -25,6 +25,11 @@
 
 .post-form-text::placeholder {
     color: white;
+}
+
+.post-form-files {
+    width: 100px;
+    float: left;
 }
 
 .post-form-btn {
