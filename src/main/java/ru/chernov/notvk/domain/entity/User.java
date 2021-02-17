@@ -10,6 +10,7 @@ import ru.chernov.notvk.domain.Role;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -52,13 +53,16 @@ public class User implements UserDetails {
     @Column(length = 50)
     private String status;
 
+    @Transient
+    private String birthdayString;
+
+    @Transient
+    private int age;
+
     @Column
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @JsonIgnore
     private LocalDate birthday;
-
-    @Transient
-    private String birthdayString;
 
     @Column(length = 100, nullable = false)
     @JsonIgnore
@@ -102,6 +106,16 @@ public class User implements UserDetails {
             String year = String.valueOf(this.getBirthday().getYear());
 
             this.setBirthdayString(day + "." + month + "." + year);
+        }
+    }
+
+    public void calculateAge() {
+        if (birthday != null) {
+            LocalDate now = LocalDate.now();
+            Period period = Period.between(birthday, now);
+            this.age = period.getYears();
+        } else {
+            this.age = 0;
         }
     }
 

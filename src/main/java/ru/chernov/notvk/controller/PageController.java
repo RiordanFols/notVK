@@ -57,7 +57,9 @@ public class PageController {
             return "error/404";
         if (foundUser.equals(user))
             return "redirect:/me";
+
         foundUser.formatBirthday();
+        foundUser.calculateAge();
 
         Map<Object, Object> data = new HashMap<>();
         data.put("me", user);
@@ -73,6 +75,7 @@ public class PageController {
                          Model model) {
         User me = userService.findById(user.getId());
         me.formatBirthday();
+        me.calculateAge();
 
         Map<Object, Object> data = new HashMap<>();
         data.put("me", me);

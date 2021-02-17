@@ -411,9 +411,7 @@ Vue.component('user-info', {
                 '<div class="user-info-right-other">' +
                     '<div class="user-info-line">Пол: {{ me.gender }}</div>' +
                     '<div class="user-info-line">День рождения: {{ me.birthdayString }}</div>' +
-                    '<div></div>' +
-                    '<div></div>' +
-                    '<div></div>' +
+                    '<div class="user-info-line">Возраст: {{ me.age }}</div>' +
                 '</div>' +
                 '<div class="user-info-right-footer">' +
                     '<div class="user-info-footer-box">' +
