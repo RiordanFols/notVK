@@ -6,14 +6,13 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.chernov.notvk.components.FileHandler;
 import ru.chernov.notvk.domain.entity.Message;
 import ru.chernov.notvk.domain.entity.User;
+import ru.chernov.notvk.formatter.LastMessageInfoFormatter;
 import ru.chernov.notvk.repository.MessageRepository;
 import ru.chernov.notvk.utils.ImageUtils;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Comparator;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * @author Pavel Chernov
@@ -24,16 +23,34 @@ public class MessageService {
     private final UserService userService;
     private final MessageRepository messageRepository;
     private final FileHandler fileHandler;
+    private final LastMessageInfoFormatter lastMessageInfoFormatter;
 
     @Autowired
-    public MessageService(UserService userService, MessageRepository messageRepository, FileHandler fileHandler) {
+    public MessageService(UserService userService, MessageRepository messageRepository,
+                          FileHandler fileHandler, LastMessageInfoFormatter lastMessageInfoFormatter) {
         this.userService = userService;
         this.messageRepository = messageRepository;
         this.fileHandler = fileHandler;
+        this.lastMessageInfoFormatter = lastMessageInfoFormatter;
     }
 
     public Message findById(long id) {
         return messageRepository.findById(id).orElse(null);
+    }
+
+    public Set<User> getAllContacts(long userId) {
+        Set<Long> contactsIds = messageRepository.findContactsIds(userId);
+        contactsIds.remove(userId);
+
+        Set<User> contacts = new TreeSet<>(
+                Comparator.comparing(o -> getLastMessageInCorrespondence(o.getId(), userId).getCreationDateTime(),
+                        Comparator.reverseOrder()));
+
+        for (long contactId : contactsIds) {
+            contacts.add(userService.findById(contactId));
+        }
+
+        return contacts;
     }
 
     public Set<Message> getCorrespondence(long user1Id, long user2Id) {
@@ -73,5 +90,20 @@ public class MessageService {
         }
 
         messageRepository.deleteById(messageId);
+    }
+
+    public Message getLastMessageInCorrespondence(long userId, long targetId) {
+        return new ArrayList<>(getCorrespondence(userId, targetId)).get(0);
+    }
+
+    public Map<String, String> getLastMessageInfo(long userId, long targetId) {
+
+        Message lastMessage = getLastMessageInCorrespondence(userId, targetId);
+
+        Map<String, String> map = new HashMap<>();
+        map.put("author", lastMessageInfoFormatter.formatAuthor(lastMessage, userId));
+        map.put("text", lastMessageInfoFormatter.formatLastMessageInfo(lastMessage));
+
+        return map;
     }
 }

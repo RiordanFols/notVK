@@ -37,7 +37,20 @@
 }
 
 .contact-last-message {
+    width: 200px;
     height: 20px;
     font-size: 13px;
+}
+
+.contact-last-message-author {
+    float: left;
+    margin-right: 5px;
+    max-width: 20px;
+    color: lightgray;
+}
+
+.contact-last-message-text {
+    float: left;
+    width: 175px;
     color: darkgray;
 }

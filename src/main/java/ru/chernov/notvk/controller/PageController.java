@@ -109,7 +109,7 @@ public class PageController {
 
         Map<Object, Object> data = new HashMap<>();
         // get all users who user contacted with
-        data.put("userList", userService.getAllContacts(user.getId()));
+        data.put("userList", messageService.getAllContacts(user.getId()));
         data.put("me", user);
 
         model.addAttribute("frontendData", data);
@@ -127,7 +127,7 @@ public class PageController {
             return "error/404";
 
         Map<Object, Object> data = new HashMap<>();
-        data.put("userList", userService.getAllContacts(user.getId()));
+        data.put("userList", messageService.getAllContacts(user.getId()));
         data.put("messages", messageService.getCorrespondence(target.getId(), user.getId()));
         data.put("me", user);
         data.put("target", target);

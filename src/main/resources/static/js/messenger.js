@@ -1,3 +1,5 @@
+let chatApi = Vue.resource('/chat{/id}');
+
 import {updateLastOnline} from './updateLastOnline.js';
 
 Vue.component('message-img', {
@@ -80,16 +82,31 @@ Vue.component('msg-block', {
 
 Vue.component('user-el', {
     props: ['user'],
+    data: function () {
+        return {
+            lastMessage: {},
+        }
+    },
     template:
         '<a v-bind:href="\'/messenger/\' + user.username">' +
             '<div class="contact">' +
                 '<img class="contact-img" v-bind:src="\'/uploads/img/avatar/\' + user.avatarFilename" alt=""/>' +
                 '<div class="contact-info">' +
                     '<div class="contact-name">{{ user.name }} {{ user.surname }}</div>' +
-                    '<div class="contact-last-message">*Последнее сообщение*</div>' +
+                    '<div class="contact-last-message">' +
+                        '<div v-if="lastMessage.author" class="contact-last-message-author">{{ lastMessage.author }}</div>' +
+                        '<div class="contact-last-message-text">{{ lastMessage.text }}</div>' +
+                    '</div>' +
                 '</div>' +
             '</div>' +
         '</a>',
+    created: function () {
+        chatApi.get({id: this.user.id}).then(result => {
+            result.json().then(data => {
+                this.lastMessage = data;
+            });
+        });
+    }
 });
 
 Vue.component('user-list', {
