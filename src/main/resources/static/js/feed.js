@@ -257,6 +257,20 @@ Vue.component('comment-section', {
     }
 });
 
+Vue.component('post-img', {
+    props: ['imgFilename'],
+    template:
+        '<img class="post-img" src="" v-bind:src="\'/uploads/img/content/\' + imgFilename" alt=""/>',
+});
+
+Vue.component('post-imgs', {
+    props: ['post'],
+    template:
+        '<div class="post-image-section">' +
+            '<post-img v-for="filename in post.imgFilenames" :key="filename" :imgFilename="filename"/>' +
+        '</div>',
+});
+
 Vue.component('post-el', {
     props: ['post', 'me'],
     data: function () {
@@ -265,7 +279,7 @@ Vue.component('post-el', {
             isLiked: false,
             comments: [],
             commentsVisible: false,
-        }
+        };
     },
     template:
         '<div class="post-el">' +
@@ -284,15 +298,16 @@ Vue.component('post-el', {
 
             '<div class="post-main">' +
                 '<div class="post-text">{{ post.text }}</div>' +
+                '<post-imgs :post="post"/>' +
             '</div>' +
 
             '<div class="post-footer">' +
                 '<img class="post-footer-btn" v-if="isLiked" @click="unlike" src="/img/liked.png" alt=""/>' +
                 '<img class="post-footer-btn" v-else="isLiked" @click="like" src="/img/unliked.png" alt=""/>' +
-                '<div class="post-footer-number">{{ this.likeN }}</div>' +
+                '<div class="post-footer-number">{{ likeN }}</div>' +
 
                 '<img class="post-footer-btn" src="/img/comment_btn.png" alt="" @click="switchComments">' +
-                '<div class="post-footer-number">{{ comments.length }}</div>' +
+                '<div v-if="comments.length !== 0" class="post-footer-number">{{ comments.length }}</div>' +
             '</div>' +
 
             '<comment-section v-if="commentsVisible" :post="post" :comments="comments" :me="me"/>' +

@@ -258,6 +258,20 @@ Vue.component('comment-section', {
     }
 });
 
+Vue.component('post-img', {
+    props: ['imgFilename'],
+    template:
+        '<img class="post-img" src="" v-bind:src="\'/uploads/img/content/\' + imgFilename" alt=""/>',
+});
+
+Vue.component('post-imgs', {
+    props: ['post'],
+    template:
+        '<div class="post-image-section">' +
+            '<post-img v-for="filename in post.imgFilenames" :key="filename" :imgFilename="filename"/>' +
+        '</div>',
+});
+
 Vue.component('post-el', {
     props: ['post', 'me'],
     data: function () {
@@ -274,6 +288,7 @@ Vue.component('post-el', {
                 '<a v-bind:href="\'/user/\' + post.author.username">' +
                     '<img class="post-author-img" v-bind:src="\'/uploads/img/avatar/\' + post.author.avatarFilename" alt=""/>' +
                 '</a>' +
+
                 '<div class="post-info">' +
                     '<a v-bind:href="\'/user/\' + post.author.username" style="text-decoration: none">' +
                         '<div class="post-author">{{ post.author.name }} {{ post.author.surname }}</div>' +
@@ -284,6 +299,7 @@ Vue.component('post-el', {
 
             '<div class="post-main">' +
                 '<div class="post-text">{{ post.text }}</div>' +
+                '<post-imgs :post="post"/>' +
             '</div>' +
 
             '<div class="post-footer">' +

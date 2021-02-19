@@ -1,4 +1,4 @@
-INSERT INTO comment_like (comment_id, user_id)
+/*INSERT INTO comment_like (comment_id, user_id)
 VALUES (49, 1),
        (49, 2),
        (50, 1),
@@ -9,5 +9,5 @@ VALUES (49, 1),
        (51, 2),
        (51, 3),
        (51, 4),
-       (51, 5);
+       (51, 5);*/
 
