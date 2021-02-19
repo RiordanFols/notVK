@@ -88,6 +88,7 @@ create table usr
 (
     id              int8         not null,
     birthday        date,
+    last_online     timestamp,
     is_active       boolean      not null,
     activation_code varchar,
     name            varchar(30)  not null,
@@ -156,11 +157,11 @@ create table post_like
 
 create table comment
 (
-    id                 int8          not null,
-    creation_date_time timestamp     not null,
+    id                 int8         not null,
+    creation_date_time timestamp    not null,
     text               varchar(500) not null,
-    user_id            int8          not null,
-    post_id            int8          not null,
+    user_id            int8         not null,
+    post_id            int8         not null,
     primary key (id)
 );
 
@@ -179,11 +180,11 @@ create table comment_like
 
 create table reply
 (
-    id                 int8          not null,
-    creation_date_time timestamp     not null,
+    id                 int8         not null,
+    creation_date_time timestamp    not null,
     text               varchar(500) not null,
-    user_id            int8          not null,
-    comment_id         int8          not null,
+    user_id            int8         not null,
+    comment_id         int8         not null,
     primary key (id)
 );
 

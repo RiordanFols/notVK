@@ -1,3 +1,4 @@
+import {updateLastOnline} from './updateLastOnline.js';
 
 Vue.component('message-img', {
     props: ['imgFilename'],
@@ -48,7 +49,7 @@ Vue.component('chat-header', {
             '<a v-bind:href="\'/user/\' + target.username">' +
                 '<div class="chat-header-name">{{ target.name }} {{ target.surname }}</div>' +
             '</a>' +
-            '<div class="chat-header-last-online">*последний раз онлайн*</div>' +
+            '<div class="chat-header-last-online">{{ target.lastOnlineString }}</div>' +
             '<a v-bind:href="\'/user/\' + target.username">' +
                 '<img class="chat-header-img" v-bind:src="\'/uploads/img/avatar/\' + target.avatarFilename" alt=""/>' +
             '</a>' +
@@ -111,5 +112,8 @@ var app = new Vue({
         '<div class="content">' +
             '<user-list :users="userList"/>' +
             '<msg-block :messages="messages" :target="target" :me="me"/>' +
-        '</div>'
+        '</div>',
+    created: function () {
+        updateLastOnline();
+    }
 });

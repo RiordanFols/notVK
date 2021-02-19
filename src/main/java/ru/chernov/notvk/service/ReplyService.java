@@ -3,10 +3,10 @@ package ru.chernov.notvk.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.chernov.notvk.components.FileHandler;
 import ru.chernov.notvk.domain.entity.Comment;
 import ru.chernov.notvk.domain.entity.Reply;
 import ru.chernov.notvk.domain.entity.User;
-import ru.chernov.notvk.repository.CommentRepository;
 import ru.chernov.notvk.repository.ReplyRepository;
 import ru.chernov.notvk.utils.ImageUtils;
 
@@ -23,15 +23,15 @@ public class ReplyService {
     private final UserService userService;
     private final ReplyRepository replyRepository;
     private final CommentService commentService;
-    private final FileService fileService;
+    private final FileHandler fileHandler;
 
     @Autowired
     public ReplyService(UserService userService, ReplyRepository replyRepository,
-                        CommentService commentService, FileService fileService) {
+                        CommentService commentService, FileHandler fileHandler) {
         this.userService = userService;
         this.replyRepository = replyRepository;
         this.commentService = commentService;
-        this.fileService = fileService;
+        this.fileHandler = fileHandler;
     }
 
     public Reply findById(long replyId) {
@@ -50,7 +50,7 @@ public class ReplyService {
 
         for (var image: images) {
             if (ImageUtils.isImageTypeAllowed(image) && reply.getImgFilenames().size() < Reply.MAX_IMAGES) {
-                String filename = fileService.saveImage(image);
+                String filename = fileHandler.saveImage(image);
                 reply.getImgFilenames().add(filename);
             }
         }
@@ -61,7 +61,7 @@ public class ReplyService {
     public void delete(long replyId) throws IOException {
         Reply reply = findById(replyId);
         for (var filename: reply.getImgFilenames())
-            fileService.deleteImage(filename);
+            fileHandler.deleteImage(filename);
 
         replyRepository.deleteById(replyId);
     }

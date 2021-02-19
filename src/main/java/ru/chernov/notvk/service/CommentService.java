@@ -3,6 +3,7 @@ package ru.chernov.notvk.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.chernov.notvk.components.FileHandler;
 import ru.chernov.notvk.domain.entity.Comment;
 import ru.chernov.notvk.domain.entity.Post;
 import ru.chernov.notvk.domain.entity.User;
@@ -24,15 +25,15 @@ public class CommentService {
     private final UserService userService;
     private final CommentRepository commentRepository;
     private final PostService postService;
-    private final FileService fileService;
+    private final FileHandler fileHandler;
 
     @Autowired
     public CommentService(UserService userService, CommentRepository commentRepository,
-                          PostService postService, FileService fileService) {
+                          PostService postService, FileHandler fileHandler) {
         this.userService = userService;
         this.commentRepository = commentRepository;
         this.postService = postService;
-        this.fileService = fileService;
+        this.fileHandler = fileHandler;
     }
 
     public Comment findById(long commentId) {
@@ -51,7 +52,7 @@ public class CommentService {
 
         for (var image: images) {
             if (ImageUtils.isImageTypeAllowed(image) && comment.getImgFilenames().size() < Comment.MAX_IMAGES) {
-                String filename = fileService.saveImage(image);
+                String filename = fileHandler.saveImage(image);
                 comment.getImgFilenames().add(filename);
             }
         }
@@ -62,7 +63,7 @@ public class CommentService {
     public void delete(long commentId) throws IOException {
         Comment comment = findById(commentId);
         for (var filename: comment.getImgFilenames())
-            fileService.deleteImage(filename);
+            fileHandler.deleteImage(filename);
 
         commentRepository.deleteById(commentId);
     }

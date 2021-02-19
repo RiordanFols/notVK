@@ -1,5 +1,7 @@
 let subscriptionsApi = Vue.resource('/subscription{/id}');
 
+import {updateLastOnline} from './updateLastOnline.js';
+
 Vue.component('sub-info', {
     props: ['sub', 'subs'],
     template:
@@ -43,4 +45,7 @@ var app = new Vue({
         '<div class="middle">' +
             '<sub-list :subs="subscriptions"/>' +
         '</div>',
+    created: function () {
+        updateLastOnline();
+    }
 });

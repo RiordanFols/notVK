@@ -3,6 +3,7 @@ package ru.chernov.notvk.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.chernov.notvk.components.FileHandler;
 import ru.chernov.notvk.domain.entity.Post;
 import ru.chernov.notvk.domain.entity.User;
 import ru.chernov.notvk.repository.PostRepository;
@@ -23,13 +24,13 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final UserService userService;
-    private final FileService fileService;
+    private final FileHandler fileHandler;
 
     @Autowired
-    public PostService(PostRepository postRepository, UserService userService, FileService fileService) {
+    public PostService(PostRepository postRepository, UserService userService, FileHandler fileHandler) {
         this.postRepository = postRepository;
         this.userService = userService;
-        this.fileService = fileService;
+        this.fileHandler = fileHandler;
     }
 
     public List<Post> getUserPosts(long authorId) {
@@ -57,7 +58,7 @@ public class PostService {
 
         for (var image: images) {
             if (ImageUtils.isImageTypeAllowed(image) && post.getImgFilenames().size() < Post.MAX_IMAGES) {
-                String filename = fileService.saveImage(image);
+                String filename = fileHandler.saveImage(image);
                 post.getImgFilenames().add(filename);
             }
         }
@@ -68,7 +69,7 @@ public class PostService {
     public void delete(long postId) throws IOException {
         Post post = findById(postId);
         for (var filename: post.getImgFilenames())
-            fileService.deleteImage(filename);
+            fileHandler.deleteImage(filename);
 
         postRepository.deleteById(postId);
     }

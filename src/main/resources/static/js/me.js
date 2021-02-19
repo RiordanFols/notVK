@@ -6,6 +6,7 @@ let replyApi = Vue.resource('/reply{/id}');
 let replyLikeApi = Vue.resource('/reply-like{/id}');
 let subscriptionApi = Vue.resource('/subscription{/id}');
 
+import {updateLastOnline} from './updateLastOnline.js';
 
 Vue.component('reply-el', {
     props: ['reply', 'replies', 'deleteReply', 'me'],
@@ -404,11 +405,12 @@ Vue.component('user-info', {
                 '<img class="user-photo" v-bind:src="\'/uploads/img/avatar/\' + me.avatarFilename" alt=""/>' +
             '</div>' +
             '<div class="user-info-right">' +
-                '<div class="user-info-right-names">' +
+                '<div class="user-info-right-top">' +
                     '<div class="user-name">{{ me.name }} {{ me.surname }}</div>' +
-                    '<div class="user-status">{{ me.status }}</div>' +
+                    '<div class="user-activity"></div>' +
                 '</div>' +
                 '<div class="user-info-right-other">' +
+                    '<div class="user-status">{{ me.status }}</div>' +
                     '<div class="user-info-line">Пол: {{ me.gender }}</div>' +
                     '<div class="user-info-line">День рождения: {{ me.birthdayString }}</div>' +
                     '<div class="user-info-line">Возраст: {{ me.age }}</div>' +
@@ -446,5 +448,8 @@ var app = new Vue({
             '<user-info :me="me"/>' +
             '<post-form :me="me"/>' +
             '<post-list :posts="posts" :me="me"/>' +
-        '</div>'
+        '</div>',
+    created: function () {
+        updateLastOnline();
+    }
 });

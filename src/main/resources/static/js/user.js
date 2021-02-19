@@ -5,6 +5,7 @@ let commentLikeApi = Vue.resource('/comment-like{/id}');
 let replyApi = Vue.resource('/reply{/id}');
 let replyLikeApi = Vue.resource('/reply-like{/id}');
 
+import {updateLastOnline} from './updateLastOnline.js';
 
 Vue.component('reply-el', {
     props: ['reply', 'replies', 'me', 'deleteReply'],
@@ -362,11 +363,12 @@ Vue.component('user-info', {
                 '<div class="user-subscribe-btn" v-else @click="unsubscribe">Отписаться</div>' +
             '</div>' +
             '<div class="user-info-right">' +
-                '<div class="user-info-right-names">' +
+                '<div class="user-info-right-top">' +
                     '<div class="user-name">{{ user.name }} {{ user.surname }}</div>' +
-                    '<div class="user-status">{{ user.status }}</div>' +
+                    '<div class="user-activity">{{ user.lastOnlineString }}</div>' +
                 '</div>' +
                 '<div class="user-info-right-other">' +
+                    '<div class="user-status">{{ user.status }}</div>' +
                     '<div class="user-info-line">Пол: {{ user.gender }}</div>' +
                     '<div class="user-info-line">День рождения: {{ user.birthdayString }}</div>' +
                     '<div class="user-info-line">Возраст: {{ user.age }}</div>' +
@@ -426,4 +428,7 @@ var app = new Vue({
             '<user-info :user="user"/>' +
             '<post-list :posts="posts" :me="me"/>' +
         '</div>',
+    created: function () {
+        updateLastOnline();
+    }
 });

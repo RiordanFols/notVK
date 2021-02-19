@@ -3,6 +3,7 @@ package ru.chernov.notvk.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.chernov.notvk.components.FileHandler;
 import ru.chernov.notvk.domain.entity.Message;
 import ru.chernov.notvk.domain.entity.User;
 import ru.chernov.notvk.repository.MessageRepository;
@@ -22,13 +23,13 @@ public class MessageService {
 
     private final UserService userService;
     private final MessageRepository messageRepository;
-    private final FileService fileService;
+    private final FileHandler fileHandler;
 
     @Autowired
-    public MessageService(UserService userService, MessageRepository messageRepository, FileService fileService) {
+    public MessageService(UserService userService, MessageRepository messageRepository, FileHandler fileHandler) {
         this.userService = userService;
         this.messageRepository = messageRepository;
-        this.fileService = fileService;
+        this.fileHandler = fileHandler;
     }
 
     public Message findById(long id) {
@@ -57,7 +58,7 @@ public class MessageService {
             // если тип файла соответсвует изображению и кол-во файлов в сообщении меньше допустимого максимума
             if (ImageUtils.isImageTypeAllowed(image) && message.getImgFilenames().size() < Message.MAX_IMAGES) {
                 // сохраняем изображение
-                String filename = fileService.saveImage(image);
+                String filename = fileHandler.saveImage(image);
                 message.getImgFilenames().add(filename);
             }
         }
@@ -68,7 +69,7 @@ public class MessageService {
     public void delete(long messageId) throws IOException {
         Message message = findById(messageId);
         for (var filename: message.getImgFilenames()) {
-            fileService.deleteImage(filename);
+            fileHandler.deleteImage(filename);
         }
 
         messageRepository.deleteById(messageId);

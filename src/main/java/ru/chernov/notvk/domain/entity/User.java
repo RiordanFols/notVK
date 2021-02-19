@@ -2,7 +2,10 @@ package ru.chernov.notvk.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.chernov.notvk.domain.Gender;
@@ -10,7 +13,7 @@ import ru.chernov.notvk.domain.Role;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.Period;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -53,6 +56,11 @@ public class User implements UserDetails {
     @Column(length = 50)
     private String status;
 
+    @Column
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonIgnore
+    private LocalDate birthday;
+
     @Transient
     private String birthdayString;
 
@@ -60,9 +68,12 @@ public class User implements UserDetails {
     private int age;
 
     @Column
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     @JsonIgnore
-    private LocalDate birthday;
+    private LocalDateTime lastOnline;
+
+    @Transient
+    private String lastOnlineString;
 
     @Column(length = 100, nullable = false)
     @JsonIgnore
@@ -96,28 +107,6 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "subscriber_id", updatable = false, nullable = false))
     @JsonIgnore
     private Set<User> subscribers = new HashSet<>();
-
-    public void formatBirthday() {
-        if (this.birthday != null) {
-            String day = String.valueOf(this.getBirthday().getDayOfMonth());
-            String month = this.getBirthday().getMonthValue() >= 10 ?
-                    String.valueOf(this.getBirthday().getMonthValue()) :
-                    "0" + this.getBirthday().getMonthValue();
-            String year = String.valueOf(this.getBirthday().getYear());
-
-            this.setBirthdayString(day + "." + month + "." + year);
-        }
-    }
-
-    public void calculateAge() {
-        if (birthday != null) {
-            LocalDate now = LocalDate.now();
-            Period period = Period.between(birthday, now);
-            this.age = period.getYears();
-        } else {
-            this.age = 0;
-        }
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

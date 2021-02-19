@@ -1,7 +1,7 @@
-package ru.chernov.notvk.service;
+package ru.chernov.notvk.components;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -12,14 +12,14 @@ import java.util.UUID;
 /**
  * @author Pavel Chernov
  */
-@Service
-public class FileService {
+@Component
+public class FileHandler {
 
     private final String imagePath;
     private final String avatarPath;
 
     @Autowired
-    public FileService(String imagePath, String avatarPath) {
+    public FileHandler(String imagePath, String avatarPath) {
         this.imagePath = imagePath;
         this.avatarPath = avatarPath;
     }

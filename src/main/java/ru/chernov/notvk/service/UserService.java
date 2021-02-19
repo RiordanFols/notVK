@@ -1,20 +1,22 @@
 package ru.chernov.notvk.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.chernov.notvk.domain.Gender;
 import ru.chernov.notvk.domain.Role;
 import ru.chernov.notvk.domain.entity.User;
 import ru.chernov.notvk.mail.MailInfo;
 import ru.chernov.notvk.mail.MailManager;
 import ru.chernov.notvk.repository.MessageRepository;
 import ru.chernov.notvk.repository.UserRepository;
+import ru.chernov.notvk.formatter.UserInfoFormatter;
 
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Pavel Chernov
@@ -27,16 +29,15 @@ public class UserService implements UserDetailsService {
     private static final String EMAIL_IS_TAKEN = "Эта почта уже занята другим пользователем";
 
     private final UserRepository userRepository;
+    private final UserInfoFormatter userInfoFormatter;
     private final MessageRepository messageRepository;
     private final MailManager mailManager;
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    public UserService(UserRepository userRepository,
-                       MessageRepository messageRepository,
-                       MailManager mailManager,
-                       PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, UserInfoFormatter userInfoFormatter,
+                       MessageRepository messageRepository, MailManager mailManager, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.userInfoFormatter = userInfoFormatter;
         this.messageRepository = messageRepository;
         this.mailManager = mailManager;
         this.passwordEncoder = passwordEncoder;
@@ -145,6 +146,20 @@ public class UserService implements UserDetailsService {
             return false;
 
         user.setActive(true);
+        userRepository.save(user);
         return true;
+    }
+
+    public void updateLastOnline(long userId) {
+        User user = findById(userId);
+        user.setLastOnline(LocalDateTime.now());
+
+        userRepository.save(user);
+    }
+
+    public void formatExtraInfo(User user) {
+        userInfoFormatter.formatBirthdayString(user);
+        userInfoFormatter.formatAge(user);
+        userInfoFormatter.formatLastOnlineString(user);
     }
 }

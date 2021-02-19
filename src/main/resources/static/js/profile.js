@@ -1,5 +1,7 @@
 let profilePhotoApi = Vue.resource('/profile/photo');
 
+import {updateLastOnline} from './updateLastOnline.js';
+
 Vue.component('user-profile', {
     props: ['me', 'updateAvatarMethod', 'genders'],
     template:
@@ -107,5 +109,8 @@ var app = new Vue({
         updateUser: function (user) {
             this.me = user;
         }
+    },
+    created: function () {
+        updateLastOnline();
     }
 });
