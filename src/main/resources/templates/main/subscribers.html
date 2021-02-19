@@ -2,15 +2,11 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${frontendData.user.name} + ' '  + ${frontendData.user.surname}"></title>
+    <title>Подписчики</title>
     <link rel="stylesheet" href="/css/reset.css">
     <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="/css/posts/post.css">
     <link rel="stylesheet" href="/css/user_page/user_info.css">
-    <link rel="stylesheet" href="/css/posts/comments/comments.css">
-    <link rel="stylesheet" href="/css/posts/comments/replies.css">
-    <link rel="stylesheet" href="/css/posts/comments/comment_form.css">
-    <link rel="stylesheet" href="/css/posts/comments/reply_form.css">
+    <link rel="stylesheet" href="/css/user_page/subscriptions_info.css">
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
     <script th:inline="javascript">
@@ -42,12 +38,12 @@
         <a href="/feed"><div class="left-btn">Новости</div></a>
         <a href="/messenger"><div class="left-btn">Сообщения</div></a>
         <a href="/subscriptions"><div class="left-btn">Подписки</div></a>
-        <a href="/subscribers"><div class="left-btn">Подписчики</div></a>
+        <a href="/subscribers"><div class="left-btn active-left-btn">Подписчики</div></a>
     </div>
     <div id="app"></div>
 </div>
 
-<script type="module" src="/js/user.js"></script>
+<script type="module" src="/js/subscribers.js"></script>
 
 </body>
 </html>

@@ -159,4 +159,15 @@ public class PageController {
         return "main/subscriptions";
     }
 
+    @GetMapping("/subscribers")
+    public String subscribersPage(@AuthenticationPrincipal User user,
+                                  Model model) {
+
+        Map<Object, Object> data = new HashMap<>();
+        data.put("subscribers", userService.findById(user.getId()).getSubscribers());
+        data.put("me", user);
+
+        model.addAttribute("frontendData", data);
+        return "main/subscribers";
+    }
 }
