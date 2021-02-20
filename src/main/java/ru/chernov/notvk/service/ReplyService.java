@@ -38,6 +38,7 @@ public class ReplyService {
         return replyRepository.findById(replyId).orElse(null);
     }
 
+
     public Reply create(long userId, long commentId, String text, MultipartFile[] images) throws IOException {
         User author = userService.findById(userId);
         Comment comment = commentService.findById(commentId);
@@ -66,7 +67,7 @@ public class ReplyService {
         replyRepository.deleteById(replyId);
     }
 
-    public Set<Reply> getCommentReplies(long commentId) {
+    public Set<Reply> findRepliesByCommentId(long commentId) {
         return replyRepository.findAllByCommentIdOrderByCreationDateTime(commentId);
     }
 

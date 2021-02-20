@@ -28,7 +28,7 @@ public class ReplyController {
 
     @GetMapping("{id}")
     public Set<Reply> getCommentReplies(@PathVariable(name = "id") long commentId) {
-        return replyService.getCommentReplies(commentId);
+        return replyService.findRepliesByCommentId(commentId);
     }
 
     @PostMapping("{id}")
