@@ -416,10 +416,10 @@ Vue.component('user-info', {
                     '<div class="user-info-line">Возраст: {{ me.age }}</div>' +
                 '</div>' +
                 '<div class="user-info-right-footer">' +
-                    '<div class="user-info-footer-box">' +
+                    '<a href="/subscribers"><div class="user-info-footer-box">' +
                         '<div class="user-info-footer-box-caption">Подписчики</div>' +
                         '<div class="user-info-footer-box-number">{{ subscribersN }}</div>' +
-                    '</div>' +
+                    '</div></a>' +
                     '<a href="/subscriptions"><div class="user-info-footer-box">' +
                         '<div class="user-info-footer-box-caption">Подписки</div>' +
                         '<div class="user-info-footer-box-number">{{ subscriptionsN }}</div>' +
