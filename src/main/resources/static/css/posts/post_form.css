@@ -13,7 +13,7 @@
 }
 
 .post-form-text {
-    width: 470px;
+    width: 550px;
     border: none;
     outline: none;
     color: white;
@@ -27,16 +27,29 @@
     color: white;
 }
 
-.post-form-files {
-    width: 100px;
+.post-form-files-label-img {
     float: left;
+    width: 25px;
+    margin-top: 10px;
+    height: 25px;
+}
+
+.post-form-files-label-img:hover {
+    cursor: pointer;
+}
+
+.post-form-files {
+    width: 0;
+    visibility: hidden;
+    float: left;
+    background: none;
 }
 
 .post-form-btn {
     margin-right: 10px;
     font-size: 24px;
     border: none;
-    color: #303038;
+    color: white;
     background: none;
     float: right;
     height: 40px;

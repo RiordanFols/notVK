@@ -64,7 +64,8 @@ Vue.component('message-form', {
         '<form v-bind:action="\'/messenger/\' + target.id" enctype="multipart/form-data" method="post">' +
             '<div class="message-form">' +
                 '<input class="message-form-text" type="text" name="text" placeholder="Напишите сообщение"/>' +
-                '<input class="message-form-files" type="file" multiple name="images">' +
+                '<label for="images"><img class="message-form-files-label-img" src="/img/upload_btn.png" alt="/"></label>' +
+                '<input class="message-form-files" id="images" type="file" multiple name="images">' +
                 '<input class="message-form-btn" type="submit" value="✔"/>' +
             '</div>' +
         '</form>'

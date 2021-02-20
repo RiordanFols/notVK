@@ -266,7 +266,8 @@ Vue.component('post-form', {
             '<div class="post-form">' +
                 '<img class="post-form-img" v-bind:src="\'/uploads/img/avatar/\' + me.avatarFilename" alt=""/>' +
                 '<input class="post-form-text" name="text" type="text" placeholder="Что у вас нового?"/>' +
-                '<input class="post-form-files" name="images" type="file" multiple >' +
+                '<label for="images"><img class="post-form-files-label-img" src="/img/upload_btn.png" alt="/"></label>' +
+                '<input class="post-form-files" id="images" name="images" type="file" multiple >' +
                 '<input class="post-form-btn" type="submit" value="✔"/>' +
             '</div>' +
         '</form>',

@@ -9,7 +9,7 @@
     color: white;
     background: none;
     float: left;
-    width: 470px;
+    width: 545px;
     height: 36px;
     padding: 4px 0 2px 15px;
     font-size: 14px;
@@ -19,9 +19,20 @@
     color: white;
 }
 
-.message-form-files {
-    width: 100px;
+.message-form-files-label-img {
     float: left;
+    width: 25px;
+    margin-top: 10px;
+    height: 25px;
+}
+
+.message-form-files-label-img:hover {
+    cursor: pointer;
+}
+
+.message-form-files {
+    width: 0;
+    visibility: hidden;
 }
 
 .message-form-btn {
