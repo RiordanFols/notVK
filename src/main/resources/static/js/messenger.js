@@ -118,7 +118,7 @@ Vue.component('user-list', {
         '</div>'
 });
 
-var app = new Vue({
+let app = new Vue({
     el: '#app',
     data: {
         userList: frontendData.userList,

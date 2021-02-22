@@ -1,0 +1,59 @@
+.middle-center {
+    width: 230px;
+    margin: 0 auto;
+}
+
+.auth-header {
+    color: white;
+    text-align: center;
+}
+
+.auth-input-line {
+    min-height: 30px;
+    margin-bottom: 10px;
+    width: 370px;
+}
+
+.auth-label {
+    color: white;
+    height: 20px;
+    width: 210px;
+    font-size: 16px;
+}
+
+.auth-input {
+    outline: none;
+    border: none;
+    width: 220px;
+    height: 22px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.auth-submit-btn {
+    width: 80px;
+    height: 25px;
+    font-weight: bold;
+}
+
+.auth-submit-btn:hover {
+    cursor: pointer;
+}
+
+.auth-bottom-block {
+    margin-top: 25px;
+}
+
+.auth-bottom-caption {
+    color: white;
+}
+
+.auth-bottom-link {
+    margin-left: 8px;
+    color: dodgerblue;
+    text-decoration: none;
+}
+
+.auth-bottom-link:hover {
+    text-decoration: underline;
+}

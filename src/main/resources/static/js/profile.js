@@ -43,7 +43,8 @@ Vue.component('user-profile', {
                         '<div class="profile-input-line">' +
                             '<div class="profile-label" >Пол: </div>' +
                             '<select class="profile-input profile-gender-input" size="1" id="gender" name="gender" required>' +
-                                '<option v-for="gender in genders" v-if="me.gender == gender.description" v-bind:value="gender.name" selected>{{ gender.description }}</option>' +
+                                '<option v-for="gender in genders" v-if="me.gender == gender.description" ' +
+                                        'v-bind:value="gender.name" selected>{{ gender.description }}</option>' +
                                 '<option v-else v-bind:value="gender.name">{{ gender.description }}</option>' +
                             '</select>' +
                         '</div>' +
@@ -65,15 +66,15 @@ Vue.component('user-profile', {
                 '<form action="profile/update/password" method="post">' +
                     '<div class="user-info-right-password">' +
                         '<div class="profile-input-line">' +
-                            '<label class="profile-label-password">Старый пароль</label>' +
+                            '<div class="profile-label-password">Старый пароль</div>' +
                             '<input class="profile-input-password" name="oldPassword" type="password">' +
                         '</div>' +
                         '<div class="profile-input-line">' +
-                            '<label class="profile-label-password">Новый пароль</label>' +
+                            '<div class="profile-label-password">Новый пароль</div>' +
                             '<input class="profile-input-password" name="newPassword" type="password">' +
                         '</div>' +
                         '<div class="profile-input-line">' +
-                            '<label class="profile-label-password">Подтвердите новый пароль</label>' +
+                            '<div class="profile-label-password">Подтвердите новый пароль</div>' +
                             '<input class="profile-input-password" name="newPasswordConfirm" type="password">' +
                         '</div>' +
 
@@ -95,7 +96,7 @@ Vue.component('user-profile', {
     }
 });
 
-var app = new Vue({
+let app = new Vue({
     el: '#app',
     data: {
         me: frontendData.me,

@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.chernov.notvk.domain.Gender;
 import ru.chernov.notvk.service.UserService;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author Pavel Chernov
  */
@@ -23,11 +26,20 @@ public class AuthenticationController {
         this.userService = userService;
     }
 
+    @GetMapping("login")
+    public String loginPage() {
+
+        return "guest/login";
+    }
+
     @GetMapping("registration")
     public String registrationPage(Model model) {
 
-        model.addAttribute("genders", Gender.getAll());
-        return "registration";
+        Map<Object, Object> data = new HashMap<>();
+        data.put("genders", Gender.getAll());
+
+        model.addAttribute("frontendData", data);
+        return "guest/registration";
     }
 
     @PostMapping("registration")
@@ -45,7 +57,7 @@ public class AuthenticationController {
             return "redirect:/login";
         } else {
             model.addAttribute("error", error);
-            return "registration";
+            return "guest/registration";
         }
     }
 
