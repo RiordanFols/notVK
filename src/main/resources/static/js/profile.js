@@ -9,7 +9,8 @@ Vue.component('user-profile', {
             '<div class="user-info-left">' +
                 '<img class="user-photo" v-bind:src="\'/uploads/img/avatar/\' + me.avatarFilename" alt=""/>' +
                 '<form action="/profile/update/avatar" method="post" enctype="multipart/form-data">' +
-                    '<input class="profile-img-update" type="file" name="avatar"/>' +
+                    '<label for="images" class="avatar-label"><img class="avatar-label-img" src="/img/upload_btn.png" alt="/"></label>' +
+                    '<input class="profile-img-update" id="images" name="avatar" type="file" >' +
                     '<input class="profile-img-submit" type="submit" value="Обновить фото"/>' +
                 '</form>' +
                 '<div class="profile-img-delete" @click="deletePhoto">Удалить фото</div>' +

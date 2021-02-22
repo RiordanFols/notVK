@@ -35,8 +35,25 @@
     cursor: pointer;
 }
 
+.avatar-label {
+    display: block;
+    width: 30px;
+    height: 30px;
+    margin: 10px auto 0 auto;
+}
+
+.avatar-label-img {
+    float: left;
+    width: 30px;
+    height: 30px;
+}
+
+.avatar-label-img:hover {
+    cursor: pointer;
+}
+
 .profile-img-update {
-    background-color: #707078;
+    display: none;
 }
 
 .profile-img-submit {
