@@ -33,10 +33,10 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
 
-    @Column(length = 30, nullable = false)
+    @Column(length = 25, nullable = false)
     private String username;
 
-    @Column(length = 10, nullable = false)
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Gender gender;
@@ -44,13 +44,13 @@ public class User implements UserDetails {
     @Column(length = 100, nullable = false)
     private String avatarFilename;
 
-    @Column(length = 30, nullable = false)
+    @Column(length = 129, nullable = false)
     private String email;
 
-    @Column(length = 30, nullable = false)
+    @Column(length = 25, nullable = false)
     private String name;
 
-    @Column(length = 30)
+    @Column(length = 25)
     private String surname;
 
     @Column(length = 50)
@@ -75,6 +75,7 @@ public class User implements UserDetails {
     @Transient
     private String lastOnlineString;
 
+    // в незашифрованном виде макс. длина 25 символов
     @Column(length = 100, nullable = false)
     @JsonIgnore
     private String password;

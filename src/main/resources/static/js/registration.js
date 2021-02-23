@@ -3,6 +3,9 @@ let app = new Vue({
     el: '#app',
     data: {
         genders: frontendData.genders,
+        error: frontendData.error,
+        notification: frontendData.notification,
+
     },
     template:
         '<div class="middle">' +
@@ -10,9 +13,12 @@ let app = new Vue({
                 '<form method="post" action="/registration">' +
                     '<h2 class="auth-header">Регистрация</h2>' +
 
+                    '<p  v-if="error !== null" class="auth-error-message"> {{ error }}</p>' +
+                    '<p  v-if="notification !== null" class="auth-notification-message"> {{ notification }}</p>' +
+
                     '<div class="auth-input-line">' +
                         '<div class="auth-label">Имя пользователя</div>' +
-                        '<input class="auth-input" type="text" name="username" required autofocus>' +
+                        '<input class="auth-input" type="text" name="username" maxlength="25" required autofocus>' +
                     '</div>' +
 
                     '<div class="auth-input-line">' +
@@ -24,29 +30,29 @@ let app = new Vue({
 
                     '<div class="auth-input-line">' +
                         '<div class="auth-label">Почта</div>' +
-                        '<input class="auth-input" type="email" name="email" required>' +
+                        '<input class="auth-input" type="email" name="email" maxlength="129" required>' +
                     '</div>' +
 
                     '<br/>' +
                     '<div class="auth-input-line">' +
                         '<div class="auth-label">Имя</div>' +
-                        '<input class="auth-input" type="text" name="name" required>' +
+                        '<input class="auth-input" type="text" name="name" maxlength="25" required>' +
                     '</div>' +
 
                     '<div class="auth-input-line">' +
                         '<div class="auth-label">Фамилия</div>' +
-                        '<input class="auth-input" type="text" name="surname">' +
+                        '<input class="auth-input" type="text" name="surname" maxlength="25">' +
                     '</div>' +
 
                     '<br/>' +
                     '<div class="auth-input-line">' +
                         '<div class="auth-label">Пароль</div>' +
-                        '<input class="auth-input" type="password" name="password" required>' +
+                        '<input class="auth-input" type="password" name="password" maxlength="25" required>' +
                     '</div>' +
 
                     '<div class="auth-input-line">' +
                         '<div class="auth-label">Введите пароль еще раз</div>' +
-                        '<input class="auth-input" type="password" name="passwordConfirm" required>' +
+                        '<input class="auth-input" type="password" name="passwordConfirm" maxlength="25" required>' +
                     '</div>' +
 
                     '<div class="auth-input-line">' +

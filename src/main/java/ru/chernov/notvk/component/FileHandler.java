@@ -1,4 +1,4 @@
-package ru.chernov.notvk.components;
+package ru.chernov.notvk.component;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

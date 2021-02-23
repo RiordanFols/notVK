@@ -21,24 +21,24 @@ Vue.component('user-profile', {
 
                         '<div class="profile-input-line">' +
                             '<div class="profile-label user-name-label">Имя: </div>' +
-                            '<input class="profile-input user-name-input" name="name" required maxlength="30" type="text" v-model="me.name"/><br/>' +
+                            '<input class="profile-input user-name-input" name="name" required maxlength="25" type="text" v-model="me.name"/><br/>' +
                         '</div>' +
 
                         '<div class="profile-input-line">' +
                             '<div class="profile-label user-name-label">Фамилия: </div>' +
-                            '<input class="profile-input user-name-input" name="surname" required maxlength="30" type="text" v-model="me.surname"/><br/>' +
+                            '<input class="profile-input user-name-input" name="surname" required maxlength="25" type="text" v-model="me.surname"/><br/>' +
                         '</div>' +
 
                         '<div class="profile-input-line">' +
                             '<div class="profile-label">Юзернейм: </div>' +
-                            '<input class="profile-input" name="username" type="text" required maxlength="30" v-model="me.username"/>' +
+                            '<input class="profile-input" name="username" type="text" required maxlength="25" v-model="me.username"/>' +
                         '</div>' +
 
                     '</div>' +
                     '<div class="user-info-right-other">' +
                         '<div class="profile-input-line">' +
                             '<div class="profile-label">Почта: </div>' +
-                            '<input class="profile-input" name="email" type="email" required maxlength="30" v-model="me.email"/>' +
+                            '<input class="profile-input" name="email" type="email" required maxlength="129" v-model="me.email"/>' +
                         '</div>' +
 
                         '<div class="profile-input-line">' +

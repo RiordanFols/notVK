@@ -47,7 +47,7 @@ public class ProfileController {
                                 @RequestParam String email) {
 
         LocalDate birthday = null;
-        if (!birthdayString.equals("")) {
+        if (!birthdayString.isEmpty()) {
             var dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             birthday = LocalDate.parse(birthdayString, dtf);
         }

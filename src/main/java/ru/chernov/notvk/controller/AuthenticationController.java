@@ -7,7 +7,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.chernov.notvk.domain.Gender;
+import ru.chernov.notvk.page.Error;
+import ru.chernov.notvk.page.Notification;
 import ru.chernov.notvk.service.UserService;
 
 import java.util.HashMap;
@@ -26,23 +29,33 @@ public class AuthenticationController {
         this.userService = userService;
     }
 
-    @GetMapping("login")
-    public String loginPage() {
+    @GetMapping("/login")
+    public String loginPage(@RequestParam(required = false) String notification,
+                            @RequestParam(required = false) String error,
+                            Model model) {
+        Map<Object, Object> data = new HashMap<>();
+        data.put("notification", notification);
+        data.put("error", error);
 
+        model.addAttribute("frontendData", data);
         return "guest/login";
     }
 
-    @GetMapping("registration")
-    public String registrationPage(Model model) {
+    @GetMapping("/registration")
+    public String registrationPage(@RequestParam(required = false) String notification,
+                                   @RequestParam(required = false) String error,
+                                   Model model) {
 
         Map<Object, Object> data = new HashMap<>();
         data.put("genders", Gender.getAll());
+        data.put("notification", notification);
+        data.put("error", error);
 
         model.addAttribute("frontendData", data);
         return "guest/registration";
     }
 
-    @PostMapping("registration")
+    @PostMapping("/registration")
     public String registration(@RequestParam String username,
                                @RequestParam String gender,
                                @RequestParam String email,
@@ -50,18 +63,19 @@ public class AuthenticationController {
                                @RequestParam String surname,
                                @RequestParam String password,
                                @RequestParam String passwordConfirm,
-                               Model model) {
-        String error = userService.checkRegistrationData(username, email, password, passwordConfirm);
+                               RedirectAttributes redirectAttributes) {
+        Error error = userService.checkRegistrationData(username, email, password, passwordConfirm);
         if (error == null) {
             userService.registration(username, gender, email, name, surname, password);
+            redirectAttributes.addAttribute("notification", Notification.REGISTRATION_SUCCESSFUL.toString());
             return "redirect:/login";
         } else {
-            model.addAttribute("error", error);
-            return "guest/registration";
+            redirectAttributes.addAttribute("error", error.toString());
+            return "redirect:/registration";
         }
     }
 
-    @GetMapping("activation{code}")
+    @GetMapping("/activation{code}")
     public String activation(@PathVariable String code) {
         if (userService.activateUser(code)) {
             return "redirect:/login";

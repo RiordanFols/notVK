@@ -94,10 +94,14 @@ public class PageController {
 
     @GetMapping("/profile")
     public String profilePage(@AuthenticationPrincipal User user,
+                              @RequestParam(required = false) String error,
+                              @RequestParam(required = false) String notification,
                               Model model) {
         Map<Object, Object> data = new HashMap<>();
         data.put("me", userService.findById(user.getId()));
         data.put("genders", Gender.getAll());
+        data.put("notification", notification);
+        data.put("error", error);
 
         model.addAttribute("frontendData", data);
         return "main/profile";

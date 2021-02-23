@@ -11,6 +11,7 @@ import ru.chernov.notvk.domain.entity.User;
 import ru.chernov.notvk.formatter.UserInfoFormatter;
 import ru.chernov.notvk.mail.MailInfo;
 import ru.chernov.notvk.mail.MailManager;
+import ru.chernov.notvk.page.Error;
 import ru.chernov.notvk.repository.UserRepository;
 
 import java.time.LocalDateTime;
@@ -21,10 +22,6 @@ import java.util.Collections;
  */
 @Service
 public class UserService implements UserDetailsService {
-
-    private static final String PASSWORDS_NOT_SAME = "Пароли не совпадают";
-    private static final String USERNAME_IS_TAKEN = "Пользователь с таким именем уже существует";
-    private static final String EMAIL_IS_TAKEN = "Эта почта уже занята другим пользователем";
 
     private final UserRepository userRepository;
     private final UserInfoFormatter userInfoFormatter;
@@ -65,26 +62,29 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user);
     }
 
-    public String checkRegistrationData(String username, String email, String password, String passwordConfirm) {
+    public Error checkRegistrationData(String username, String email, String password, String passwordConfirm) {
+
+        // если username уже существует
+        if (loadUserByUsername(username) != null)
+            return Error.USERNAME_IS_TAKEN;
+
+        // если email уже привязан
+        if (findByEmail(email) != null)
+            return Error.EMAIL_IS_TAKEN;
+
+        // если пароль слишком короткий (минимум 6 символов)
+        if (password.length() < 6)
+            return Error.PASSWORD_IS_TOO_SHORT;
 
         // если пароль и подтверждение пароля не совпадают
         if (!password.equals(passwordConfirm))
-            return PASSWORDS_NOT_SAME;
-
-        // если username уже существует
-        if (loadUserByUsername(username) != null) {
-            return USERNAME_IS_TAKEN;
-        }
-
-        // если email уже привязан
-        if (findByEmail(email) != null) {
-            return EMAIL_IS_TAKEN;
-        }
+            return Error.PASSWORDS_NOT_SAME;
 
         return null;
     }
 
-    public void registration(String username, String gender, String email, String name, String surname, String password) {
+    public void registration(String username, String gender, String email,
+                             String name, String surname, String password) {
         User user = new User();
         user.setUsername(username);
 

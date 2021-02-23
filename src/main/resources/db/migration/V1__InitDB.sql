@@ -91,13 +91,13 @@ create table usr
     last_online     timestamp,
     is_active       boolean      not null,
     activation_code varchar,
-    name            varchar(30)  not null,
+    name            varchar(25)  not null,
     password        varchar(100) not null,
     status          varchar(50),
-    surname         varchar(30),
-    username        varchar(30)  not null,
-    gender          varchar(10)  not null,
-    email           varchar(30)  not null,
+    surname         varchar(25),
+    username        varchar(25)  not null,
+    gender          varchar      not null,
+    email           varchar(129) not null,
     avatar_filename varchar(100) not null,
     primary key (id)
 );

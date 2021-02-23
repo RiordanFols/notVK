@@ -3,7 +3,7 @@ package ru.chernov.notvk.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.chernov.notvk.components.FileHandler;
+import ru.chernov.notvk.component.FileHandler;
 import ru.chernov.notvk.domain.entity.Comment;
 import ru.chernov.notvk.domain.entity.Post;
 import ru.chernov.notvk.domain.entity.User;
