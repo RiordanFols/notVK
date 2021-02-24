@@ -7,7 +7,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.chernov.notvk.domain.entity.User;
+import ru.chernov.notvk.page.Error;
+import ru.chernov.notvk.page.Notification;
 import ru.chernov.notvk.service.ProfileService;
 
 import java.io.IOException;
@@ -44,18 +47,16 @@ public class ProfileController {
                                 @RequestParam String surname,
                                 @RequestParam String status,
                                 @RequestParam(name = "birthday") String birthdayString,
-                                @RequestParam String email) {
+                                @RequestParam String email,
+                                RedirectAttributes redirectAttributes) {
 
-        LocalDate birthday = null;
-        if (!birthdayString.isEmpty()) {
-            var dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            birthday = LocalDate.parse(birthdayString, dtf);
-        }
+        Error error = profileService.updateData(
+                user.getId(), username, gender, name, surname, status, birthdayString, email);
 
-        profileService.updateData(user.getId(), username, gender, name, surname, status, birthday);
-
-        if (profileService.updateEmail(user.getId(), email)) {
-            return "redirect:/login";
+        if (error == null) {
+            redirectAttributes.addAttribute("notification", Notification.DATA_UPDATE_SUCCESSFUL.toString());
+        } else {
+            redirectAttributes.addAttribute("error", error.toString());
         }
 
         return "redirect:/profile";
@@ -65,11 +66,14 @@ public class ProfileController {
     public String updatePassword(@AuthenticationPrincipal User user,
                                  @RequestParam String oldPassword,
                                  @RequestParam String newPassword,
-                                 @RequestParam String newPasswordConfirm) {
-        if (profileService.updatePassword(user.getId(), oldPassword, newPassword, newPasswordConfirm)) {
-            return "redirect:/login";
+                                 @RequestParam String newPasswordConfirm,
+                                 RedirectAttributes redirectAttributes) {
+        Error error = profileService.updatePassword(user.getId(), oldPassword, newPassword, newPasswordConfirm);
+        if (error == null) {
+            redirectAttributes.addAttribute("passwordNotification", Notification.PASSWORD_UPDATE_SUCCESSFUL.toString());
         } else {
-            return "redirect:/profile";
+            redirectAttributes.addAttribute("passwordError", error.toString());
         }
+        return "redirect:/profile";
     }
 }

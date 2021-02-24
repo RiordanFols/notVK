@@ -96,12 +96,16 @@ public class PageController {
     public String profilePage(@AuthenticationPrincipal User user,
                               @RequestParam(required = false) String error,
                               @RequestParam(required = false) String notification,
+                              @RequestParam(required = false) String passwordError,
+                              @RequestParam(required = false) String passwordNotification,
                               Model model) {
         Map<Object, Object> data = new HashMap<>();
         data.put("me", userService.findById(user.getId()));
         data.put("genders", Gender.getAll());
-        data.put("notification", notification);
         data.put("error", error);
+        data.put("notification", notification);
+        data.put("passwordError", passwordError);
+        data.put("passwordNotification", passwordNotification);
 
         model.addAttribute("frontendData", data);
         return "main/profile";

@@ -4,13 +4,13 @@ package ru.chernov.notvk.page;
  * @author Pavel Chernov
  */
 public enum Notification {
-    REGISTRATION_SUCCESSFUL(0, "Регистрация прошла успешно. Введите свои логин и пароль");
+    REGISTRATION_SUCCESSFUL("Регистрация прошла успешно. Введите свои логин и пароль"),
+    PASSWORD_UPDATE_SUCCESSFUL("Пароль успешно изменен"),
+    DATA_UPDATE_SUCCESSFUL("Данные сохранены");
 
-    private final int code;
     private final String description;
 
-    Notification(int code, String description) {
-        this.code = code;
+    Notification(String description) {
         this.description = description;
     }
 

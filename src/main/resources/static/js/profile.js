@@ -3,7 +3,7 @@ let profilePhotoApi = Vue.resource('/profile/photo');
 import {updateLastOnline} from './updateLastOnline.js';
 
 Vue.component('user-profile', {
-    props: ['me', 'updateAvatarMethod', 'genders'],
+    props: ['me', 'updateAvatarMethod', 'genders', 'error', 'notification', 'passwordError', 'passwordNotification'],
     template:
         '<div class="user-info">' +
             '<div class="user-info-left">' +
@@ -16,7 +16,12 @@ Vue.component('user-profile', {
                 '<div class="profile-img-delete" @click="deletePhoto">Удалить фото</div>' +
             '</div>' +
             '<div class="user-info-right">' +
+
+                '<p v-if="error !== null" class="profile-error-message">{{ error }}</p>' +
+                '<p v-if="notification !== null" class="profile-notification-message">{{ notification }}</p>' +
+
                 '<form action="profile/update/data" method="post">' +
+
                     '<div class="user-info-right-names">' +
 
                         '<div class="profile-input-line">' +
@@ -64,6 +69,9 @@ Vue.component('user-profile', {
                     '</div>' +
                 '</form>' +
 
+                '<p v-if="passwordError !== null" class="profile-error-message">{{ passwordError }}</p>' +
+                '<p v-if="passwordNotification !== null" class="profile-notification-message">{{ passwordNotification }}</p>' +
+
                 '<form action="profile/update/password" method="post">' +
                     '<div class="user-info-right-password">' +
                         '<div class="profile-input-line">' +
@@ -102,10 +110,16 @@ let app = new Vue({
     data: {
         me: frontendData.me,
         genders: frontendData.genders,
+        error: frontendData.error,
+        notification: frontendData.notification,
+        passwordError: frontendData.passwordError,
+        passwordNotification: frontendData.passwordNotification,
     },
     template:
         '<div class="middle">' +
-            '<user-profile :me="me" :updateAvatarMethod="updateUser" :genders="genders"/>' +
+            '<user-profile :me="me" :updateAvatarMethod="updateUser" :genders="genders"' +
+                ' :error="error" :notification="notification"' +
+                ' :passwordError="passwordError" :passwordNotification="passwordNotification"/>' +
         '</div>',
     methods: {
         updateUser: function (user) {

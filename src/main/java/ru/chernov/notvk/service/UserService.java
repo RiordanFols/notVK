@@ -74,7 +74,7 @@ public class UserService implements UserDetailsService {
 
         // если пароль слишком короткий (минимум 6 символов)
         if (password.length() < 6)
-            return Error.PASSWORD_IS_TOO_SHORT;
+            return Error.TOO_SHORT_PASSWORD;
 
         // если пароль и подтверждение пароля не совпадают
         if (!password.equals(passwordConfirm))

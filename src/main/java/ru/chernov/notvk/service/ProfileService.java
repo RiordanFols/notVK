@@ -3,16 +3,18 @@ package ru.chernov.notvk.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import ru.chernov.notvk.component.FileHandler;
 import ru.chernov.notvk.domain.entity.User;
 import ru.chernov.notvk.mail.MailInfo;
 import ru.chernov.notvk.mail.MailManager;
+import ru.chernov.notvk.page.Error;
 import ru.chernov.notvk.utils.ImageUtils;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.UUID;
+import java.time.format.DateTimeFormatter;
 
 /**
  * @author Pavel Chernov
@@ -67,52 +69,62 @@ public class ProfileService {
         return userService.save(user);
     }
 
-    public void updateData(long userId, String username, String gender, String name, String surname,
-                           String status, LocalDate birthday) {
+    public Error updateData(long userId, String username, String gender, String name, String surname,
+                           String status, String birthdayString, String email) {
 
         User user = userService.findById(userId);
-        // если юзернейм свободен или занят текущим юзером
-        if (userService.findByUsername(username) == null || userService.findByUsername(username).equals(user)) {
-            user.setUsername(username);
-            user.setGender(gender);
-            user.setName(name);
-            user.setSurname(surname);
-            user.setStatus(status);
-            user.setBirthday(birthday);
-
-            userService.save(user);
+        // если дата рождения юзера не пустая, то форматируем ее
+        LocalDate birthday = null;
+        if (StringUtils.hasLength(birthdayString)) {
+            var dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            birthday = LocalDate.parse(birthdayString, dtf);
         }
-        // else error
+
+        // если юзернейм занят и при этом не принадлежит текущему юзеру
+        if (userService.findByUsername(username) != null && !userService.findByUsername(username).equals(user))
+            return Error.USERNAME_IS_TAKEN;
+
+        // если почта занята и при этом не принадлежит текущему юзеру
+        if (userService.findByEmail(email) != null && !userService.findByEmail(email).equals(user))
+            return Error.EMAIL_IS_TAKEN;
+
+        user.setUsername(username);
+        user.setGender(gender);
+        user.setName(name);
+        user.setSurname(surname);
+        user.setStatus(status);
+        user.setBirthday(birthday);
+
+        // если email был обновлен
+        if (!user.getEmail().equals(email)) {
+            user.setEmail(email);
+//            user.setActive(false);
+//            user.setActivationCode(UUID.randomUUID().toString());
+            mailManager.send(new MailInfo(user, "2"));
+        }
+
+        userService.save(user);
+        return null;
     }
 
-    public boolean updateEmail(long userId, String email) {
-
-        User user = userService.findById(userId);
-        // если юзер с такой почтой еще не существует или это текущий юзер
-        if (userService.findByEmail(email) == null || userService.findByEmail(email).equals(user)) {
-            if (!user.getEmail().equals(email)) {
-                user.setEmail(email);
-                user.setActive(false);
-                user.setActivationCode(UUID.randomUUID().toString());
-                userService.save(user);
-                mailManager.send(new MailInfo(user, "2"));
-                return true;
-            }
-        }
-        // else error
-
-        return false;
-    }
-
-    public boolean updatePassword(long userId, String oldPassword, String newPassword, String newPasswordConfirm) {
+    public Error updatePassword(long userId, String oldPassword, String newPassword, String newPasswordConfirm) {
         User user = userService.findById(userId);
 
-        if (passwordEncoder.matches(oldPassword, user.getPassword()) && newPassword.equals(newPasswordConfirm)) {
-            user.setPassword(passwordEncoder.encode(newPassword));
-            userService.save(user);
-            mailManager.send(new MailInfo(user, "3"));
-            return true;
-        }
-        return false;
+        if (!passwordEncoder.matches(oldPassword, user.getPassword()))
+            return Error.WRONG_PASSWORD;
+
+        if (!newPassword.equals(newPasswordConfirm))
+            return Error.PASSWORDS_NOT_SAME;
+
+        if (newPassword.length() < 6)
+            return Error.TOO_SHORT_NEW_PASSWORD;
+
+        if (newPassword.equals(oldPassword))
+            return Error.SAME_PASSWORDS;
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userService.save(user);
+        mailManager.send(new MailInfo(user, "3"));
+        return null;
     }
 }

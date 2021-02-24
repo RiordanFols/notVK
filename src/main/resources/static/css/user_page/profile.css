@@ -5,6 +5,16 @@
     color: white;
 }
 
+.profile-error-message {
+    margin: 3px 0;
+    color: #CC3030;
+}
+
+.profile-notification-message {
+    margin: 3px 0;
+    color: #30CC30;
+}
+
 .user-info-left {
     padding: 15px;
     min-height: 240px;

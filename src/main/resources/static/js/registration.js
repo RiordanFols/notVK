@@ -13,8 +13,8 @@ let app = new Vue({
                 '<form method="post" action="/registration">' +
                     '<h2 class="auth-header">Регистрация</h2>' +
 
-                    '<p  v-if="error !== null" class="auth-error-message"> {{ error }}</p>' +
-                    '<p  v-if="notification !== null" class="auth-notification-message"> {{ notification }}</p>' +
+                    '<p v-if="error !== null" class="auth-error-message">{{ error }}</p>' +
+                    '<p v-if="notification !== null" class="auth-notification-message">{{ notification }}</p>' +
 
                     '<div class="auth-input-line">' +
                         '<div class="auth-label">Имя пользователя</div>' +

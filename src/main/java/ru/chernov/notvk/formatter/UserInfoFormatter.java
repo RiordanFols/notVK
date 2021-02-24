@@ -16,7 +16,7 @@ import java.time.ZoneOffset;
  * @author Pavel Chernov
  */
 @Component
-@Getter
+@SuppressWarnings("FieldCanBeLocal")
 public class UserInfoFormatter {
 
     private final String VERB_MALE = "был";
