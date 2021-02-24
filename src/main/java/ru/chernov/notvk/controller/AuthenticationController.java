@@ -3,6 +3,7 @@ package ru.chernov.notvk.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,7 +36,12 @@ public class AuthenticationController {
                             Model model) {
         Map<Object, Object> data = new HashMap<>();
         data.put("notification", notification);
-        data.put("error", error);
+        if (error != null && error.isEmpty()) {
+            data.put("error", Error.WRONG_CREDENTIALS.toString());
+        } else {
+            data.put("error", error);
+        }
+
 
         model.addAttribute("frontendData", data);
         return "guest/login";
